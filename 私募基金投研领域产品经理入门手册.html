@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>私募基金投研领域 · 产品经理入门手册</title>
+<style>
+/* ============ 设计变量 ============ */
+:root{
+  --bg:#faf8f4;
+  --card:#ffffff;
+  --text:#2b2f36;
+  --text-2:#5b6673;
+  --text-3:#8a93a0;
+  --primary:#1f4e79;
+  --primary-2:#2f6ba3;
+  --primary-soft:#e9f1f8;
+  --accent:#d96f2b;
+  --accent-2:#f0a05a;
+  --accent-soft:#fdf0e3;
+  --green:#2e7d5b;
+  --green-soft:#e9f5ef;
+  --red:#c0392b;
+  --red-soft:#fbece9;
+  --amber:#a06a00;
+  --amber-soft:#fbf3dd;
+  --border:#e7e1d6;
+  --border-2:#d8d0c0;
+  --code-bg:#f3efe8;
+  --shadow:0 1px 3px rgba(31,42,55,.06),0 4px 14px rgba(31,42,55,.06);
+  --shadow-lg:0 6px 24px rgba(31,42,55,.12);
+  --radius:14px;
+  --sidebar-w:288px;
+  --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC","Noto Sans CJK SC",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"SF Mono","JetBrains Mono",Menlo,Consolas,"Courier New",monospace;
+}
+[data-theme="dark"]{
+  --bg:#14181d;
+  --card:#1c222a;
+  --text:#e8ecf1;
+  --text-2:#a7b1bd;
+  --text-3:#6f7a87;
+  --primary:#7fb3e0;
+  --primary-2:#9cc5ea;
+  --primary-soft:#1e2e3d;
+  --accent:#f0a05a;
+  --accent-2:#ffb877;
+  --accent-soft:#3a2a1a;
+  --green:#6fbf9a;
+  --green-soft:#1c3228;
+  --red:#e08a7e;
+  --red-soft:#3a2420;
+  --amber:#e0b45c;
+  --amber-soft:#362d16;
+  --border:#2d3640;
+  --border-2:#3d4854;
+  --code-bg:#222a33;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25);
+  --shadow-lg:0 6px 24px rgba(0,0,0,.4);
+}
+/* ============ 基础 ============ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  font-size:16.5px;
+  line-height:1.78;
+  letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+  transition:background .3s,color .3s;
+}
+::selection{background:var(--accent);color:#fff}
+a{color:var(--primary-2);text-decoration:none}
+a:hover{text-decoration:underline}
+img{max-width:100%}
+
+/* ============ 阅读进度条 ============ */
+#progress{
+  position:fixed;top:0;left:0;height:3px;width:0;
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  z-index:1000;transition:width .1s linear;
+}
+
+/* ============ 布局 ============ */
+#layout{display:flex;min-height:100vh}
+
+/* ============ 侧边栏 ============ */
+#sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  position:fixed;top:0;left:0;bottom:0;
+  background:var(--card);
+  border-right:1px solid var(--border);
+  overflow-y:auto;overflow-x:hidden;
+  padding:20px 0 40px;
+  z-index:200;
+  transition:transform .3s ease;
+}
+#sidebar::-webkit-scrollbar{width:6px}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+.sb-brand{
+  padding:0 22px 14px;border-bottom:1px solid var(--border);margin-bottom:12px;
+}
+.sb-brand .logo{
+  font-size:17px;font-weight:800;color:var(--primary);
+  display:flex;align-items:center;gap:8px;
+}
+.sb-brand .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);display:inline-block}
+.sb-brand .sub{font-size:12px;color:var(--text-3);margin-top:4px}
+.sb-search{padding:0 16px 10px}
+.sb-search input{
+  width:100%;padding:8px 12px;border:1px solid var(--border);
+  border-radius:9px;background:var(--bg);color:var(--text);
+  font-size:13px;font-family:inherit;outline:none;
+}
+.sb-search input:focus{border-color:var(--primary-2)}
+nav.toc{padding:0 12px}
+.toc-group{margin-bottom:10px}
+.toc-group>a{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:8px;
+  font-size:13.5px;font-weight:600;color:var(--text);
+  cursor:pointer;border-left:3px solid transparent;
+}
+.toc-group>a .num{
+  font-size:11px;font-weight:700;color:#fff;background:var(--primary);
+  border-radius:5px;padding:1px 6px;flex-shrink:0;
+}
+.toc-group>a:hover{background:var(--primary-soft);text-decoration:none}
+.toc-group>a.active{
+  background:var(--primary-soft);color:var(--primary);
+  border-left-color:var(--accent);
+}
+.toc-group>a.active .num{background:var(--accent)}
+.toc-sub{display:none;padding:2px 0 6px 26px}
+.toc-group.open .toc-sub{display:block}
+.toc-sub a{
+  display:block;padding:4px 10px;font-size:12.5px;color:var(--text-2);
+  border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.toc-sub a:hover{background:var(--primary-soft);text-decoration:none;color:var(--text)}
+.toc-sub a.active{color:var(--primary);font-weight:600;background:var(--primary-soft)}
+
+/* ============ 主内容 ============ */
+#main{
+  flex:1;margin-left:var(--sidebar-w);
+  min-width:0;
+}
+.article{max-width:780px;margin:0 auto;padding:0 48px 120px}
+
+/* ============ 顶部条 ============ */
+#topbar{
+  position:sticky;top:0;z-index:150;
+  display:flex;align-items:center;gap:12px;
+  background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding:10px 24px;margin-bottom:8px;
+}
+#menuBtn{
+  display:none;background:var(--card);border:1px solid var(--border);
+  border-radius:8px;width:38px;height:38px;cursor:pointer;font-size:17px;
+  align-items:center;justify-content:center;color:var(--text);
+}
+#topbar .crumb{font-size:13px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#topbar .spacer{flex:1}
+.icon-btn{
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  width:38px;height:38px;border-radius:9px;cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;transition:background .2s;
+}
+.icon-btn:hover{background:var(--primary-soft)}
+
+/* ============ 封面 ============ */
+.hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-2) 100%);
+  color:#fff;border-radius:var(--radius);
+  padding:44px 40px 36px;margin:28px 0 8px;
+  box-shadow:var(--shadow-lg);
+}
+.hero::after{
+  content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;
+  border-radius:50%;background:rgba(255,255,255,.08);
+}
+.hero::before{
+  content:"";position:absolute;right:40px;bottom:-90px;width:220px;height:220px;
+  border-radius:50%;background:rgba(255,255,255,.06);
+}
+.hero .tag{
+  display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);
+  padding:4px 12px;border-radius:999px;margin-bottom:16px;
+}
+.hero h1{font-size:30px;line-height:1.35;font-weight:800;position:relative;z-index:1}
+.hero .lead{margin-top:14px;font-size:16px;line-height:1.8;color:rgba(255,255,255,.92);position:relative;z-index:1;max-width:640px}
+.hero .quick{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;position:relative;z-index:1;
+}
+.hero .quick a{
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);
+  color:#fff;font-size:13px;padding:7px 14px;border-radius:999px;
+  transition:background .2s;
+}
+.hero .quick a:hover{background:rgba(255,255,255,.26);text-decoration:none}
+
+/* ============ 章节 ============ */
+section.ch{padding-top:52px;margin-top:8px}
+.ch-header{margin-bottom:18px}
+.ch-header .kicker{
+  font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--accent);
+  text-transform:uppercase;display:flex;align-items:center;gap:8px;
+}
+.ch-header .kicker::before{content:"";width:22px;height:3px;border-radius:2px;background:var(--accent)}
+.ch-header h2{
+  font-size:25px;font-weight:800;line-height:1.35;margin-top:6px;color:var(--text);
+}
+.ch-header .desc{color:var(--text-2);font-size:15px;margin-top:8px}
+.overview{
+  display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 22px;
+}
+.ov-chip{
+  background:var(--primary-soft);color:var(--primary);font-size:12.5px;font-weight:600;
+  padding:5px 12px;border-radius:999px;
+}
+
+h3{
+  font-size:19px;font-weight:700;margin:34px 0 12px;color:var(--text);
+  padding-bottom:8px;border-bottom:2px solid var(--primary-soft);
+}
+h4{font-size:16px;font-weight:700;margin:22px 0 10px;color:var(--primary-2)}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 0;padding-left:24px}
+li{margin:6px 0}
+li::marker{color:var(--accent)}
+strong{font-weight:700;color:var(--text)}
+.hl{color:var(--accent);font-weight:700}
+.hl-blue{color:var(--primary-2);font-weight:700}
+b.num{font-family:var(--mono);color:var(--accent);font-weight:700}
+
+/* ============ 引用框 ============ */
+blockquote{
+  margin:18px 0;padding:16px 20px;border-radius:12px;
+  background:var(--primary-soft);border-left:4px solid var(--primary-2);
+  color:var(--text);
+}
+blockquote p{margin:4px 0}
+.callout{
+  display:flex;gap:12px;align-items:flex-start;
+  margin:18px 0;padding:16px 18px;border-radius:12px;border:1px solid;
+}
+.callout .ico{font-size:20px;line-height:1.4;flex-shrink:0}
+.callout p{margin:0;font-size:14.5px;line-height:1.75}
+.callout.idea{background:var(--green-soft);border-color:var(--green)}
+.callout.idea .ico{color:var(--green)}
+.callout.warn{background:var(--red-soft);border-color:var(--red)}
+.callout.warn .ico{color:var(--red)}
+.callout.tip{background:var(--amber-soft);border-color:var(--amber)}
+.callout.tip .ico{color:var(--amber)}
+.callout.key{background:var(--accent-soft);border-color:var(--accent)}
+.callout.key .ico{color:var(--accent)}
+
+/* ============ 表格 ============ */
+.table-wrap{overflow-x:auto;margin:16px 0;border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+thead th{
+  background:var(--primary);color:#fff;text-align:left;
+  padding:11px 14px;font-weight:600;font-size:13.5px;white-space:nowrap;
+}
+[data-theme="dark"] thead th{background:var(--primary-2);color:#0d1117}
+tbody td{padding:11px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65}
+tbody tr:nth-child(even){background:var(--bg)}
+tbody tr:hover{background:var(--primary-soft)}
+tbody tr:hover td{border-top-color:var(--primary-soft)}
+td .t{font-weight:700;white-space:nowrap;color:var(--primary-2)}
+
+/* ============ 术语 tooltip ============ */
+.term{
+  color:var(--primary-2);font-weight:600;cursor:help;
+  border-bottom:1.5px dotted var(--primary-2);
+  position:relative;white-space:nowrap;
+}
+.tooltip{
+  position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%) translateY(4px);
+  background:var(--text);color:var(--bg);font-weight:400;
+  font-size:12.5px;line-height:1.6;padding:8px 12px;border-radius:9px;
+  width:240px;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;
+  transition:opacity .18s,transform .18s;z-index:500;white-space:normal;
+}
+[data-theme="dark"] .tooltip{background:#e8ecf1;color:#14181d}
+.tooltip::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:var(--text);
+}
+[data-theme="dark"] .tooltip::after{border-top-color:#e8ecf1}
+.term.show .tooltip{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============ 时间轴 ============ */
+.timeline{position:relative;margin:20px 0 8px;padding-left:8px}
+.timeline::before{
+  content:"";position:absolute;left:16px;top:6px;bottom:6px;width:2px;
+  background:var(--border-2);
+}
+.tl-item{position:relative;padding:0 0 14px 48px}
+.tl-item::before{
+  content:"";position:absolute;left:10px;top:6px;width:13px;height:13px;border-radius:50%;
+  background:var(--card);border:3px solid var(--primary-2);
+}
+.tl-item.hot::before{border-color:var(--accent)}
+.tl-time{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--accent)}
+.tl-body{font-size:14.5px;color:var(--text-2);margin-top:2px}
+
+/* ============ 步骤条（投研循环） ============ */
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.fstep{
+  flex:1 1 130px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:12px 14px;position:relative;
+  box-shadow:var(--shadow);
+}
+.fstep .n{
+  width:24px;height:24px;border-radius:50%;background:var(--primary);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-bottom:8px;
+}
+.fstep .t{font-weight:700;font-size:14px}
+.fstep .d{font-size:12px;color:var(--text-2);margin-top:3px;line-height:1.5}
+.fstep .arrow{position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--border-2);font-size:15px;z-index:2}
+.fstep.loop{background:var(--accent-soft);border-color:var(--accent)}
+.fstep.loop .n{background:var(--accent)}
+
+/* ============ 组织架构图 ============ */
+.org{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.org .ceo{
+  text-align:center;margin:0 auto 8px;max-width:260px;
+  background:var(--primary);color:#fff;border-radius:10px;padding:10px 14px;font-weight:700;font-size:14px;
+}
+[data-theme="dark"] .org .ceo{background:var(--primary-2);color:#0d1117}
+.org .line{width:2px;height:18px;background:var(--border-2);margin:0 auto}
+.org .row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:2px;
+}
+.org .col{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.org .col .role{font-weight:800;font-size:14px;color:var(--primary-2)}
+.org .col .who{font-size:12px;color:var(--text-2);margin-top:4px;line-height:1.6}
+
+/* ============ 心法卡片（手风琴：一次只展开一张） ============ */
+.zhifa-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.zhifa{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .2s;
+}
+.zhifa:hover{box-shadow:var(--shadow-lg)}
+.zhifa-head{
+  display:block;width:100%;text-align:left;
+  cursor:pointer;user-select:none;
+  padding:16px 18px;
+  background:none;border:none;font-family:inherit;color:inherit;
+}
+.zhifa-head:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.zhifa-head .head{display:flex;align-items:center;gap:10px;width:100%}
+.zhifa-head .badge{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  background:var(--primary-soft);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;
+}
+.zhifa-head .tt{flex:1;min-width:0}
+.zhifa-head .tt .n{font-size:13px;font-weight:800;color:var(--accent)}
+.zhifa-head .tt .h{font-size:15.5px;font-weight:700;margin-top:1px}
+.zhifa-head .tt .who{font-size:12px;color:var(--text-3);margin-top:2px}
+.zhifa-head .caret{
+  color:var(--text-3);transition:transform .25s;font-size:13px;flex-shrink:0;
+  margin-left:6px;
+}
+.zhifa.open .zhifa-head .caret{transform:rotate(90deg)}
+/* 展开的卡片独占整行，避免撑高同行的其他卡片 */
+.zhifa.open{
+  grid-column:1 / -1;
+  border-color:var(--primary-2);
+  box-shadow:var(--shadow-lg);
+}
+.zhifa.open .one{padding-left:22px;padding-right:22px}
+.zhifa.open .body{padding:16px 22px 20px}
+.zhifa-panel{
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .32s ease;
+}
+.zhifa.open .zhifa-panel{grid-template-rows:1fr}
+.zhifa-panel .panel-inner{overflow:hidden;min-height:0}
+.zhifa .one{
+  padding:0 18px 14px;font-size:13.5px;color:var(--text-2);line-height:1.7;
+  border-bottom:1px dashed var(--border);
+}
+.zhifa .body{padding:14px 18px 16px}
+.zhifa .body h5{font-size:13px;font-weight:800;color:var(--green);margin:0 0 8px;letter-spacing:.04em}
+.zhifa .body ul{padding-left:18px;margin:0}
+.zhifa .body li{font-size:13px;line-height:1.7;margin:5px 0;color:var(--text-2)}
+.zhifa .body li b{color:var(--text)}
+.zhifa .body .sys-title{font-size:13px;font-weight:800;color:var(--accent);margin:12px 0 6px;letter-spacing:.04em}
+.zhifa .body .sys li b{color:var(--accent)}
+
+/* ============ 竞品卡片 ============ */
+.map-layer{margin:12px 0}
+.map-layer .ml-head{
+  display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;
+  padding:10px 16px;border-radius:10px;background:var(--primary);color:#fff;
+}
+[data-theme="dark"] .map-layer .ml-head{background:var(--primary-2);color:#0d1117}
+.map-layer .ml-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;
+  border:2px dashed var(--border-2);border-top:none;border-radius:0 0 12px 12px;
+  padding:14px;margin-top:0;
+}
+.map-layer .ml-grid.attached{margin-top:-2px}
+.cp-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:12px 14px;box-shadow:var(--shadow);
+}
+.cp-card .cp-name{font-weight:800;font-size:14px;color:var(--primary-2)}
+.cp-card .cp-pos{font-size:12px;color:var(--text-3);margin-top:1px}
+.cp-card .cp-prod{font-size:12.5px;color:var(--text-2);margin-top:6px;line-height:1.6}
+.vendors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.vendor{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 18px;box-shadow:var(--shadow);
+}
+.vendor .v-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.vendor .v-name{font-weight:800;font-size:15px;color:var(--primary-2)}
+.vendor .v-tag{
+  font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:999px;
+  background:var(--primary-soft);color:var(--primary);white-space:nowrap;
+}
+.vendor .v-pos{font-size:12.5px;color:var(--text-3);margin-top:2px}
+.vendor ul{margin:8px 0 0;padding-left:18px}
+.vendor li{font-size:13px;line-height:1.7;color:var(--text-2);margin:3px 0}
+.vendor .v-val{
+  margin-top:10px;font-size:12.5px;line-height:1.65;color:var(--text-2);
+  background:var(--bg);border-radius:8px;padding:8px 10px;
+}
+.vendor .v-val b{color:var(--accent)}
+
+/* ============ 架构图（第六章） ============ */
+.arch{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin:16px 0}
+.arch .layer{border:1px solid var(--border-2);border-radius:10px;padding:10px;margin:8px 0}
+.arch .layer .l-name{font-size:12px;font-weight:800;text-align:center;margin-bottom:8px;color:var(--text-2)}
+.arch .workbench{background:var(--primary);border-color:var(--primary);color:#fff}
+[data-theme="dark"] .arch .workbench{background:var(--primary-2);border-color:var(--primary-2);color:#0d1117}
+.arch .workbench .l-name{color:rgba(255,255,255,.85)}
+.arch .mods{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.arch .mod{
+  background:var(--bg);border:1px solid var(--border);border-radius:8px;
+  padding:10px 8px;text-align:center;
+}
+.arch .mod .m-n{font-weight:800;font-size:13px;color:var(--primary-2)}
+.arch .mod .m-d{font-size:11px;color:var(--text-3);margin-top:2px}
+.arch .data-layer{background:var(--accent-soft);border-color:var(--accent-2);text-align:center}
+.arch .data-layer .l-name{color:var(--accent)}
+.arch .data-layer .d-txt{font-size:13px;color:var(--text-2)}
+.arch .data-layer .d-txt b{color:var(--accent)}
+
+/* ============ 模块蓝图 ============ */
+.module{
+  margin:14px 0;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+}
+.module .m-head{
+  display:flex;align-items:center;gap:12px;padding:16px 20px;
+  background:linear-gradient(90deg,var(--primary-soft),transparent);
+  border-bottom:1px solid var(--border);
+}
+.module .m-ico{width:42px;height:42px;border-radius:12px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+[data-theme="dark"] .module .m-ico{background:var(--primary-2);color:#0d1117}
+.module .m-title{font-size:17px;font-weight:800}
+.module .m-meta{font-size:12.5px;color:var(--text-2);margin-top:2px}
+.module .m-body{padding:16px 20px}
+.module ul{padding-left:22px;margin:0}
+.module li{font-size:14px;line-height:1.7;margin:6px 0}
+.module li b{color:var(--primary-2)}
+.module .star{color:var(--accent)}
+.module .m-body .callout{margin:14px 0 0}
+
+/* ============ 清单（可勾选） ============ */
+.checklist{list-style:none;padding:0;margin:14px 0}
+.checklist li{
+  display:flex;gap:12px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--border);border-radius:11px;
+  padding:13px 16px;margin:8px 0;box-shadow:var(--shadow);
+}
+.checklist input[type=checkbox]{
+  width:18px;height:18px;flex-shrink:0;margin-top:3px;accent-color:var(--accent);cursor:pointer;
+}
+.checklist .cl-t{font-weight:700;font-size:14.5px}
+.checklist .cl-d{font-size:13px;color:var(--text-2);margin-top:2px;line-height:1.65}
+.checklist li.done .cl-t{text-decoration:line-through;color:var(--text-3)}
+
+/* ============ 误区列表 ============ */
+.mistake{list-style:none;padding:0;margin:14px 0}
+.mistake li{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 16px;margin:8px 0;border-radius:11px;border:1px solid;
+}
+.mistake li.no{background:var(--red-soft);border-color:var(--red)}
+.mistake li.no .mk{color:var(--red);font-weight:800}
+.mistake li.yes{background:var(--green-soft);border-color:var(--green)}
+.mistake li.yes .mk{color:var(--green);font-weight:800}
+.mistake .mk-t{font-size:14px;line-height:1.7}
+.mistake .mk-t b{display:block;font-size:13px;margin-bottom:2px}
+
+/* ============ 本章小结 ============ */
+.summary-box{
+  margin:30px 0 0;padding:18px 22px;border-radius:var(--radius);
+  background:var(--green-soft);border:1px solid var(--green);
+}
+.summary-box .sb-title{
+  display:flex;align-items:center;gap:8px;font-weight:800;font-size:14.5px;
+  color:var(--green);margin-bottom:10px;
+}
+.summary-box ol{margin:0;padding-left:20px}
+.summary-box li{font-size:13.5px;line-height:1.75;margin:4px 0;color:var(--text)}
+.summary-box li::marker{color:var(--green);font-weight:800}
+.summary-box li b{color:var(--primary-2)}
+
+/* ============ 资金流向图 ============ */
+.money-flow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.mf-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 18px;box-shadow:var(--shadow);
+}
+.mf-card .mf-title{font-weight:800;font-size:15px;color:var(--primary-2);margin-bottom:8px}
+.money-steps{list-style:none;padding:0;margin:6px 0 0}
+.money-steps li{
+  position:relative;display:flex;gap:12px;align-items:flex-start;
+  padding:0 0 15px 0;
+}
+.money-steps li:last-child{padding-bottom:0}
+.money-steps li::before{
+  content:"";position:absolute;left:14px;top:33px;bottom:0;width:2px;
+  background:var(--border-2);
+}
+.money-steps li:last-child::before{display:none}
+.ms-num{
+  flex-shrink:0;width:29px;height:29px;border-radius:50%;
+  background:var(--primary);color:#fff;font-size:12.5px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:1;
+}
+[data-theme="dark"] .ms-num{background:var(--primary-2);color:#0d1117}
+.ms-body{flex:1;padding-top:3px}
+.ms-body b{display:block;color:var(--text);font-size:13.5px}
+.ms-desc{font-size:12.5px;color:var(--text-2);line-height:1.6}
+.ms-loop{
+  margin:4px 0 0;padding:8px 12px;font-size:12px;color:var(--text-3);
+  border-top:1px dashed var(--border);line-height:1.6;
+}
+.ms-loop b{color:var(--accent);font-weight:800}
+.mf-card.mf-highlight{background:var(--accent-soft);border-color:var(--accent-2)}
+.mf-card.mf-highlight .mf-title{color:var(--accent)}
+
+/* 2/20 费用项（独立小卡片，避免 flex 文本混排） */
+.fee-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.fee-item{
+  background:var(--bg);border:1px solid var(--border);border-radius:11px;
+  padding:13px 15px;
+}
+.fee-name{font-weight:800;font-size:14px;color:var(--text)}
+.fee-rate{font-size:21px;font-weight:800;color:var(--accent);margin:4px 0 2px;line-height:1.2}
+.fee-unit{font-size:12px;font-weight:600;color:var(--text-3)}
+.fee-desc{font-size:12px;color:var(--text-2)}
+.fee-example{margin:12px 0 0;font-size:13px;line-height:1.75;color:var(--text-2)}
+.fee-example b{color:var(--text)}
+.fee-note{margin:10px 0 0;font-size:12.5px;line-height:1.7;color:var(--text-2)}
+
+/* ============ 策略卡片 ============ */
+.strategy-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.strat{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 16px;box-shadow:var(--shadow);
+}
+.strat .s-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.strat .s-ico{font-size:19px;line-height:1}
+.strat .s-name{font-weight:800;font-size:14.5px;color:var(--primary-2)}
+.strat .s-en{font-size:10.5px;color:var(--text-3);font-family:var(--mono);letter-spacing:.02em}
+.strat .s-desc{font-size:12.5px;line-height:1.65;color:var(--text-2)}
+.strat .s-desc b{color:var(--accent)}
+
+/* ============ 三步阅读路径 ============ */
+.readpath{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0 4px}
+.rp-step{
+  flex:1 1 220px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);position:relative;
+}
+.rp-step .rp-n{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.05em}
+.rp-step .rp-t{font-weight:700;font-size:14.5px;margin-top:4px}
+.rp-step .rp-d{font-size:12.5px;color:var(--text-2);margin-top:4px;line-height:1.6}
+
+/* ============ 术语表 ============ */
+.termsearch{position:relative;margin:16px 0;max-width:420px}
+.termsearch input{
+  width:100%;padding:11px 16px 11px 40px;border:1px solid var(--border-2);
+  border-radius:12px;background:var(--card);color:var(--text);
+  font-size:14px;font-family:inherit;outline:none;
+}
+.termsearch input:focus{border-color:var(--primary-2);box-shadow:0 0 0 3px var(--primary-soft)}
+.termsearch .ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-3)}
+.term-filters{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+.tf-btn{
+  font-size:12px;padding:4px 12px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--border-2);background:var(--card);color:var(--text-2);
+}
+.tf-btn.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+[data-theme="dark"] .tf-btn.on{background:var(--primary-2);color:#0d1117}
+.glossary{list-style:none;padding:0;margin:12px 0 0}
+.glossary li{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:12px 16px;border-bottom:1px solid var(--border);border-radius:8px;
+}
+.glossary li:hover{background:var(--primary-soft)}
+.glossary .g-term{flex:0 0 190px;font-weight:700;font-size:14px;color:var(--primary-2)}
+.glossary .g-def{font-size:13.5px;color:var(--text-2);line-height:1.7}
+.glossary .g-cat{
+  flex-shrink:0;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;
+  background:var(--accent-soft);color:var(--accent);align-self:center;
+}
+
+/* ============ 资源 & 页脚 ============ */
+.res-list{list-style:none;padding:0;margin:14px 0}
+.res-list li{
+  display:flex;gap:10px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:11px 14px;margin:7px 0;font-size:13.5px;line-height:1.65;
+}
+.res-list .rk{flex-shrink:0;width:24px;height:24px;border-radius:7px;background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-top:1px}
+.res-list .r-desc{color:var(--text-3);font-size:12.5px;margin-top:2px}
+footer{
+  margin-top:60px;padding:28px 0 20px;border-top:1px solid var(--border);
+  color:var(--text-3);font-size:12.5px;text-align:center;line-height:1.8;
+}
+
+/* ============ 返回顶部 ============ */
+#toTop{
+  position:fixed;right:26px;bottom:26px;z-index:300;
+  width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--primary);color:#fff;font-size:19px;
+  box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transform:translateY(8px);
+  transition:opacity .25s,transform .25s;
+}
+#toTop.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+#toTop:hover{background:var(--primary-2)}
+
+/* ============ 响应式 ============ */
+@media(max-width:1100px){
+  .article{padding:0 28px 100px}
+}
+@media(max-width:960px){
+  #sidebar{transform:translateX(-100%);box-shadow:var(--shadow-lg)}
+  #sidebar.open{transform:translateX(0)}
+  #main{margin-left:0}
+  #menuBtn{display:flex}
+  #scrim{
+    position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:190;opacity:0;
+    pointer-events:none;transition:opacity .3s;
+  }
+  #scrim.show{opacity:1;pointer-events:auto}
+  .zhifa-grid,.vendors,.money-flow,.strategy-grid,.fee-row{grid-template-columns:1fr}
+  .arch .mods{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  body{font-size:15.5px}
+  .article{padding:0 18px 80px}
+  .hero{padding:32px 24px}
+  .hero h1{font-size:23px}
+  .org .row{grid-template-columns:1fr 1fr}
+  .glossary li{flex-direction:column;gap:4px}
+  .glossary .g-term{flex-basis:auto}
+}
+/* ============ 打印 ============ */
+@media print{
+  #sidebar,#topbar,#progress,#toTop,#scrim{display:none!important}
+  #main{margin-left:0}
+  .article{max-width:none;padding:0}
+  body{font-size:12px;line-height:1.6;background:#fff;color:#000}
+  section.ch{padding-top:24px;page-break-inside:avoid}
+  a{color:#000}
+  .zhifa-panel{grid-template-rows:1fr !important}
+  .callout,.module,.vendor{box-shadow:none;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="scrim"></div>
+
+<!-- ================= 侧边栏目录 ================= -->
+<aside id="sidebar">
+  <div class="sb-brand">
+    <div class="logo"><span class="dot"></span>私募投研 · 产品入门手册</div>
+    <div class="sub">为产品经理小白打造 · 可反复查阅</div>
+  </div>
+  <div class="sb-search">
+    <input type="text" id="tocSearch" placeholder="🔍 搜索章节…">
+  </div>
+  <nav class="toc" id="toc">
+    <div class="toc-group"><a href="#ch0" class="active"><span class="num">◉</span>封面导读</a></div>
+    <div class="toc-group" data-g="1">
+      <a href="#ch1"><span class="num">1</span>行业全景<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s1-1">1.1 私募基金是什么</a>
+        <a href="#s1-2">1.2 两类私募的区别</a>
+        <a href="#s1-3">1.3 监管与合规</a>
+        <a href="#s1-4">1.4 募投管退生命周期</a>
+        <a href="#s1-5">1.5 钱怎么流动 & 怎么赚钱</a>
+        <a href="#s1-6">1.6 常见策略类型</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="2">
+      <a href="#ch2"><span class="num">2</span>用户是谁<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s2-1">2.1 行业玩家分层</a>
+        <a href="#s2-2">2.2 组织架构</a>
+        <a href="#s2-3">2.3 需求与痛点</a>
+        <a href="#s2-4">2.4 行业事实</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="3">
+      <a href="#ch3"><span class="num">3</span>投研一天<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s3-1">3.1 研究员的一天</a>
+        <a href="#s3-2">3.2 本质循环</a>
+        <a href="#s3-3">3.3 读研写验荐评</a>
+        <a href="#s3-4">3.4 数据是地基</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="4">
+      <a href="#ch4"><span class="num">4</span>投研心法 ×10<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s4-1">4.1 能力圈</a>
+        <a href="#s4-2">4.2 护城河</a>
+        <a href="#s4-3">4.3 逆向投资</a>
+        <a href="#s4-4">4.4 弱者体系</a>
+        <a href="#s4-5">4.5 安全边际</a>
+        <a href="#s4-6">4.6 赔率与概率</a>
+        <a href="#s4-7">4.7 复利与长期</a>
+        <a href="#s4-8">4.8 执行纪律</a>
+        <a href="#s4-9">4.9 复盘迭代</a>
+        <a href="#s4-10">4.10 风控第一</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="5">
+      <a href="#ch5"><span class="num">5</span>竞品地图<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s5-1">5.1 全景地图</a>
+        <a href="#s5-2">5.2 核心能力拆解</a>
+        <a href="#s5-3">5.3 为什么是蓝海</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="6">
+      <a href="#ch6"><span class="num">6</span>功能蓝图<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s6-1">6.1 整体架构</a>
+        <a href="#s6-2">6.2 研究管理</a>
+        <a href="#s6-3">6.3 组合管理</a>
+        <a href="#s6-4">6.4 风控管理</a>
+        <a href="#s6-5">6.5 复盘进化 ★</a>
+        <a href="#s6-6">6.6 数据与资讯</a>
+        <a href="#s6-7">6.7 AI 机会点</a>
+        <a href="#s6-8">6.8 商业化思考</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="7">
+      <a href="#ch7"><span class="num">7</span>行动建议<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s7-1">7.1 补什么知识</a>
+        <a href="#s7-2">7.2 实操建议</a>
+        <a href="#s7-3">7.3 常见误区</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="8">
+      <a href="#ch8"><span class="num">8</span>术语速查<span class="caret" style="margin-left:auto">▸</span></a>
+    </div>
+    <div class="toc-group" data-g="9">
+      <a href="#ch9"><span class="num">9</span>资源与下一步<span class="caret" style="margin-left:auto">▸</span></a>
+    </div>
+  </nav>
+</aside>
+
+<!-- ================= 主内容 ================= -->
+<div id="main">
+<div id="topbar">
+  <button id="menuBtn" title="目录">☰</button>
+  <span class="crumb" id="crumb">封面导读</span>
+  <span class="spacer"></span>
+  <button class="icon-btn" id="themeBtn" title="切换主题">🌙</button>
+</div>
+
+<div class="article">
+
+<!-- ========== 封面 ========== -->
+<section class="ch" id="ch0">
+  <div class="hero">
+    <span class="tag">产品经理 · 领域入门手册</span>
+    <h1>私募基金投研领域<br>入门手册</h1>
+    <p class="lead">这套手册只回答四个问题：<strong>私募持仓管理人是谁？他们每天在干什么？痛在哪里？投研心法怎么变成产品功能？</strong>——读完你就能听懂投研人说话，知道该做什么样的产品。</p>
+    <div class="quick">
+      <a href="#ch1">① 先建地图：行业全景</a>
+      <a href="#ch4">④ 投研心法 ×10</a>
+      <a href="#ch6">⑥ 功能设计蓝图</a>
+      <a href="#ch8">⑧ 术语速查表</a>
+    </div>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">📖 建议阅读时长：约 40 分钟</span>
+    <span class="ov-chip">🎯 难度：零基础可读</span>
+    <span class="ov-chip">🔖 遇到不懂的词，鼠标悬停正文中的蓝色词语即可查看解释</span>
+  </div>
+
+  <div class="readpath">
+    <div class="rp-step"><div class="rp-n">STEP 1 · 建立地图</div><div class="rp-t">先读第一～三章</div><div class="rp-d">搞懂私募是什么、用户是谁、投研人一天怎么过（约 15 分钟）</div></div>
+    <div class="rp-step"><div class="rp-n">STEP 2 · 掌握心法</div><div class="rp-t">精读第四章</div><div class="rp-d">10 大投研心法如何变成产品功能，是全书核心（约 15 分钟）</div></div>
+    <div class="rp-step"><div class="rp-n">STEP 3 · 落地执行</div><div class="rp-t">用第五～七章</div><div class="rp-d">看竞品、画蓝图、列行动计划（约 10 分钟）</div></div>
+  </div>
+
+  <div class="callout key">
+    <div class="ico">💡</div>
+    <div><p><strong>怎么读这套手册：</strong>第一章到第三章帮你建立"行业和用户"的地图；第四章是核心——把大师们的"心法"逐条翻译成产品功能；第五、六章告诉你市场现状和你的机会；第七章是可执行的学习与产品清单。每章开头都有「本章速览」，先看它再决定精读还是略读。</p></div>
+  </div>
+</section>
+
+<!-- ========== 第一章 ========== -->
+<section class="ch" id="ch1">
+  <div class="ch-header">
+    <div class="kicker">Chapter 1</div>
+    <h2>一、先建立整体地图：私募基金行业全景</h2>
+    <p class="desc">用最少的术语，搞懂私募基金是什么、分几类、被谁管、怎么运转。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 本章速览：私募是什么</span>
+    <span class="ov-chip">✅ 证券 vs 股权两类私募的区别</span>
+    <span class="ov-chip">✅ 为什么"合规"是刚需</span>
+    <span class="ov-chip">✅ 募投管退生命周期</span>
+  </div>
+
+  <h3 id="s1-1">1.1 私募基金是什么（一句话版）</h3>
+  <p><strong>私募基金</strong> = 面向<strong>合格投资者</strong>（高净值个人/机构）<strong>非公开募集</strong>、由<strong>私募基金管理人</strong>运作的基金。</p>
+  <p>和公募基金的区别，用一个对比就记住：</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>维度</th><th>公募基金</th><th>私募基金</th></tr></thead>
+      <tbody>
+        <tr><td class="t">向谁募集</td><td>向大众公开宣传</td><td>不公开宣传，只面向合格投资者</td></tr>
+        <tr><td class="t">投资门槛</td><td>10 元起</td><td>单人最低 <b class="num">100 万元</b> 起步</td></tr>
+        <tr><td class="t">信息披露</td><td>严格、定期披露</td><td>几乎不公开披露</td></tr>
+        <tr><td class="t">谁在管</td><td>基金公司（公募牌照）</td><td>私募基金管理人（中基协登记）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="s1-2">1.2 两类私募，投研逻辑完全不同（这是关键！）</h3>
+  <p>很多人一上来把"私募"当成一个东西，其实它分两类，投研逻辑截然不同：</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>维度</th><th>私募证券投资基金</th><th>私募股权/创业投资基金</th></tr></thead>
+      <tbody>
+        <tr><td class="t">投什么</td><td>二级市场：股票、债券、期货、期权、基金</td><td>一级市场：未上市企业股权</td></tr>
+        <tr><td class="t">看什么</td><td>上市公司财报、行业景气、股价</td><td>项目商业计划、团队、赛道</td></tr>
+        <tr><td class="t">决策节奏</td><td>快（日/周/月级调仓）</td><td>慢（投决会，数月调研）</td></tr>
+        <tr><td class="t">投研重心</td><td>研究→选股→组合→风控→交易</td><td>项目储备→尽调→投决→投后→退出</td></tr>
+        <tr><td class="t">行业规模</td><td colspan="2">整个私募行业管理规模约 <b class="num">20 万亿元</b>（2023 年）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warn">
+    <div class="ico">⚠️</div>
+    <div><p><strong>做产品前先确认客户类型。</strong>如果你做的是"投研"产品，先确认目标客户是<strong>证券类私募</strong>（二级市场，投研系统核心诉求）还是<strong>股权类私募</strong>（更多是项目尽调与投后管理，叫"募投管退"系统）。本手册重点讲证券类私募投研——这是"投研心法"最密集的地方。</p></div>
+  </div>
+
+  <h3 id="s1-3">1.3 行业监管框架（理解"合规"为什么是刚需）</h3>
+  <ul>
+    <li><strong>监管机构</strong>：中国证监会；<strong>自律组织</strong>：中国证券投资基金业协会（<span class="term" data-term="中基协">中基协</span>）</li>
+    <li><strong>核心制度</strong>："管理人登记 + 基金备案"二元体系
+      <ul>
+        <li>私募基金管理人要在中基协登记（类似"牌照"）</li>
+        <li>每只基金产品要备案</li>
+      </ul>
+    </li>
+    <li><strong>关键法规</strong>：
+      <ul>
+        <li>《私募投资基金监督管理暂行办法》（2014，基础性法规）</li>
+        <li>《私募投资基金监督管理条例》（2023.9.1，国务院条例，监管升级）</li>
+        <li>《私募投资基金登记备案办法》（2023.5.1）</li>
+        <li>《证券期货投资者适当性管理办法》（投资者适当性）</li>
+      </ul>
+    </li>
+    <li><strong>合格投资者标准</strong>：金融资产不低于 300 万元，或近三年年均收入不低于 50 万元；单只私募证券基金投资门槛 <b class="num">100 万元</b>（股权 300 万）</li>
+    <li><strong>合规要求</strong>：投资者适当性管理（风险测评→匹配）、<span class="term" data-term="双录">双录</span>（录音录像留痕）、信息披露（季度报告等）</li>
+  </ul>
+  <div class="callout idea">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：</strong><strong>合规留痕、适当性管理、信息披露报告</strong>是私募管理人的刚性需求，系统能帮他们"不出事"。但这是"及格线"功能，不是差异化竞争力。<span class="hl">差异化竞争力在"帮他们赚钱"的投研功能上。</span></p></div>
+  </div>
+
+  <h3 id="s1-4">1.4 私募基金的"募投管退"生命周期</h3>
+  <div class="flow">
+    <div class="fstep"><span class="n">募</span><div class="t">募集</div><div class="d">合格投资者尽调、路演、认购</div></div>
+    <div class="fstep" style="border-color:var(--accent-2);background:var(--accent-soft)"><span class="n" style="background:var(--accent)">投</span><div class="t" style="color:var(--accent)">投资 ★</div><div class="d">研究、决策、交易 —— 投研系统核心</div></div>
+    <div class="fstep"><span class="n">管</span><div class="t">管理</div><div class="d">持仓跟踪、风控、信息披露</div></div>
+    <div class="fstep"><span class="n">退</span><div class="t">退出</div><div class="d">赎回、清盘、分配</div></div>
+  </div>
+  <p>私募证券基金的"投管退"节奏很快，基本是滚动循环：<strong>研究 → 买 → 跟踪 → 卖 → 复盘 → 再研究</strong>。</p>
+
+  <h3 id="s1-5">1.5 钱是怎么流动的？管理人靠什么赚钱？</h3>
+  <p>一句话：<strong>投资者把钱交给管理人，管理人拿去买资产，赚了钱分给投资者，自己抽成。</strong></p>
+  <div class="money-flow">
+    <div class="mf-card">
+      <div class="mf-title">💰 钱怎么流动</div>
+      <ol class="money-steps">
+        <li><span class="ms-num">1</span><div class="ms-body"><b>投资者（LP）</b><span class="ms-desc">认购基金，把钱打进来</span></div></li>
+        <li><span class="ms-num">2</span><div class="ms-body"><b>管理人（GP）</b><span class="ms-desc">用这笔钱建投资组合</span></div></li>
+        <li><span class="ms-num">3</span><div class="ms-body"><b>买股票 / 债券 / 期货…</b><span class="ms-desc">这就是投研团队的活儿</span></div></li>
+        <li><span class="ms-num">4</span><div class="ms-body"><b>净值涨跌</b><span class="ms-desc">产生收益或亏损</span></div></li>
+        <li><span class="ms-num">5</span><div class="ms-body"><b>回馈投资者</b><span class="ms-desc">赎回时按份额拿回本金和收益</span></div></li>
+      </ol>
+      <p class="ms-loop"><b>↺</b> 循环往复：赎回后资金又可重新认购，周而复始</p>
+    </div>
+    <div class="mf-card mf-highlight">
+      <div class="mf-title">💸 管理人怎么赚钱（记住 "2/20"）</div>
+      <div class="fee-row">
+        <div class="fee-item">
+          <div class="fee-name">管理费</div>
+          <div class="fee-rate">1%–2% <span class="fee-unit">/ 年</span></div>
+          <div class="fee-desc">按规模收，旱涝保收</div>
+        </div>
+        <div class="fee-item">
+          <div class="fee-name">业绩报酬</div>
+          <div class="fee-rate">20%</div>
+          <div class="fee-desc">赚了钱才抽成（Carry）</div>
+        </div>
+      </div>
+      <p class="fee-example"><b>举例：</b>管 10 亿，管理费 2% = 2000 万/年；一年赚 1 亿，再抽 20% = 2000 万。行情差时只赚管理费，行情好时两头都赚。</p>
+      <p class="fee-note">※ 这正是私募"重业绩"的原因：业绩好，规模才涨得动，管理费和业绩报酬都水涨船高——所以<span class="hl">帮管理人"做出好业绩"的投研工具，是直击核心利益的产品</span>。</p>
+    </div>
+  </div>
+
+  <h3 id="s1-6">1.6 私募基金的常见策略类型（你未来的用户画像）</h3>
+  <p>同样是"私募投研"，不同策略的团队工作方式天差地别。认识它们，才知道你的产品要服务谁：</p>
+  <div class="strategy-grid">
+    <div class="strat">
+      <div class="s-head"><span class="s-ico">📈</span><span class="s-name">股票多头</span><span class="s-en">主观 · Long Only</span></div>
+      <div class="s-desc">最主流。靠"研究公司 → 买好股票 → 长期持有"赚钱，主观判断主导。代表：高毅、景林、淡水泉。<b>对"研究沉淀+决策留痕"系统需求最强烈的群体。</b></div>
+    </div>
+    <div class="strat">
+      <div class="s-head"><span class="s-ico">🤖</span><span class="s-name">量化指增 / 市场中性</span><span class="s-en">Quant</span></div>
+      <div class="s-desc">靠模型和算法选股、交易，追求跑赢指数或对冲后稳赚超额。代表：幻方、九坤、明汯。主要用米筐/聚宽这类量化平台。</div>
+    </div>
+    <div class="strat">
+      <div class="s-head"><span class="s-ico">🛢</span><span class="s-name">CTA（管理期货）</span><span class="s-en">Commodity Trading Advisor</span></div>
+      <div class="s-desc">主要交易期货，抓商品/股指的趋势，跟股票关系不大，风控看波动率。</div>
+    </div>
+    <div class="strat">
+      <div class="s-head"><span class="s-ico">🌐</span><span class="s-name">宏观对冲</span><span class="s-en">Macro</span></div>
+      <div class="s-desc">判断宏观经济和大类资产（股/债/汇/商品）的涨跌来下注，以宏观数据研究为主。</div>
+    </div>
+    <div class="strat">
+      <div class="s-head"><span class="s-ico">💵</span><span class="s-name">债券策略</span><span class="s-en">Fixed Income</span></div>
+      <div class="s-desc">投债券，赚票息和价差，波动低。研究重心是信用风险（会不会违约）。</div>
+    </div>
+    <div class="strat">
+      <div class="s-head"><span class="s-ico">🧩</span><span class="s-name">多策略 / FOF</span><span class="s-en">Multi-strategy / Fund of Funds</span></div>
+      <div class="s-desc">组合多种策略，或投资一篮子基金（<span class="term" data-term="FOF">FOF</span>）。核心是"配置"而非"选股"。</div>
+    </div>
+  </div>
+  <div class="callout tip">
+    <div class="ico">🔑</div>
+    <div><p><strong>给产品经理的提示：</strong>不同策略的用户，投研需求完全不同——<span class="hl">主观股票多头要"研究沉淀 + 决策留痕"，量化团队要"回测 + 因子 + 数据"</span>。做产品前先想清楚：你的 MVP 服务哪一类？本手册后续章节重点服务<strong>主观股票多头</strong>（需求最空白、最值得做）。</p></div>
+  </div>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>私募 = 面向合格投资者、非公开募集、100 万起投的基金，分<b>证券类</b>（二级市场）和<b>股权类</b>（一级市场）两大类。</li>
+      <li>本手册聚焦<b>证券类私募投研</b>——投研心法最密集、产品机会最大的地方。</li>
+      <li>合规（登记备案、适当性、双录）是刚需，但只是"及格线"，差异化在"帮他们赚钱"。</li>
+      <li>记住 <b>"2/20"</b>：管理人靠 1–2% 管理费 + 20% 业绩报酬赚钱，所以业绩是命根子。</li>
+      <li>策略分很多种：股票多头、量化、CTA、宏观、债券、多策略——先锁定<b>主观股票多头</b>。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第二章 ========== -->
+<section class="ch" id="ch2">
+  <div class="ch-header">
+    <div class="kicker">Chapter 2</div>
+    <h2>二、你的用户是谁：私募基金管理人与投研团队</h2>
+    <p class="desc">做产品前，先知道用户长什么样、分几层、各自痛在哪里。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 玩家分三层，谁是付费客户</span>
+    <span class="ov-chip">✅ 一家私募的组织架构</span>
+    <span class="ov-chip">✅ 三类核心用户的痛点</span>
+    <span class="ov-chip">✅ 行业铁律：系统贴合流程</span>
+  </div>
+
+  <h3 id="s2-1">2.1 行业玩家分层（决定你的产品定价与形态）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>层级</th><th>特征</th><th>对产品意味着什么</th></tr></thead>
+      <tbody>
+        <tr><td class="t">头部私募（百亿+）</td><td>高毅、景林、淡水泉、幻方、九坤、明汯等。投研体系成熟</td><td><span class="hl">倾向自研或重定制</span>，很少买通用 SaaS</td></tr>
+        <tr><td class="t">腰部私募（10亿–100亿）</td><td>有正规投研团队（5–30 人），有付费意愿</td><td><span class="hl">投研 SaaS 的核心客户</span> 🎯</td></tr>
+        <tr><td class="t">小型私募（&lt;10亿）</td><td>"老板 = 基金经理 = 研究员"，用 Wind + Excel + 微信群</td><td>付费能力弱，但人数多</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="s2-2">2.2 一家私募（证券类）的组织架构</h3>
+  <div class="org">
+    <div class="ceo">创始人 / CEO（通常就是核心基金经理）</div>
+    <div class="line"></div>
+    <div class="row">
+      <div class="col"><div class="role">投研团队</div><div class="who">基金经理<br>研究员（按行业）<br>研究助理</div></div>
+      <div class="col"><div class="role">交易团队</div><div class="who">交易员<br>中台运营</div></div>
+      <div class="col"><div class="role">风控 / 合规</div><div class="who">风控专员</div></div>
+      <div class="col"><div class="role">市场 / 运营</div><div class="who">投资者关系（IR）</div></div>
+    </div>
+  </div>
+  <ul style="margin-top:14px">
+    <li><strong>基金经理</strong>：决定买什么、买多少、何时卖。是"心法"的源头。</li>
+    <li><strong>研究员</strong>：按行业分工（消费、科技、医药…），研究公司 → 写报告 → 推票 → 跟踪持仓。</li>
+    <li><strong>交易员</strong>：执行买卖，处理冲击成本。</li>
+    <li><strong>风控</strong>：盯仓位、集中度、<span class="term" data-term="止损线">止损线</span>、合规红线。</li>
+    <li><strong>IR/运营</strong>：给客户（LP）出净值报告、月报、季报。</li>
+  </ul>
+
+  <h3 id="s2-3">2.3 三类核心用户的真实需求与痛点</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>角色</th><th>日常要做什么</th><th>核心痛点</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="t">基金经理</td>
+          <td>看盘、看研究员推票、读研报、做组合决策、应对客户</td>
+          <td>信息过载；研究结论散落在聊天/邮件/脑子里；难以快速比较候选标的；组合风险看不清；决策无留痕，难复盘</td>
+        </tr>
+        <tr>
+          <td class="t">研究员</td>
+          <td>读公告研报、搭财务模型、调研、写报告、晨会汇报、跟踪持仓</td>
+          <td>数据获取靠 Wind+Excel 手工搬运，<span class="hl">重复劳动占 60%+ 时间</span>；研究成果不被记录、难以被验证；模拟盘考核缺乏系统</td>
+        </tr>
+        <tr>
+          <td class="t">投研总监 / 创始人</td>
+          <td>管团队、定方向、看整体持仓、控风险</td>
+          <td>团队认知不沉淀（<span class="hl">人走了知识就没了</span>）；研究员考核凭印象；仓位和风控靠 Excel，易出错</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout key">
+    <div class="ico">💡</div>
+    <div><p><strong>一句话总结用户需求：</strong>让研究可沉淀、让决策可留痕、让组合看得清、让风险守得住、让复盘有依据。</p></div>
+  </div>
+
+  <h3 id="s2-4">2.4 一个被反复强调的行业事实</h3>
+  <blockquote>
+    <p>系统永远是跟着机构的"办法、流程、制度"走的，<strong>不要做"用系统重构业务流程"的白日梦</strong>。—— 资管行业数字化转型共识</p>
+  </blockquote>
+  <p>含义：做产品前要先理解客户已有的流程（晨会、投决会、风控委员会），系统去<strong>贴合、放大、提效</strong>这些流程，而不是强行定义新流程。</p>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>客户分三层：头部（百亿+，自研）、<b>腰部（10–100 亿，投研 SaaS 核心客户）</b>、小型（付费弱）。</li>
+      <li>核心岗位：基金经理（拍板）、研究员（研究推票）、交易员、风控、IR。</li>
+      <li>一句话痛点：<b>研究不沉淀、决策不留痕、组合看不清、风险守不住、复盘没依据。</b></li>
+      <li>铁律：系统要<b>贴合</b>机构已有的流程，别妄想用系统重构流程。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第三章 ========== -->
+<section class="ch" id="ch3">
+  <div class="ch-header">
+    <div class="kicker">Chapter 3</div>
+    <h2>三、买方投研的一天与完整工作流</h2>
+    <p class="desc">把抽象的用户，还原成一个具体的人，看看他的一天怎么过。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 研究员的一天时间轴</span>
+    <span class="ov-chip">✅ 投研本质循环 7 步</span>
+    <span class="ov-chip">✅ 机构框架"读研写验荐评"</span>
+    <span class="ov-chip">✅ 为什么数据是地基</span>
+  </div>
+
+  <h3 id="s3-1">3.1 一个典型工作日（买方研究员）</h3>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time">08:30</div><div class="tl-body"><strong>晨会</strong>：汇报隔夜市场、重点行业/个股动态、推荐标的</div></div>
+    <div class="tl-item"><div class="tl-time">09:00</div><div class="tl-body"><strong>开盘</strong>：看盘，跟踪持仓异动；回复卖方微信/短信</div></div>
+    <div class="tl-item"><div class="tl-time">09:30</div><div class="tl-body"><strong>读公告/研报/新闻</strong>，整理信息</div></div>
+    <div class="tl-item"><div class="tl-time">11:30</div><div class="tl-body"><strong>午餐</strong>：约卖方研究员/同行交流信息（信息都在饭桌上）</div></div>
+    <div class="tl-item"><div class="tl-time">13:00</div><div class="tl-body"><strong>下午：调研准备、搭盈利预测模型、写研究报告</strong></div></div>
+    <div class="tl-item hot"><div class="tl-time">15:00</div><div class="tl-body"><strong>收盘：写复盘笔记、准备明天的交易计划</strong>（一天里最重要的决策时段）</div></div>
+    <div class="tl-item"><div class="tl-time">16:00</div><div class="tl-body"><strong>内部会议</strong>：投研交流、跟基金经理对齐</div></div>
+    <div class="tl-item"><div class="tl-time">晚间</div><div class="tl-body">读公告（很多公告晚上 9 点后才发布）、跟研究员朋友交流</div></div>
+  </div>
+
+  <h3 id="s3-2">3.2 投研工作流的本质循环</h3>
+  <div class="flow">
+    <div class="fstep"><span class="n">1</span><div class="t">获取信息</div><div class="d">数据 / 研报 / 公告 / 舆情</div><span class="arrow">→</span></div>
+    <div class="fstep"><span class="n">2</span><div class="t">研究分析</div><div class="d">模型 / 报告 / 估值</div><span class="arrow">→</span></div>
+    <div class="fstep"><span class="n">3</span><div class="t">形成观点</div><div class="d">推票 + 目标价</div><span class="arrow">→</span></div>
+    <div class="fstep"><span class="n">4</span><div class="t">决策建仓</div><div class="d">组合 + 仓位</div><span class="arrow">→</span></div>
+    <div class="fstep"><span class="n">5</span><div class="t">持仓跟踪</div><div class="d">盯盘 / 预期差 / 归因</div><span class="arrow">→</span></div>
+    <div class="fstep"><span class="n">6</span><div class="t">卖出</div><div class="d">止损 / 目标价 / 逻辑破坏</div><span class="arrow">→</span></div>
+    <div class="fstep"><span class="n">7</span><div class="t">复盘</div><div class="d">总结 + 认知沉淀</div><span class="arrow">→</span></div>
+    <div class="fstep loop"><span class="n">↺</span><div class="t">认知沉淀</div><div class="d">回流到第 1 步，形成飞轮</div></div>
+  </div>
+  <p style="font-size:14px;color:var(--text-2)">关键环节拆解：</p>
+  <ul>
+    <li><strong>获取信息</strong>：行情数据、上市公司公告、券商研报、宏观数据、行业数据、调研纪要、新闻舆情</li>
+    <li><strong>研究分析</strong>：财务分析（三张表）、盈利预测模型（<span class="term" data-term="DCF">DCF</span>/<span class="term" data-term="PE">PE</span> 估值）、行业供需分析、产业链研究、公司竞争力（<span class="term" data-term="护城河">护城河</span>）</li>
+    <li><strong>形成观点</strong>：给出明确的投资建议（买入/持有/卖出）+ 目标价 + 关键假设</li>
+    <li><strong>决策建仓</strong>：基金经理拍板，决定仓位大小；研究员通常用<span class="term" data-term="模拟盘">模拟盘</span>证明自己的选股能力（<span class="hl">考核依据</span>）</li>
+    <li><strong>持仓跟踪</strong>：盯业绩兑现、重大公告、<span class="term" data-term="预期差">预期差</span>；组合层面看集中度、<span class="term" data-term="最大回撤">回撤</span>、风格暴露</li>
+    <li><strong>卖出</strong>：逻辑破坏、达到目标价、止损触发、更好的机会出现</li>
+    <li><strong>复盘</strong>：这笔交易赚/亏了为什么？是逻辑对还是运气？下次怎么改进？</li>
+  </ul>
+
+  <h3 id="s3-3">3.3 机构投研管理的"读研写验荐评"框架（恒生电子韩海潮总结）</h3>
+  <p>监管层要求机构强化"<strong>平台型、团队制、一体化、多策略</strong>"投研体系（私募同样适用）。投研工作从业务场景上分为六个字：</p>
+  <div class="flow">
+    <div class="fstep"><span class="n">读</span><div class="t">信息获取</div><div class="d">便捷直观高效，数据可视化</div></div>
+    <div class="fstep"><span class="n">研</span><div class="t">研究分析</div><div class="d">知识图谱连关系网，发现风险链条</div></div>
+    <div class="fstep"><span class="n">写</span><div class="t">研究报告</div><div class="d">写作与沉淀</div></div>
+    <div class="fstep"><span class="n">验</span><div class="t">观点验证</div><div class="d">模拟盘、回测、跟踪</div></div>
+    <div class="fstep"><span class="n">荐</span><div class="t">推荐推票</div><div class="d">推荐与审批流程</div></div>
+    <div class="fstep"><span class="n">评</span><div class="t">绩效评价</div><div class="d">绩效评价与归因</div></div>
+  </div>
+  <div class="callout key">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：</strong>这六个字就是投研系统的功能骨架——<strong>读（数据+资讯）、研（分析工具）、写（报告）、验（模拟盘/回测）、荐（推票流程）、评（绩效归因）</strong>。</p></div>
+  </div>
+
+  <h3 id="s3-4">3.4 为什么"数据"是投研系统的地基</h3>
+  <ul>
+    <li><strong>研究员现状</strong>：Wind/Choice 客户端 + Excel + Python 手工搬运数据</li>
+    <li><strong>系统要做的事</strong>：把数据接入、清洗、标准化，让研究员"开箱即用"</li>
+    <li><strong>难点</strong>：① 精准覆盖研究员需求（行业数据差异极大）② 改变使用习惯很难</li>
+    <li><strong>数据质量要求</strong>：<span class="term" data-term="Point-in-Time">Point-in-Time</span>（用当时能拿到的数据回测，避免未来函数）、及时性、准确性</li>
+  </ul>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>研究员的一天 = 晨会 → 看盘 → 读研报 → 调研 → 写报告 → 复盘。</li>
+      <li>投研本质循环 7 步：<b>获取信息 → 研究 → 观点 → 建仓 → 跟踪 → 卖出 → 复盘</b>，复盘成果回流形成飞轮。</li>
+      <li>机构投研框架就六个字：<b>读、研、写、验、荐、评</b>——这就是投研系统的功能骨架。</li>
+      <li>数据是地基但最难做；先从"流程"切入比从"数据"切入更实际。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第四章 ========== -->
+<section class="ch" id="ch4">
+  <div class="ch-header">
+    <div class="kicker">Chapter 4 · 全手册核心</div>
+    <h2>四、投研心法总览：哪些"心法"能被系统化</h2>
+    <p class="desc">投资大师的方法论听起来玄，但大量可以被翻译成系统功能。点击每张卡片展开看「心法内容」和「能做成什么功能」。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 10 大心法逐个拆解</span>
+    <span class="ov-chip">✅ 每个心法 → 具体功能</span>
+    <span class="ov-chip">✅ 第 6 章把功能组装成产品</span>
+  </div>
+
+  <div class="zhifa-grid">
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">1</span>
+            <span class="tt"><span class="n">心法一</span><span class="h">能力圈</span><span class="who">巴菲特 / 芒格</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">只投自己真正看得懂的生意，不懂不投。能力圈的大小不重要，<strong>清楚边界最重要</strong>。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>行业覆盖标注</b>：研究员/基金经理覆盖哪些行业，避免越界</li>
+            <li><b>能力圈评分卡</b>：每只标的要求回答"是否理解生意模式/商业模式/盈利来源"，不理解的强制标记</li>
+            <li><b>能力圈标签</b>：给标的上标签（品牌消费品/平台/周期/科技…），与持仓者覆盖能力匹配</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">2</span>
+            <span class="tt"><span class="n">心法二</span><span class="h">护城河分析</span><span class="who">巴菲特 / 帕特·多尔西</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">好公司要有可持续的竞争优势——品牌、网络效应、转换成本、成本优势、无形资产、规模经济。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>护城河评估模板</b>：标准化的评估维度（无形价值/转换成本/网络效应/成本优势/有效规模），逐项打分 + 证据留痕</li>
+            <li><b>护城河变化跟踪</b>：定期复核，标记"护城河收窄/加宽"，触发提醒</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">3</span>
+            <span class="tt"><span class="n">心法三</span><span class="h">逆向投资</span><span class="who">邓普顿"极度悲观点"</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">"牛市在悲观中诞生，在怀疑中成长，在乐观中成熟，在兴奋中死亡。""街头溅血时买入。"</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>情绪/关注度指标</b>：研报数量热度、搜索热度、媒体情绪、北向资金流，量化"市场恐慌程度"</li>
+            <li><b>跌幅扫描器</b>：自动列出"跌幅榜"，配合基本面筛选（跌得多但基本面不烂 = 潜在逆向机会）</li>
+            <li><b>极端点位标记</b>：在个股/指数历史估值分位上标注历史顶底区间（冯柳的"基本面坐标体系"）</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">4</span>
+            <span class="tt"><span class="n">心法四</span><span class="h">弱者体系</span><span class="who">冯柳（高毅资产）· 当代中国最著名的体系之一</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">假定自己在信息、理解、精力、情绪上都处于市场最差水平，只依靠<strong>时间、赔率与常识</strong>。</div>
+        <div class="body">
+          <h5>核心内容</h5>
+          <ul>
+            <li><b>前提</b>：自己是"弱者"，靠时间、赔率、常识取胜</li>
+            <li><b>风格</b>：不择时、不对冲、不用杠杆、不做空、高仓位、赔率优先</li>
+            <li><b>选股标准："可预期、可展望、可想象"</b>
+              <ul>
+                <li>可预期 = 能搞明白 1 年内的业绩和估值</li>
+                <li>可展望 = 大致感受 3 年的发展路径</li>
+                <li>可想象 = 对 10 年后的未来有期盼</li>
+              </ul>
+            </li>
+            <li><b>下跌分类</b>：杀估值（最好，跌下来原因就解除）、杀业绩（次之，按经营节奏投）、杀逻辑（最危险，不碰）</li>
+            <li><b>关注度 × 购买度矩阵</b>：高关注低购买（估值易抬升，好）；高关注高购买（估值有压力，回避）</li>
+            <li><b>卖出</b>：梦想落空时出逃 vs 达到预设后收手</li>
+          </ul>
+          <div class="sys-title">可系统化的点</div>
+          <ul class="sys">
+            <li><b>"10-3原则"检查清单</b>：强制回答"10年后企业还在且更好？3年内盈利提升+估值提升？"</li>
+            <li><b>下跌性质分类器</b>：自动/半自动判断下跌属于杀估值/杀业绩/杀逻辑（结合盈利预测下修幅度 vs 估值变化）</li>
+            <li><b>三段式研究模板</b>：把"可预期/可展望/可想象"变成填空</li>
+            <li><b>关注度-购买度四象限图</b>：研报数量 × 成交量/筹码结构自动绘制</li>
+            <li><b>负面情景压力测试</b>：列出最悲观逻辑，问"最悲观成立也不怕吗"</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">5</span>
+            <span class="tt"><span class="n">心法五</span><span class="h">价值投资与安全边际</span><span class="who">格雷厄姆 / 巴菲特</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">买价格显著低于内在价值的资产，用"安全边际"保护自己；"第一条规则是不要亏钱，第二条是记住第一条"。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>估值工具库</b>：DCF、PE/PB/PS 分位数、EV/EBITDA、股息率等，一键计算并对比历史区间</li>
+            <li><b>安全边际提示</b>：当前价 vs 内在价值估算的折扣率，低于阈值高亮</li>
+            <li><b>一致预期数据</b>（朝阳永续核心产品）：全市场分析师盈利预测汇总，与自主预测对比找"预期差"</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">6</span>
+            <span class="tt"><span class="n">心法六</span><span class="h">赔率与概率思维</span><span class="who">冯柳 / 机构化思维</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">下注 = 概率 × 赔率。胜率不高但赔率极高时值得小仓位参与；胜率赔率双高时重仓。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>交易计划模板</b>：强制填写"看多逻辑、看空逻辑、目标价、止损位、仓位建议、预期赔率（上行空间/下行空间）"</li>
+            <li><b>赔率计算器</b>：自动算上行空间/下行空间比值</li>
+            <li><b>仓位建议模型</b>：凯利公式参考仓位 vs 集中度限制取 min</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">7</span>
+            <span class="tt"><span class="n">心法七</span><span class="h">复利与长期主义</span><span class="who">邓普顿 / 巴菲特</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">年化收益率的小差距（3–4 个百分点）经过时间复利放大后天壤之别；避免大幅回撤是复利的关键（亏 50% 需要涨 100% 才回本）。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>复利视图</b>：组合净值曲线的长期复利展示，回撤区间高亮（水下曲线）</li>
+            <li><b>回撤管理</b>：最大回撤监控、回撤形成天数/修复天数统计、回撤超阈值预警</li>
+            <li><b>"不要打扰复利"</b>：把换手率、交易成本可视化——高换手如何侵蚀复利</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">8</span>
+            <span class="tt"><span class="n">心法八</span><span class="h">知行合一与执行纪律</span><span class="who">现代系统化投资的核心</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">从"知道规则"到"无条件执行"是投资里最难的一公里：回测时冷静，实盘时手抖；明知该止损却不执行。</div>
+        <div class="body">
+          <h5>可系统化的点（产品蓝图的黄金区域）</h5>
+          <ul class="sys">
+            <li><b>规则引擎 / 计划-执行对照</b>：事先设定止损线/止盈线/仓位上限，系统自动监控，触发后强提醒（甚至对接交易系统自动执行）</li>
+            <li><b>纪律打分</b>：统计"计划 vs 实际执行"的偏差，生成纪律分</li>
+            <li><b>情绪标注</b>：下单时让用户标注情绪状态（冷静/FOMO/恐慌/贪婪），复盘时关联情绪与盈亏</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">9</span>
+            <span class="tt"><span class="n">心法九</span><span class="h">复盘与认知迭代</span><span class="who">达利欧"痛苦+反思=进步"</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">把每一次亏损变成系统升级的燃料；复盘要看对问题（"真问题" vs "表层问题"）。</div>
+        <div class="body">
+          <h5>可系统化的点（产品机会巨大，详见第六章）</h5>
+          <ul class="sys">
+            <li><b>交易迭代日志</b>：决策还原 → 模式识别 → 归因分析 → 系统升级（一个具体的"补丁"）</li>
+            <li><b>复盘顺序</b>：先看客观信号 → 再比对主观操作 → 最后看盈亏结果（避免结果导向偏见）</li>
+            <li><b>认知错题本</b>：把共性错误归类成"认知盲区对照表"（如：追涨杀跌=无系统；不止损=侥幸心理）</li>
+            <li><b>研究结论可证伪</b>：每个研究观点必须写下"什么情况出现=我的观点错了"（证伪条件），系统定期提醒复核</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">10</span>
+            <span class="tt"><span class="n">心法十</span><span class="h">风控第一</span><span class="who">所有大师的共识</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">先想怎么不亏，再想怎么赚。真正好的风险控制来自"充分深入的思考"，但机械指标是底线。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>风控指标库</b>：预警线/止损线（产品层面）、回撤控制、仓位上限、个股/行业集中度、杠杆率、流动性监控</li>
+            <li><b>实时监控面板</b>：组合风险仪表盘（<span class="term" data-term="Beta">Beta</span>、波动率、<span class="term" data-term="VaR">VaR</span>、最大回撤、行业暴露）</li>
+            <li><b>压力测试</b>：极端情景（如市场跌 20%）下的组合表现</li>
+            <li><b>合规红线</b>：禁止投资标的池、关联交易、单一持仓上限</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout tip">
+    <div class="ico">🔑</div>
+    <div><p><strong>心法→功能的翻译口诀：</strong>大师的每句话，都能问三遍——"它能变成<strong>表单字段</strong>吗？能变成<strong>自动计算</strong>吗？能变成<strong>提醒规则</strong>吗？"三问都"否"的，才暂时不做。</p></div>
+  </div>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>10 大心法的共同点：都能被翻译成<b>表单字段、自动计算、提醒规则</b>。</li>
+      <li>最值得产品化的四个：<b>弱者体系</b>（冯柳，模板化）、<b>逆向投资</b>（情绪/跌幅工具）、<b>执行纪律</b>（规则引擎）、<b>复盘迭代</b>（决策日志）。</li>
+      <li>翻译口诀：每句心法问三遍——能变成表单吗？能自动算吗？能设提醒吗？</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第五章 ========== -->
+<section class="ch" id="ch5">
+  <div class="ch-header">
+    <div class="kicker">Chapter 5</div>
+    <h2>五、竞品功能地图：市面上已有什么产品</h2>
+    <p class="desc">知己知彼：先看市场上有谁，再看哪里是空白。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 全景地图</span>
+    <span class="ov-chip">✅ 9 类产品拆解</span>
+    <span class="ov-chip">✅ 蓝海在哪里</span>
+  </div>
+
+  <h3 id="s5-1">5.1 全景地图</h3>
+  <div class="map-layer">
+    <div class="ml-head">🏛 全流程资管平台（重）· Wind AMS / 恒生 / 融都</div>
+    <div class="ml-grid attached" style="grid-template-columns:1fr">
+      <div class="cp-card" style="text-align:center">
+        <span class="cp-name">功能全 · 重 · 贵 · 适合大机构</span>
+      </div>
+    </div>
+  </div>
+  <div class="map-layer">
+    <div class="ml-head">🗂 四大方向（轻）</div>
+    <div class="ml-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="cp-card">
+        <div class="cp-name">数据 / 资讯</div>
+        <div class="cp-pos">Wind · Choice · 通联 · 朝阳</div>
+        <div class="cp-prod">行情、财报、研报、一致预期</div>
+      </div>
+      <div class="cp-card">
+        <div class="cp-name">投研工具</div>
+        <div class="cp-pos">慧博 · 朝阳 Go-Goal</div>
+        <div class="cp-prod">研报阅读、产业链图谱、选股工具</div>
+      </div>
+      <div class="cp-card">
+        <div class="cp-name">量化平台</div>
+        <div class="cp-pos">米筐 · 聚宽 · 掘金 · 万矿</div>
+        <div class="cp-prod">策略回测、因子研究、模拟交易</div>
+      </div>
+      <div class="cp-card">
+        <div class="cp-name">绩效 / 风控</div>
+        <div class="cp-pos">排排网组合大师 · 盈透</div>
+        <div class="cp-prod">组合分析、归因、评级</div>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="s5-2">5.2 各家核心能力拆解</h3>
+  <div class="vendors">
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">Wind 金融终端 + AMS</span><span class="v-tag">数据 + 全流程</span></div>
+      <div class="v-pos">行业标配数据源；大机构一体化方案，重、贵</div>
+      <ul>
+        <li>行情/财报/研报数据最全</li>
+        <li>AMS 覆盖投前（投研管理/绩效归因）投中（指令/交易/合规风控）投后（估值对账/组合报告）</li>
+      </ul>
+      <div class="v-val"><b>价值：</b>行业基础设施，但你做不过它</div>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">朝阳永续</span><span class="v-tag">数据 + 投研工具</span></div>
+      <div class="v-pos">"预期差"研究的核心数据源</div>
+      <ul>
+        <li><b>一致预期数据</b>（全市场分析师盈利预测汇总）独家长项</li>
+        <li>私募数据库（31 万+ 产品）</li>
+        <li>Go-Goal 选股系统（好公司/寻宝/TOP 榜/好标的漏斗）</li>
+        <li>ETF 数据库（600+ 标签）、AI 智能体</li>
+      </ul>
+      <div class="v-val"><b>启发：</b>投资实务标签化、工具化的先行者</div>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">通联数据</span><span class="v-tag">数据 + AI</span></div>
+      <div class="v-pos">量化私募数据与 AI 投研探索</div>
+      <ul>
+        <li>自产数据（Point-in-Time 保证）</li>
+        <li>萝卜投研、优矿（量化）、智能外脑、AI 辅助投研</li>
+      </ul>
+      <div class="v-val"><b>启发：</b>AI 辅助投研的方向参考</div>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">慧博投研</span><span class="v-tag">研报 + 知识图谱</span></div>
+      <div class="v-pos">研究员读研报、产业链研究的效率工具</div>
+      <ul>
+        <li>研报全覆盖、产业链图谱</li>
+        <li>机构策略池、一致性预期、财务分析、云笔记</li>
+      </ul>
+      <div class="v-val"><b>启发：</b>产业链图谱是"研"环节的好范本</div>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">私募排排网</span><span class="v-tag">私募数据 + FOF</span></div>
+      <div class="v-pos">注意：这是"选私募"，不是"做私募投研"</div>
+      <ul>
+        <li>私募基金数据库、八大策略分类</li>
+        <li>组合大师：基金组合构建/回测/风险平价、评级</li>
+      </ul>
+      <div class="v-val"><b>价值：</b><span class="term" data-term="FOF">FOF</span> 和机构筛选私募标的核心工具</div>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">米筐 RiceQuant</span><span class="v-tag">量化平台 + 资管系统</span></div>
+      <div class="v-pos">量化私募从研究到实盘的全链路</div>
+      <ul>
+        <li>RQData 数据 API、RQAlpha 回测</li>
+        <li>RQBeta 风险模型（风格/行业风险敞口）</li>
+        <li>RQAMS 资产管理系统（多资产、业绩归因、实时监控）</li>
+      </ul>
+      <div class="v-val"><b>启发：</b>归因 + 风险模型 + 资产管理一体的范本</div>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">聚宽 / 掘金 / 优矿 / 万矿</span><span class="v-tag">量化平台</span></div>
+      <div class="v-pos">量化研究者的开发平台</div>
+      <ul>
+        <li>策略回测、因子研究、模拟交易、社区</li>
+      </ul>
+      <div class="v-val"><b>注意：</b>服务量化策略开发，<b>主观投研未被好好服务</b></div>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">盈透 PortfolioAnalyst</span><span class="v-tag">组合分析</span></div>
+      <div class="v-pos">组合层级的绩效分析范本</div>
+      <ul>
+        <li>35+ 绩效指标、业绩归因 vs 基准</li>
+        <li>投资主题敞口、自定义基准</li>
+      </ul>
+      <div class="v-val"><b>启发：</b>绩效分析交互设计参考</div>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">恒生电子</span><span class="v-tag">资管 IT 龙头</span></div>
+      <div class="v-pos">大机构采购对象，产品思路参考</div>
+      <ul>
+        <li>投资交易、风控、一体化平台建设方法论</li>
+      </ul>
+      <div class="v-val"><b>启发：</b>"读研写验荐评"框架出处</div>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">各类小厂商</span><span class="v-tag">私募一体化管理</span></div>
+      <div class="v-pos">满足合规运营需求（及格线产品）</div>
+      <ul>
+        <li>投资者管理、适当性、电子合同、双录、信息披露</li>
+      </ul>
+      <div class="v-val"><b>注意：</b>同质化红海，只能当敲门砖</div>
+    </div>
+  </div>
+
+  <h3 id="s5-3">5.3 关键洞察（为什么说这是蓝海）</h3>
+  <ul>
+    <li><strong>重平台（Wind AMS / 恒生）</strong>：功能全但重、贵、上线周期长（虽然 Wind 宣传 3 天），适合大机构</li>
+    <li><strong>数据商（朝阳 / 通联）</strong>：卖数据为主，不解决"研究协作、决策留痕、复盘沉淀"这些流程问题</li>
+    <li><strong>量化平台（米筐 / 聚宽）</strong>：服务量化策略开发，<span class="hl">主观投研（基本面研究型私募）没有被好好服务</span></li>
+    <li><strong>合规运营系统</strong>：一堆小厂在做，同质化严重，只能当敲门砖</li>
+  </ul>
+  <div class="callout key">
+    <div class="ico">🚀</div>
+    <div><p><strong>空白地带：</strong><strong>"研究协作 + 决策留痕 + 认知沉淀 + 复盘进化"</strong> —— 几乎没有成熟产品系统性解决，而这是所有私募投研团队（尤其腰部以下）最痛的。恒生韩海潮的"读研写验荐评"、监管的"平台型团队制"导向都在给这个方向背书。</p></div>
+  </div>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>市场格局：<b>重平台</b>（Wind/恒生）又贵又重、<b>数据商</b>（朝阳/通联）只卖数据、<b>量化平台</b>（米筐/聚宽）只服务量化。</li>
+      <li><b>空白地带 = 主观投研的"研究协作 + 决策留痕 + 认知沉淀 + 复盘进化"</b>，几乎没人做。</li>
+      <li>这是你的机会：切腰部私募，做他们最痛、又没人做好的那块。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第六章 ========== -->
+<section class="ch" id="ch6">
+  <div class="ch-header">
+    <div class="kicker">Chapter 6 · 落地篇</div>
+    <h2>六、从心法到系统：产品功能设计蓝图</h2>
+    <p class="desc">把第四章的心法翻译成模块。这是"如何真正帮助用户"的核心章节。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 整体架构</span>
+    <span class="ov-chip">✅ 五大功能模块</span>
+    <span class="ov-chip">✅ AI 机会点</span>
+    <span class="ov-chip">✅ 商业化思考</span>
+  </div>
+
+  <h3 id="s6-1">6.1 整体架构（投研一体化 SaaS）</h3>
+  <div class="arch">
+    <div class="layer workbench">
+      <div class="l-name">统一工作台（待办 / 晨会 / 消息 / 今日重点 / 组合快照）</div>
+    </div>
+    <div class="layer">
+      <div class="l-name">五大业务模块</div>
+      <div class="mods">
+        <div class="mod"><div class="m-n">研究管理</div><div class="m-d">读 / 写 / 验</div></div>
+        <div class="mod"><div class="m-n">组合管理</div><div class="m-d">持仓 / 决策</div></div>
+        <div class="mod"><div class="m-n">风控管理</div><div class="m-d">指标 / 预警</div></div>
+        <div class="mod" style="background:var(--accent-soft);border-color:var(--accent-2)"><div class="m-n" style="color:var(--accent)">复盘进化 ★</div><div class="m-d">日志 / 迭代</div></div>
+        <div class="mod"><div class="m-n">运营报告</div><div class="m-d">净值 / 信披</div></div>
+      </div>
+    </div>
+    <div class="layer data-layer">
+      <div class="l-name">数据层</div>
+      <div class="d-txt">行情 · 财报 · 研报 · 宏观 · <b>一致预期</b></div>
+    </div>
+  </div>
+
+  <h3 id="s6-2">6.2 模块一：研究管理（对应心法：能力圈、护城河、弱者体系）</h3>
+  <div class="module">
+    <div class="m-head">
+      <div class="m-ico">📚</div>
+      <div><div class="m-title">研究管理</div><div class="m-meta">把大师心法变成研究员每天填的表格，填完就有沉淀</div></div>
+    </div>
+    <div class="m-body">
+      <ul>
+        <li><b>标的池管理</b>：三级池（观察池 → 研究池 → 核心池 → 持仓），带流转记录</li>
+        <li><b>研究模板库</b>：护城河评估、10-3 原则检查清单、可预期/可展望/可想象三段式、下跌性质分类、负面情景测试</li>
+        <li><b>盈利预测模型</b>：三表联动 + 估值（DCF/PE/PB），支持假设调整与情景分析（乐观/中性/悲观）</li>
+        <li><b>预期差分析</b>：对接一致预期数据，自主预测 vs 市场预期对比，标红差异</li>
+        <li><b>调研管理</b>：调研纪要、录音、问答记录，关联到标的时间线</li>
+        <li><b>观点留痕</b>：每条观点必须带"证伪条件"（什么情况出现=观点错），带日期戳（防"马后炮"）</li>
+      </ul>
+      <div class="callout idea"><div class="ico">💡</div><div><p><strong>产品价值主张：</strong>把冯柳/巴菲特的"心法"变成研究员每天填的表格，填完就有沉淀。</p></div></div>
+    </div>
+  </div>
+
+  <h3 id="s6-3">6.3 模块二：组合管理（对应心法：赔率概率、复利、集中度）</h3>
+  <div class="module">
+    <div class="m-head">
+      <div class="m-ico">📊</div>
+      <div><div class="m-title">组合管理</div><div class="m-meta">让基金经理"先算后买"，组合一眼看清</div></div>
+    </div>
+    <div class="m-body">
+      <ul>
+        <li><b>组合构建器</b>：多产品/多组合视图，模拟调仓（回测一下再动手）</li>
+        <li><b>交易计划单</b>：标的/方向/仓位/目标价/止损位/赔率，审批流（研究员 → 基金经理）</li>
+        <li><b>模拟盘</b>：研究员模拟组合，自动按实时行情计算收益，<b>直接作为考核数据</b></li>
+        <li><b>持仓全景</b>：按行业/风格/市值/个股集中度可视化；单一持仓超限预警</li>
+        <li><b>估值视图</b>：组合整体 PE/PB 分位，与历史对比</li>
+        <li><b>复利与回撤视图</b>：<span class="term" data-term="净值">净值</span>曲线、水下曲线、回撤区间标注、换手率与交易成本对复利的影响</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 id="s6-4">6.4 模块三：风控管理（对应心法：风控第一）</h3>
+  <div class="module">
+    <div class="m-head">
+      <div class="m-ico">🛡</div>
+      <div><div class="m-title">风控管理</div><div class="m-meta">把"先想怎么不亏"变成自动盯梢的哨兵</div></div>
+    </div>
+    <div class="m-body">
+      <ul>
+        <li><b>风控规则引擎</b>：可配置规则（单票上限、行业上限、止损线、预警线、回撤阈值、杠杆、禁投池），实时扫描持仓与待成交指令</li>
+        <li><b>分级预警</b>：预警（黄）/ 警告（橙）/ 触发（红），推送至相关人</li>
+        <li><b>压力测试</b>：预设极端情景（-10%/-20% 市场下跌、行业黑天鹅），估算组合影响</li>
+        <li><b>风控报告</b>：自动生成日/周风控报告，留痕备查（合规需要）</li>
+        <li><b>适当性/合规</b>：投资者适当性匹配、双录留痕管理（如需覆盖运营侧）</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 id="s6-5">6.5 模块四：复盘进化（对应心法：知行合一、复盘迭代）<span class="star">★ 差异化核心</span></h3>
+  <div class="module">
+    <div class="m-head">
+      <div class="m-ico" style="background:var(--accent)">🧠</div>
+      <div><div class="m-title" style="color:var(--accent)">复盘进化</div><div class="m-meta">最空白、最有故事性的模块，"心法 → 系统"最直接的体现</div></div>
+    </div>
+    <div class="m-body">
+      <ul>
+        <li><b>决策日志（投资 commit）</b>：每笔买入 = 一次 commit：买入逻辑、当时情绪、信息环境、预设止损/止盈、仓位。卖出同理记录复盘。<b>全部带时间戳，不可篡改</b>（防止记忆美化）</li>
+        <li><b>计划-执行对照</b>：系统记住每笔交易的止损/止盈计划，实际执行时比对——"到了止损位你执行了吗？"自动生成纪律分</li>
+        <li><b>归因分类器</b>：每笔亏损强制归因：信息不足 / 模型错误 / 情绪干扰。统计分布</li>
+        <li><b>模式识别</b>：AI/统计发现共性——"你的亏损是否都集中在某类消息触发后？是否总在满仓时乱动？"</li>
+        <li><b>认知错题本</b>：把归因聚类成"认知盲区对照表"，定期回顾</li>
+        <li><b>证伪提醒</b>：对每条带证伪条件的研究观点，按周期提醒复核："当初说'逻辑破坏即卖出'，现在逻辑变了吗？"</li>
+        <li><b>月度认知报告</b>：自动总结本月决策质量、纪律执行、认知升级点、下一步改进</li>
+        <li><b>团队知识库</b>：所有观点/报告/复盘沉淀为可检索的团队资产，<b>人走了知识留下</b></li>
+      </ul>
+      <div class="callout key"><div class="ico">💡</div><div><p><strong>产品价值主张：</strong>"让每次亏损都变成可复利的认知资产。"这是散户工具（如"回想"App）已验证的需求，机构版无人做好。</p></div></div>
+    </div>
+  </div>
+
+  <h3 id="s6-6">6.6 模块五：数据与资讯（地基）</h3>
+  <div class="module">
+    <div class="m-head">
+      <div class="m-ico">🗄</div>
+      <div><div class="m-title">数据与资讯</div><div class="m-meta">一切功能的地基，接入与体验是生死线</div></div>
+    </div>
+    <div class="m-body">
+      <ul>
+        <li>行情/财务/公告/研报/宏观数据接入（Wind/Choice/通联/朝阳等供应商）</li>
+        <li>自建统一数据模型，研究员可自助取数（类似 Wind 的 API 简化版 + Excel 插件）</li>
+        <li>资讯流：按自选股/持仓/行业订阅，智能过滤噪音（AI 摘要 + 重要度排序）</li>
+        <li>产业链图谱（慧博模式）：企业-行业-上下游关系，事件传导链提示</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 id="s6-7">6.7 AI 的机会点（所有竞品都在试）</h3>
+  <div class="module">
+    <div class="m-head">
+      <div class="m-ico">🤖</div>
+      <div><div class="m-title">AI 能力</div><div class="m-meta">提效而非替代，赋能而非荐股</div></div>
+    </div>
+    <div class="m-body">
+      <ul>
+        <li><b>AI 研报摘要/公告解读</b>：把长公告压缩成"影响点 + 投资含义"</li>
+        <li><b>AI 预期差扫描</b>：从一致预期数据中自动发现超预期/低于预期标的</li>
+        <li><b>AI 复盘助手</b>：对决策日志做归因与模式识别（参考"回想"App、交易迭代日志的 AI 化）</li>
+        <li><b>AI 问答</b>：自然语言查询数据（"帮我筛出 PE 分位&lt;20% 且 ROE&gt;15% 的消费股"）</li>
+        <li><b>AI 情绪标注</b>：从文本推断市场情绪/关注度（支持逆向投资心法）</li>
+      </ul>
+      <div class="callout warn"><div class="ico">⚠️</div><div><p><strong>注意红线：</strong>不能做"荐股"（合规），定位是"过程支持"，不是"决策替代"。</p></div></div>
+    </div>
+  </div>
+
+  <h3 id="s6-8">6.8 商业化与落地思考</h3>
+  <ul>
+    <li><strong>目标客户</strong>：腰部私募（10–100 亿）最有付费意愿；小私募可做轻量版/免费引流</li>
+    <li><strong>形态</strong>：SaaS（云）为主，数据敏感的大客户可私有化</li>
+    <li><strong>数据采购成本</strong>是大头——通过"系统+数据"打包或与数据商合作分账</li>
+    <li><strong>切入点建议</strong>：从"复盘进化"或"研究沉淀"这种空白功能切入（差异化），再向组合/风控扩展（Wind/恒生覆盖但贵）</li>
+  </ul>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>投研一体化 SaaS 分三层：工作台 → 五大模块（研究/组合/风控/<b>复盘进化</b>/运营）→ 数据层。</li>
+      <li>差异化核心是<b>复盘进化</b>模块：决策日志、纪律打分、归因、错题本、证伪提醒。</li>
+      <li>切入点：先做"复盘进化"或"研究沉淀"单点，跑通再扩组合/风控。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第七章 ========== -->
+<section class="ch" id="ch7">
+  <div class="ch-header">
+    <div class="kicker">Chapter 7</div>
+    <h2>七、给产品经理的行动建议</h2>
+    <p class="desc">把知识变成行动。下面的清单可以勾选，跟着做就入门了。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 优先补的知识清单</span>
+    <span class="ov-chip">✅ 做产品实操建议</span>
+    <span class="ov-chip">✅ 常见误区提醒</span>
+  </div>
+
+  <h3 id="s7-1">7.1 优先补的"领域知识"清单（按优先级）</h3>
+  <ul class="checklist" id="kl">
+    <li><input type="checkbox" id="k1"><div><div class="cl-t">财务三张表</div><div class="cl-d">资产负债表 / 利润表 / 现金流量表 —— 看懂公司</div></div></li>
+    <li><input type="checkbox" id="k2"><div><div class="cl-t">估值基础</div><div class="cl-d">PE / PB / PS / EV/EBITDA / DCF —— 看懂贵贱</div></div></li>
+    <li><input type="checkbox" id="k3"><div><div class="cl-t">A 股基本规则</div><div class="cl-d">涨跌停、T+1、停牌、限售解禁、财报披露节奏 —— 看懂玩法</div></div></li>
+    <li><input type="checkbox" id="k4"><div><div class="cl-t">投资流派</div><div class="cl-d">价值 / 成长 / 逆向 / 趋势 / 量化 —— 看懂用户的脑内模型</div></div></li>
+    <li><input type="checkbox" id="k5"><div><div class="cl-t">常见指标</div><div class="cl-d"><span class="term" data-term="夏普比率">夏普</span>、回撤、<span class="term" data-term="Beta">Beta</span>、<span class="term" data-term="Alpha">Alpha</span>、<span class="term" data-term="VaR">VaR</span> —— 看懂绩效</div></div></li>
+    <li><input type="checkbox" id="k6"><div><div class="cl-t">行业数据源格局</div><div class="cl-d">Wind / Choice / 通联 / 朝阳 / 聚源 各自强项</div></div></li>
+  </ul>
+
+  <h3 id="s7-2">7.2 做产品的实操建议</h3>
+  <ol>
+    <li><strong>先访谈 3–5 家腰部私募</strong>：问他们晨会怎么开、研究员考核怎么定、亏损怎么复盘、知识怎么沉淀。比读十本书有用。</li>
+    <li><strong>观察"Excel 里有什么"</strong>：用户现在用 Excel 管理什么，哪里就缺产品。Excel 结构 = 产品原型。</li>
+    <li><strong>别一上来做重平台</strong>：从单点（如复盘进化）切，做出让研究员"用了就回不去"的功能。</li>
+    <li><strong>心法必须翻译成"填空"</strong>：不要在产品里写"请进行护城河分析"，要写"请为以下 5 个维度打分并附证据"。</li>
+    <li><strong>留痕是刚需也是护城河</strong>：时间戳、不可篡改、版本记录——既是合规要求，也让用户离不开（数据资产积累）。</li>
+    <li><strong>模拟盘考核是抓手</strong>：帮老板"考核研究员"是付费决策人最关心的，也是最容易量化的价值。</li>
+  </ol>
+
+  <h3 id="s7-3">7.3 常见误区提醒</h3>
+  <ul class="mistake">
+    <li class="no"><span class="mk">✕</span><div class="mk-t"><b>把"合规运营系统"当核心产品</b>那是及格线，同质化红海</div></li>
+    <li class="no"><span class="mk">✕</span><div class="mk-t"><b>想用产品定义客户流程</b>系统要贴合流程</div></li>
+    <li class="no"><span class="mk">✕</span><div class="mk-t"><b>只做数据终端</b>那是 Wind 的主场，你做不过</div></li>
+    <li class="no"><span class="mk">✕</span><div class="mk-t"><b>提供"荐股/收益承诺"类功能</b>合规红线，直接出局</div></li>
+    <li class="yes"><span class="mk">✓</span><div class="mk-t"><b>做"研究沉淀、决策留痕、复盘进化、协作提效"</b>—— 心法的系统化地带</div></li>
+  </ul>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>先补知识：财务三张表、估值、A 股规则、投资流派、绩效指标。</li>
+      <li>再动手：访谈腰部私募、看他们 Excel 里有什么、从单点切入。</li>
+      <li>避开红线：不做荐股/收益承诺，不碰合规运营红海，只做"心法系统化"地带。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第八章 ========== -->
+<section class="ch" id="ch8">
+  <div class="ch-header">
+    <div class="kicker">Chapter 8 · 随查随用</div>
+    <h2>八、术语速查表</h2>
+    <p class="desc">阅读正文时悬停蓝色术语即可查看；也可以在这里搜索。</p>
+  </div>
+  <div class="termsearch">
+    <span class="ico">🔍</span>
+    <input type="text" id="glossSearch" placeholder="输入术语或关键词过滤…">
+  </div>
+  <div class="term-filters" id="glossFilters">
+    <button class="tf-btn on" data-cat="all">全部</button>
+    <button class="tf-btn" data-cat="基本">基本概念</button>
+    <button class="tf-btn" data-cat="投研">投研方法</button>
+    <button class="tf-btn" data-cat="风险">风险与绩效</button>
+    <button class="tf-btn" data-cat="机构">机构与合规</button>
+  </div>
+  <ul class="glossary" id="glossList"></ul>
+</section>
+
+<!-- ========== 第九章 ========== -->
+<section class="ch" id="ch9">
+  <div class="ch-header">
+    <div class="kicker">Chapter 9</div>
+    <h2>九、资源与下一步</h2>
+    <p class="desc">本次研究的信息来源，以及读完手册后的第一个行动。</p>
+  </div>
+  <ul class="res-list">
+    <li><span class="rk">1</span><div>恒生电子韩海潮《资管机构投研平台怎么建？》<div class="r-desc">"读研写验荐评"框架出处，机构投研平台建设必读</div></div></li>
+    <li><span class="rk">2</span><div>《如何构建投研平台化软件系统（一/二）》（知乎）<div class="r-desc">买方/卖方研究差异、数据层设计</div></div></li>
+    <li><span class="rk">3</span><div>冯柳《我的弱者投资体系》（新浪/凤凰财经）<div class="r-desc">当代中国最著名的投研体系之一</div></div></li>
+    <li><span class="rk">4</span><div>《逆向投资：邓普顿的长赢投资法》（中信出版社）<div class="r-desc">逆向投资大师方法论全集</div></div></li>
+    <li><span class="rk">5</span><div>朝阳永续官网（Go-Goal、私募数据库、一致预期）<div class="r-desc">"一致预期"数据与投研工具化标杆</div></div></li>
+    <li><span class="rk">6</span><div>米筐 RiceQuant 官网（RQSDK / RQAMS 功能页）<div class="r-desc">量化投研全链路产品范本</div></div></li>
+    <li><span class="rk">7</span><div>Wind AMS 资产管理解决方案页<div class="r-desc">全流程资管平台标杆</div></div></li>
+    <li><span class="rk">8</span><div>私募排排网"组合大师"介绍<div class="r-desc">私募数据 + 组合分析</div></div></li>
+    <li><span class="rk">9</span><div>界面新闻《量化平台玩家们的变现难题》<div class="r-desc">行业格局与商业模式全景</div></div></li>
+    <li><span class="rk">10</span><div>知乎《资管机构投研平台怎么建？》<div class="r-desc">业务与系统建设的思考框架</div></div></li>
+  </ul>
+  <div class="callout key">
+    <div class="ico">🎯</div>
+    <div><p><strong>建议下一步：</strong>拿着本手册第 6 章的功能蓝图去访谈真实私募投研人员，验证需求优先级，把<strong>"复盘进化"和"研究沉淀"</strong>两个模块做成 MVP 原型。</p></div>
+  </div>
+</section>
+
+<footer>
+  私募基金投研领域 · 产品经理入门手册<br>
+  基于公开资料整理 · 仅供学习研究 · 不构成任何投资建议
+</footer>
+
+</div><!-- /article -->
+</div><!-- /main -->
+
+<button id="toTop" title="返回顶部">↑</button>
+
+<script>
+/* ============ 术语词典 ============ */
+const TERMS = {
+  "合格投资者": "资产或收入达到门槛、能承受风险的投资者：金融资产不低于300万元，或近三年年均收入不低于50万元",
+  "私募基金管理人": "负责私募基金募集、投资运作的公司，即“管理人”，也是本手册的目标客户",
+  "私募证券投资基金": "投资二级市场（股票、债券、期货、期权、基金等）的私募基金，投研节奏快",
+  "私募股权投资基金": "投资一级市场（未上市企业股权）的私募基金，决策慢，走“募投管退”",
+  "募投管退": "基金的生命周期：募集资金 → 投资 → 管理 → 退出",
+  "中基协": "中国证券投资基金业协会，负责私募基金管理人登记和基金备案的自律组织",
+  "双录": "投资者适当性管理中的录音录像留痕，证明销售过程合规",
+  "投决会": "投资决策委员会，基金内部最高投资决策机构",
+  "晨会": "每日早间的投研例会，汇报市场与行业动态、推荐标的",
+  "模拟盘": "研究员构建的模拟投资组合，用真实行情计算收益，是研究员考核的依据",
+  "一致预期": "全市场分析师对上市公司盈利预测的汇总数据（朝阳永续核心产品）",
+  "预期差": "实际业绩或自主预测，与市场一致预期之间的差异——超额收益的重要来源",
+  "安全边际": "资产价格低于其内在价值的幅度，是价值投资的安全垫",
+  "护城河": "公司可持续的竞争优势：品牌、网络效应、转换成本、成本优势等",
+  "杀估值": "下跌原因是估值压缩（如市场情绪转冷），基本面未变，冯柳认为最值得参与",
+  "杀业绩": "下跌原因是业绩不及预期，需要判断经营节奏是否可修复",
+  "杀逻辑": "下跌原因是公司核心逻辑被破坏，冯柳认为最危险、不参与",
+  "赔率": "上行空间与下行空间之比，衡量“赚多少 vs 亏多少”",
+  "胜率": "判断正确的概率",
+  "止损线": "净值或价格跌破某阈值时强制减仓/清仓的线",
+  "预警线": "先于止损线发出的风险警示线",
+  "最大回撤": "净值从历史高点跌到低点的最大跌幅，衡量最坏情况亏多少",
+  "夏普比率": "超额收益 ÷ 总波动率，衡量“每承担1份风险能换多少收益”",
+  "索提诺比率": "超额收益 ÷ 下行波动率，只看下跌风险，适合收益不对称的策略",
+  "卡玛比率": "年化收益 ÷ 最大回撤，风险用最大回撤衡量",
+  "信息比率": "超额收益 ÷ 跟踪误差，衡量相对基准的稳定超额能力",
+  "Brinson归因": "把组合收益拆解为资产配置、行业选择、个股选择等来源的分析方法",
+  "VaR": "Value at Risk，在给定置信度下组合可能的最大损失",
+  "Beta": "组合对市场整体波动的敏感度，Beta=1 表示与市场同步",
+  "Alpha": "超越市场/基准的超额收益，衡量主动管理能力",
+  "DCF": "现金流折现估值法，把未来现金流折现到现在算出内在价值",
+  "PE": "市盈率 = 股价 ÷ 每股盈利，衡量“花多少钱买1块钱利润”",
+  "PB": "市净率 = 股价 ÷ 每股净资产",
+  "换手率": "持仓被买卖的频率，高换手带来高交易成本、侵蚀复利",
+  "FOF": "基金中的基金，投资一篮子基金而不是直接买股票",
+  "净值": "基金每份的价值，基金净值的涨跌曲线即业绩表现",
+  "Point-in-Time": "只使用“当时时点”可得的数据（避免用未来数据回测），保证研究可复现",
+  "FOMO": "Fear Of Missing Out，害怕错过上涨而冲动买入的情绪",
+  "卖方": "券商研究所，通过写研究报告、卖观点服务买方",
+  "买方": "基金管理人，用真金白银做投资决策的一方",
+  "LP": "有限合伙人，出资的投资者（金主）",
+  "GP": "普通合伙人，负责基金运作的管理人",
+  "IR": "投资者关系岗，负责和客户（LP）沟通、发报告",
+  "冲击成本": "大额买卖对价格的冲击，买得越多价格被推得越高",
+  "适当性": "投资者风险承受能力与产品风险等级的匹配管理（监管强制要求）"
+};
+
+/* 渲染术语表 */
+const glossData = [
+  ["私募基金","面向合格投资者非公开募集的基金","基本"],
+  ["合格投资者","金融资产300万+或年收入50万+，单只证券私募100万起","基本"],
+  ["管理人（GP）","负责基金运作的公司（你的目标客户）","机构"],
+  ["投资者（LP）","出钱的金主","机构"],
+  ["私募证券基金","投二级市场（股票/债券/期货）的私募","基本"],
+  ["私募股权基金","投一级市场（未上市股权）的私募","基本"],
+  ["募投管退","基金生命周期：募集/投资/管理/退出","机构"],
+  ["中基协","中国证券投资基金业协会，私募登记备案机构","机构"],
+  ["投决会","投资决策委员会，基金内部最高投资决策机构","机构"],
+  ["晨会","每日早间投研例会","机构"],
+  ["模拟盘","模拟投资组合，研究员考核依据","投研"],
+  ["一致预期","全市场分析师盈利预测的汇总（朝阳永续核心数据）","投研"],
+  ["预期差","实际业绩/自主预测 vs 市场一致预期的差异","投研"],
+  ["安全边际","价格低于内在价值的幅度","投研"],
+  ["护城河","公司的可持续竞争优势","投研"],
+  ["杀估值/杀业绩/杀逻辑","下跌的三类原因（冯柳分类）","投研"],
+  ["赔率","上行空间与下行空间之比","投研"],
+  ["胜率","判断正确的概率","投研"],
+  ["止损线/预警线","净值跌破某值触发风控动作的线","风险"],
+  ["最大回撤","净值从高点跌到低点的最大跌幅","风险"],
+  ["夏普比率","超额收益/总波动率，衡量风险调整后收益","风险"],
+  ["索提诺比率","超额收益/下行波动率（只看下跌风险）","风险"],
+  ["卡玛比率","年化收益/最大回撤","风险"],
+  ["信息比率","超额收益/跟踪误差（相对基准）","风险"],
+  ["Brinson归因","把组合收益拆成资产配置/行业配置/选股贡献","风险"],
+  ["VaR","一定置信度下组合的最大可能损失","风险"],
+  ["Beta","组合对市场波动的敏感度","风险"],
+  ["Alpha","超越基准的超额收益","风险"],
+  ["换手率","持仓买卖频率，高换手侵蚀收益","投研"],
+  ["双录","投资者适当性中的录音录像留痕","机构"],
+  ["FOF","基金中的基金（投基金组合的基金）","基本"],
+  ["卖方/买方","卖方=券商研究所（写报告卖观点）；买方=基金管理人（用观点做投资）","机构"],
+  ["Point-in-Time","只用当时可得数据，避免未来函数","投研"],
+  ["管理费","管理人按规模收取的费用，一般 1%–2%/年","基本"],
+  ["业绩报酬","管理人赚了钱才抽成的部分，一般 20%（即 \"2/20\" 里的 20）","基本"],
+  ["股票多头","主观选股、长期持有的主流策略","投研"],
+  ["量化","用模型和算法做投资决策的策略","投研"],
+  ["CTA","管理期货策略，主要交易期货抓趋势","投研"]
+];
+const glossList = document.getElementById("glossList");
+function renderGloss(filter="", cat="all"){
+  glossList.innerHTML = "";
+  glossData.filter(([t,d,c])=>
+    (cat==="all"||c===cat) &&
+    (t.toLowerCase().includes(filter.toLowerCase()) || d.toLowerCase().includes(filter.toLowerCase()))
+  ).forEach(([t,d,c])=>{
+    const li = document.createElement("li");
+    li.innerHTML = `<span class="g-term">${t}</span><span class="g-def">${d}</span><span class="g-cat">${c}</span>`;
+    glossList.appendChild(li);
+  });
+}
+document.getElementById("glossSearch").addEventListener("input", e=>renderGloss(e.target.value, currentCat));
+let currentCat = "all";
+document.querySelectorAll("#glossFilters .tf-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll("#glossFilters .tf-btn").forEach(b=>b.classList.remove("on"));
+    btn.classList.add("on");
+    currentCat = btn.dataset.cat;
+    renderGloss(document.getElementById("glossSearch").value, currentCat);
+  });
+});
+renderGloss();
+
+/* ============ 术语悬停 tooltip ============ */
+document.querySelectorAll(".term").forEach(el=>{
+  const key = el.dataset.term || el.textContent;
+  const def = TERMS[key];
+  if(!def) return;
+  const tip = document.createElement("span");
+  tip.className = "tooltip";
+  tip.textContent = def;
+  el.appendChild(tip);
+  el.addEventListener("click", e=>{
+    e.stopPropagation();
+    document.querySelectorAll(".term.show").forEach(t=>{ if(t!==el) t.classList.remove("show"); });
+    el.classList.toggle("show");
+  });
+});
+document.addEventListener("click", e=>{
+  if(!e.target.closest(".term")) document.querySelectorAll(".term.show").forEach(t=>t.classList.remove("show"));
+});
+/* 桌面端 hover 显示 */
+document.querySelectorAll(".term").forEach(el=>{
+  el.addEventListener("mouseenter", ()=>el.classList.add("show"));
+  el.addEventListener("mouseleave", ()=>el.classList.remove("show"));
+});
+
+/* ============ 目录滚动高亮 + 章节定位 ============ */
+const groups = document.querySelectorAll(".toc-group[data-g]");
+const sections = [...document.querySelectorAll("section.ch")];
+const crumb = document.getElementById("crumb");
+function setActive(id){
+  document.querySelectorAll(".toc-group>a").forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+id));
+  document.querySelectorAll(".toc-sub a").forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+id));
+  groups.forEach(g=>{
+    g.classList.toggle("open", g.querySelector("a").getAttribute("href")==="#"+id);
+  });
+  const sec = document.getElementById(id);
+  if(sec){
+    const h2 = sec.querySelector("h2");
+    crumb.textContent = h2 ? h2.textContent : "封面导读";
+  }
+}
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting) setActive(en.target.id);
+  });
+},{rootMargin:"-15% 0px -70% 0px"});
+sections.forEach(s=>io.observe(s));
+
+/* ============ 阅读进度条 ============ */
+const progress = document.getElementById("progress");
+window.addEventListener("scroll", ()=>{
+  const h = document.documentElement;
+  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight);
+  progress.style.width = (pct*100) + "%";
+  toTop.classList.toggle("show", h.scrollTop > 600);
+},{passive:true});
+
+/* ============ 返回顶部 ============ */
+const toTop = document.getElementById("toTop");
+toTop.addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+/* ============ 心法卡片：手风琴（一次只展开一张，完全由 JS 控制） ============ */
+(function(){
+  const cards = document.querySelectorAll('.zhifa');
+  cards.forEach(card=>{
+    const head = card.querySelector('.zhifa-head');
+    head.addEventListener('click', ()=>{
+      const willOpen = !card.classList.contains('open');
+      // 先收起所有卡片
+      cards.forEach(c=>{
+        c.classList.remove('open');
+        c.querySelector('.zhifa-head').setAttribute('aria-expanded','false');
+      });
+      // 再只展开被点击的那张
+      if(willOpen){
+        card.classList.add('open');
+        head.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+})();
+
+/* ============ 主题切换 ============ */
+const themeBtn = document.getElementById("themeBtn");
+function applyTheme(dark){
+  document.documentElement.setAttribute("data-theme", dark?"dark":"light");
+  themeBtn.textContent = dark ? "☀️" : "🌙";
+}
+applyTheme(localStorage.getItem("pm-theme")==="dark");
+themeBtn.addEventListener("click", ()=>{
+  const dark = document.documentElement.getAttribute("data-theme")!=="dark";
+  applyTheme(dark);
+  localStorage.setItem("pm-theme", dark?"dark":"light");
+});
+
+/* ============ 移动端抽屉 ============ */
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+const scrim = document.getElementById("scrim");
+function closeDrawer(){ sidebar.classList.remove("open"); scrim.classList.remove("show"); }
+menuBtn.addEventListener("click", ()=>{ sidebar.classList.toggle("open"); scrim.classList.toggle("show"); });
+scrim.addEventListener("click", closeDrawer);
+document.querySelectorAll("#sidebar a").forEach(a=>a.addEventListener("click", closeDrawer));
+
+/* ============ 目录搜索 ============ */
+document.getElementById("tocSearch").addEventListener("input", e=>{
+  const q = e.target.value.trim();
+  document.querySelectorAll(".toc-group").forEach(g=>{
+    if(!q){ g.style.display=""; g.querySelectorAll(".toc-sub a").forEach(a=>a.style.display=""); return; }
+    const a = g.querySelector("a");
+    const match = a.textContent.includes(q) ||
+      [...g.querySelectorAll(".toc-sub a")].some(x=>x.textContent.includes(q));
+    g.style.display = match ? "" : "none";
+    g.classList.toggle("open", match);
+    g.querySelectorAll(".toc-sub a").forEach(x=>x.style.display = x.textContent.includes(q)?"":"none");
+  });
+});
+
+/* ============ 知识清单勾选 ============ */
+document.querySelectorAll("#kl input").forEach(cb=>{
+  cb.addEventListener("change", ()=>cb.closest("li").classList.toggle("done", cb.checked));
+});
+</script>
+</body>
+</html>
