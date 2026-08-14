@@ -1,0 +1,2285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公募基金投资领域 · 产品经理入门手册</title>
+<style>
+/* ============ 设计变量 ============ */
+:root{
+  --bg:#f7faf8;
+  --card:#ffffff;
+  --text:#26312e;
+  --text-2:#54635e;
+  --text-3:#87948f;
+  --primary:#0e6f5c;
+  --primary-2:#128a71;
+  --primary-soft:#e5f3ef;
+  --accent:#d97706;
+  --accent-2:#f0a94e;
+  --accent-soft:#fdf3e2;
+  --green:#2e7d5b;
+  --green-soft:#e9f5ef;
+  --red:#c0392b;
+  --red-soft:#fbece9;
+  --amber:#a06a00;
+  --amber-soft:#fbf3dd;
+  --border:#e2e8e4;
+  --border-2:#cfdad4;
+  --code-bg:#f0f5f2;
+  --shadow:0 1px 3px rgba(23,42,36,.06),0 4px 14px rgba(23,42,36,.06);
+  --shadow-lg:0 6px 24px rgba(23,42,36,.12);
+  --radius:14px;
+  --sidebar-w:288px;
+  --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Source Han Sans SC","Noto Sans CJK SC",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"SF Mono","JetBrains Mono",Menlo,Consolas,"Courier New",monospace;
+}
+[data-theme="dark"]{
+  --bg:#121a17;
+  --card:#1a2421;
+  --text:#e6ece8;
+  --text-2:#a3b0aa;
+  --text-3:#6d7b75;
+  --primary:#5ecfb0;
+  --primary-2:#8ae3c8;
+  --primary-soft:#143029;
+  --accent:#f0a94e;
+  --accent-2:#ffc477;
+  --accent-soft:#362a15;
+  --green:#6fbf9a;
+  --green-soft:#163026;
+  --red:#e08a7e;
+  --red-soft:#33211f;
+  --amber:#e0b45c;
+  --amber-soft:#2f2713;
+  --border:#26322d;
+  --border-2:#36453f;
+  --code-bg:#1e2a26;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25);
+  --shadow-lg:0 6px 24px rgba(0,0,0,.4);
+}
+/* ============ 基础 ============ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  font-size:16.5px;
+  line-height:1.78;
+  letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+  transition:background .3s,color .3s;
+}
+::selection{background:var(--accent);color:#fff}
+a{color:var(--primary-2);text-decoration:none}
+a:hover{text-decoration:underline}
+img{max-width:100%}
+
+/* ============ 阅读进度条 ============ */
+#progress{
+  position:fixed;top:0;left:0;height:3px;width:0;
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  z-index:1000;transition:width .1s linear;
+}
+
+/* ============ 布局 ============ */
+#layout{display:flex;min-height:100vh}
+
+/* ============ 侧边栏 ============ */
+#sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  position:fixed;top:0;left:0;bottom:0;
+  background:var(--card);
+  border-right:1px solid var(--border);
+  overflow-y:auto;overflow-x:hidden;
+  padding:20px 0 40px;
+  z-index:200;
+  transition:transform .3s ease;
+}
+#sidebar::-webkit-scrollbar{width:6px}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border-2);border-radius:3px}
+.sb-brand{
+  padding:0 22px 14px;border-bottom:1px solid var(--border);margin-bottom:12px;
+}
+.sb-brand .logo{
+  font-size:17px;font-weight:800;color:var(--primary);
+  display:flex;align-items:center;gap:8px;
+}
+.sb-brand .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);display:inline-block}
+.sb-brand .sub{font-size:12px;color:var(--text-3);margin-top:4px}
+.sb-search{padding:0 16px 10px}
+.sb-search input{
+  width:100%;padding:8px 12px;border:1px solid var(--border);
+  border-radius:9px;background:var(--bg);color:var(--text);
+  font-size:13px;font-family:inherit;outline:none;
+}
+.sb-search input:focus{border-color:var(--primary-2)}
+nav.toc{padding:0 12px}
+.toc-group{margin-bottom:10px}
+.toc-group>a{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:8px;
+  font-size:13.5px;font-weight:600;color:var(--text);
+  cursor:pointer;border-left:3px solid transparent;
+}
+.toc-group>a .num{
+  font-size:11px;font-weight:700;color:#fff;background:var(--primary);
+  border-radius:5px;padding:1px 6px;flex-shrink:0;
+}
+.toc-group>a:hover{background:var(--primary-soft);text-decoration:none}
+.toc-group>a.active{
+  background:var(--primary-soft);color:var(--primary);
+  border-left-color:var(--accent);
+}
+.toc-group>a.active .num{background:var(--accent)}
+.toc-sub{display:none;padding:2px 0 6px 26px}
+.toc-group.open .toc-sub{display:block}
+.toc-sub a{
+  display:block;padding:4px 10px;font-size:12.5px;color:var(--text-2);
+  border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.toc-sub a:hover{background:var(--primary-soft);text-decoration:none;color:var(--text)}
+.toc-sub a.active{color:var(--primary);font-weight:600;background:var(--primary-soft)}
+
+/* ============ 主内容 ============ */
+#main{
+  flex:1;margin-left:var(--sidebar-w);
+  min-width:0;
+}
+.article{max-width:780px;margin:0 auto;padding:0 48px 120px}
+
+/* ============ 顶部条 ============ */
+#topbar{
+  position:sticky;top:0;z-index:150;
+  display:flex;align-items:center;gap:12px;
+  background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding:10px 24px;margin-bottom:8px;
+}
+#menuBtn{
+  display:none;background:var(--card);border:1px solid var(--border);
+  border-radius:8px;width:38px;height:38px;cursor:pointer;font-size:17px;
+  align-items:center;justify-content:center;color:var(--text);
+}
+#topbar .crumb{font-size:13px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#topbar .spacer{flex:1}
+.icon-btn{
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  width:38px;height:38px;border-radius:9px;cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;transition:background .2s;
+}
+.icon-btn:hover{background:var(--primary-soft)}
+
+/* ============ 封面 ============ */
+.hero{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-2) 100%);
+  color:#fff;border-radius:var(--radius);
+  padding:44px 40px 36px;margin:28px 0 8px;
+  box-shadow:var(--shadow-lg);
+}
+.hero::after{
+  content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;
+  border-radius:50%;background:rgba(255,255,255,.08);
+}
+.hero::before{
+  content:"";position:absolute;right:40px;bottom:-90px;width:220px;height:220px;
+  border-radius:50%;background:rgba(255,255,255,.06);
+}
+.hero .tag{
+  display:inline-block;font-size:12px;font-weight:700;letter-spacing:.12em;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);
+  padding:4px 12px;border-radius:999px;margin-bottom:16px;
+}
+.hero h1{font-size:30px;line-height:1.35;font-weight:800;position:relative;z-index:1}
+.hero .lead{margin-top:14px;font-size:16px;line-height:1.8;color:rgba(255,255,255,.92);position:relative;z-index:1;max-width:640px}
+.hero .quick{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;position:relative;z-index:1;
+}
+.hero .quick a{
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);
+  color:#fff;font-size:13px;padding:7px 14px;border-radius:999px;
+  transition:background .2s;
+}
+.hero .quick a:hover{background:rgba(255,255,255,.26);text-decoration:none}
+
+/* ============ 章节 ============ */
+section.ch{padding-top:52px;margin-top:8px}
+.ch-header{margin-bottom:18px}
+.ch-header .kicker{
+  font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--accent);
+  text-transform:uppercase;display:flex;align-items:center;gap:8px;
+}
+.ch-header .kicker::before{content:"";width:22px;height:3px;border-radius:2px;background:var(--accent)}
+.ch-header h2{
+  font-size:25px;font-weight:800;line-height:1.35;margin-top:6px;color:var(--text);
+}
+.ch-header .desc{color:var(--text-2);font-size:15px;margin-top:8px}
+.overview{
+  display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 22px;
+}
+.ov-chip{
+  background:var(--primary-soft);color:var(--primary);font-size:12.5px;font-weight:600;
+  padding:5px 12px;border-radius:999px;
+}
+
+h3{
+  font-size:19px;font-weight:700;margin:34px 0 12px;color:var(--text);
+  padding-bottom:8px;border-bottom:2px solid var(--primary-soft);
+}
+h4{font-size:16px;font-weight:700;margin:22px 0 10px;color:var(--primary-2)}
+p{margin:10px 0}
+ul,ol{margin:10px 0 10px 0;padding-left:24px}
+li{margin:6px 0}
+li::marker{color:var(--accent)}
+strong{font-weight:700;color:var(--text)}
+.hl{color:var(--accent);font-weight:700}
+.hl-blue{color:var(--primary-2);font-weight:700}
+b.num{font-family:var(--mono);color:var(--accent);font-weight:700}
+
+/* ============ 引用框 ============ */
+blockquote{
+  margin:18px 0;padding:16px 20px;border-radius:12px;
+  background:var(--primary-soft);border-left:4px solid var(--primary-2);
+  color:var(--text);
+}
+blockquote p{margin:4px 0}
+.callout{
+  display:flex;gap:12px;align-items:flex-start;
+  margin:18px 0;padding:16px 18px;border-radius:12px;border:1px solid;
+}
+.callout .ico{font-size:20px;line-height:1.4;flex-shrink:0}
+.callout p{margin:0;font-size:14.5px;line-height:1.75}
+.callout.idea{background:var(--green-soft);border-color:var(--green)}
+.callout.idea .ico{color:var(--green)}
+.callout.warn{background:var(--red-soft);border-color:var(--red)}
+.callout.warn .ico{color:var(--red)}
+.callout.tip{background:var(--amber-soft);border-color:var(--amber)}
+.callout.tip .ico{color:var(--amber)}
+.callout.key{background:var(--accent-soft);border-color:var(--accent)}
+.callout.key .ico{color:var(--accent)}
+
+/* ============ 表格 ============ */
+.table-wrap{overflow-x:auto;margin:16px 0;border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+thead th{
+  background:var(--primary);color:#fff;text-align:left;
+  padding:11px 14px;font-weight:600;font-size:13.5px;white-space:nowrap;
+}
+[data-theme="dark"] thead th{background:var(--primary-2);color:#0d1117}
+tbody td{padding:11px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65}
+tbody tr:nth-child(even){background:var(--bg)}
+tbody tr:hover{background:var(--primary-soft)}
+tbody tr:hover td{border-top-color:var(--primary-soft)}
+td .t{font-weight:700;white-space:nowrap;color:var(--primary-2)}
+
+/* ============ 术语 tooltip ============ */
+.term{
+  color:var(--primary-2);font-weight:600;cursor:help;
+  border-bottom:1.5px dotted var(--primary-2);
+  position:relative;white-space:nowrap;
+}
+.tooltip{
+  position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%) translateY(4px);
+  background:var(--text);color:var(--bg);font-weight:400;
+  font-size:12.5px;line-height:1.6;padding:8px 12px;border-radius:9px;
+  width:240px;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;
+  transition:opacity .18s,transform .18s;z-index:500;white-space:normal;
+}
+[data-theme="dark"] .tooltip{background:#e6ece8;color:#121a17}
+.tooltip::after{
+  content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:var(--text);
+}
+[data-theme="dark"] .tooltip::after{border-top-color:#e6ece8}
+.term.show .tooltip{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============ 时间轴 ============ */
+.timeline{position:relative;margin:20px 0 8px;padding-left:8px}
+.timeline::before{
+  content:"";position:absolute;left:16px;top:6px;bottom:6px;width:2px;
+  background:var(--border-2);
+}
+.tl-item{position:relative;padding:0 0 14px 48px}
+.tl-item::before{
+  content:"";position:absolute;left:10px;top:6px;width:13px;height:13px;border-radius:50%;
+  background:var(--card);border:3px solid var(--primary-2);
+}
+.tl-item.hot::before{border-color:var(--accent)}
+.tl-time{font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--accent)}
+.tl-body{font-size:14.5px;color:var(--text-2);margin-top:2px}
+
+/* ============ 步骤条 ============ */
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.fstep{
+  flex:1 1 120px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:12px 14px;position:relative;
+  box-shadow:var(--shadow);
+}
+.fstep .n{
+  width:24px;height:24px;border-radius:50%;background:var(--primary);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-bottom:8px;
+}
+.fstep .t{font-weight:700;font-size:14px}
+.fstep .d{font-size:12px;color:var(--text-2);margin-top:3px;line-height:1.5}
+.fstep .arrow{position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:var(--border-2);font-size:15px;z-index:2}
+.fstep.loop{background:var(--accent-soft);border-color:var(--accent)}
+.fstep.loop .n{background:var(--accent)}
+.fstep.warn{background:var(--red-soft);border-color:var(--red)}
+.fstep.warn .n{background:var(--red)}
+
+/* ============ 心法卡片（手风琴：一次只展开一张） ============ */
+.zhifa-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.zhifa{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;box-shadow:var(--shadow);transition:box-shadow .2s;
+}
+.zhifa:hover{box-shadow:var(--shadow-lg)}
+.zhifa-head{
+  display:block;width:100%;text-align:left;
+  cursor:pointer;user-select:none;
+  padding:16px 18px;
+  background:none;border:none;font-family:inherit;color:inherit;
+}
+.zhifa-head:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.zhifa-head .head{display:flex;align-items:center;gap:10px;width:100%}
+.zhifa-head .badge{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  background:var(--primary-soft);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;
+}
+.zhifa-head .tt{flex:1;min-width:0}
+.zhifa-head .tt .n{font-size:13px;font-weight:800;color:var(--accent)}
+.zhifa-head .tt .h{font-size:15.5px;font-weight:700;margin-top:1px}
+.zhifa-head .tt .who{font-size:12px;color:var(--text-3);margin-top:2px}
+.zhifa-head .caret{
+  color:var(--text-3);transition:transform .25s;font-size:13px;flex-shrink:0;
+  margin-left:6px;
+}
+.zhifa.open .zhifa-head .caret{transform:rotate(90deg)}
+.zhifa.open{
+  grid-column:1 / -1;
+  border-color:var(--primary-2);
+  box-shadow:var(--shadow-lg);
+}
+.zhifa.open .one{padding-left:22px;padding-right:22px}
+.zhifa.open .body{padding:16px 22px 20px}
+.zhifa-panel{
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows .32s ease;
+}
+.zhifa.open .zhifa-panel{grid-template-rows:1fr}
+.zhifa-panel .panel-inner{overflow:hidden;min-height:0}
+.zhifa .one{
+  padding:0 18px 14px;font-size:13.5px;color:var(--text-2);line-height:1.7;
+  border-bottom:1px dashed var(--border);
+}
+.zhifa .body{padding:14px 18px 16px}
+.zhifa .body h5{font-size:13px;font-weight:800;color:var(--green);margin:0 0 8px;letter-spacing:.04em}
+.zhifa .body ul{padding-left:18px;margin:0}
+.zhifa .body li{font-size:13px;line-height:1.7;margin:5px 0;color:var(--text-2)}
+.zhifa .body li b{color:var(--text)}
+.zhifa .body .sys-title{font-size:13px;font-weight:800;color:var(--accent);margin:12px 0 6px;letter-spacing:.04em}
+.zhifa .body .sys li b{color:var(--accent)}
+.zhifa .body .honest{
+  margin:12px 0 0;font-size:12.5px;line-height:1.7;color:var(--text-2);
+  background:var(--amber-soft);border:1px solid var(--amber);border-radius:9px;padding:9px 12px;
+}
+.zhifa .body .honest b{color:var(--amber)}
+
+/* ============ 竞品卡片 ============ */
+.map-layer{margin:12px 0}
+.map-layer .ml-head{
+  display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;
+  padding:10px 16px;border-radius:10px;background:var(--primary);color:#fff;
+}
+[data-theme="dark"] .map-layer .ml-head{background:var(--primary-2);color:#0d1117}
+.map-layer .ml-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;
+  border:2px dashed var(--border-2);border-top:none;border-radius:0 0 12px 12px;
+  padding:14px;margin-top:0;
+}
+.cp-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:12px 14px;box-shadow:var(--shadow);
+}
+.cp-card .cp-name{font-weight:800;font-size:14px;color:var(--primary-2)}
+.cp-card .cp-pos{font-size:12px;color:var(--text-3);margin-top:1px}
+.cp-card .cp-prod{font-size:12.5px;color:var(--text-2);margin-top:6px;line-height:1.6}
+.vendors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.vendor{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 18px;box-shadow:var(--shadow);
+}
+.vendor .v-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.vendor .v-name{font-weight:800;font-size:15px;color:var(--primary-2)}
+.vendor .v-tag{
+  font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:999px;
+  background:var(--primary-soft);color:var(--primary);white-space:nowrap;
+}
+.vendor .v-pos{font-size:12.5px;color:var(--text-3);margin-top:2px}
+.vendor .v-pos b{color:var(--accent)}
+.vendor ul{margin:8px 0 0;padding-left:18px}
+.vendor li{font-size:13px;line-height:1.7;color:var(--text-2);margin:3px 0}
+
+/* ============ 架构图（第六章） ============ */
+.arch{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin:16px 0}
+.arch .layer{border:1px solid var(--border-2);border-radius:10px;padding:10px;margin:8px 0}
+.arch .layer .l-name{font-size:12px;font-weight:800;text-align:center;margin-bottom:8px;color:var(--text-2)}
+.arch .workbench{background:var(--primary);border-color:var(--primary);color:#fff}
+[data-theme="dark"] .arch .workbench{background:var(--primary-2);border-color:var(--primary-2);color:#0d1117}
+.arch .workbench .l-name{color:rgba(255,255,255,.85)}
+.arch .mods{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.arch .mod{
+  background:var(--bg);border:1px solid var(--border);border-radius:8px;
+  padding:10px 8px;text-align:center;
+}
+.arch .mod .m-n{font-weight:800;font-size:13px;color:var(--primary-2)}
+.arch .mod .m-d{font-size:11px;color:var(--text-3);margin-top:2px}
+.arch .mod.star .m-n::after{content:"★";color:var(--accent);margin-left:2px}
+.arch .data-layer{background:var(--accent-soft);border-color:var(--accent-2);text-align:center}
+.arch .data-layer .l-name{color:var(--accent)}
+.arch .data-layer .d-txt{font-size:13px;color:var(--text-2)}
+.arch .data-layer .d-txt b{color:var(--accent)}
+
+/* ============ 模块蓝图 ============ */
+.module{
+  margin:14px 0;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+}
+.module .m-head{
+  display:flex;align-items:center;gap:12px;padding:16px 20px;
+  background:linear-gradient(90deg,var(--primary-soft),transparent);
+  border-bottom:1px solid var(--border);
+}
+.module .m-ico{width:42px;height:42px;border-radius:12px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+[data-theme="dark"] .module .m-ico{background:var(--primary-2);color:#0d1117}
+.module .m-title{font-size:17px;font-weight:800}
+.module .m-meta{font-size:12.5px;color:var(--text-2);margin-top:2px}
+.module .m-body{padding:16px 20px}
+.module ul{padding-left:22px;margin:0}
+.module li{font-size:14px;line-height:1.7;margin:6px 0}
+.module li b{color:var(--primary-2)}
+.module .star{color:var(--accent)}
+.module .m-body .callout{margin:14px 0 0}
+
+/* ============ 资金流向图 ============ */
+.money-flow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.mf-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 18px;box-shadow:var(--shadow);
+}
+.mf-card .mf-title{font-weight:800;font-size:15px;color:var(--primary-2);margin-bottom:8px}
+.money-steps{list-style:none;padding:0;margin:6px 0 0}
+.money-steps li{
+  position:relative;display:flex;gap:12px;align-items:flex-start;
+  padding:0 0 15px 0;
+}
+.money-steps li:last-child{padding-bottom:0}
+.money-steps li::before{
+  content:"";position:absolute;left:14px;top:33px;bottom:0;width:2px;
+  background:var(--border-2);
+}
+.money-steps li:last-child::before{display:none}
+.ms-num{
+  flex-shrink:0;width:29px;height:29px;border-radius:50%;
+  background:var(--primary);color:#fff;font-size:12.5px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:1;
+}
+[data-theme="dark"] .ms-num{background:var(--primary-2);color:#0d1117}
+.ms-body{flex:1;padding-top:3px}
+.ms-body b{display:block;color:var(--text);font-size:13.5px}
+.ms-desc{font-size:12.5px;color:var(--text-2);line-height:1.6}
+.mf-card.mf-highlight{background:var(--accent-soft);border-color:var(--accent-2)}
+.mf-card.mf-highlight .mf-title{color:var(--accent)}
+
+/* 费率改革步骤（费用小卡） */
+.fee-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.fee-item{
+  background:var(--bg);border:1px solid var(--border);border-radius:11px;
+  padding:13px 15px;
+}
+.fee-name{font-weight:800;font-size:14px;color:var(--text)}
+.fee-rate{font-size:20px;font-weight:800;color:var(--accent);margin:4px 0 2px;line-height:1.2}
+.fee-unit{font-size:12px;font-weight:600;color:var(--text-3)}
+.fee-desc{font-size:12px;color:var(--text-2)}
+
+/* ============ 清单（可勾选） ============ */
+.checklist{list-style:none;padding:0;margin:14px 0}
+.checklist li{
+  display:flex;gap:12px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--border);border-radius:11px;
+  padding:13px 16px;margin:8px 0;box-shadow:var(--shadow);
+}
+.checklist input[type=checkbox]{
+  width:18px;height:18px;flex-shrink:0;margin-top:3px;accent-color:var(--accent);cursor:pointer;
+}
+.checklist .cl-t{font-weight:700;font-size:14.5px}
+.checklist .cl-d{font-size:13px;color:var(--text-2);margin-top:2px;line-height:1.65}
+.checklist li.done .cl-t{text-decoration:line-through;color:var(--text-3)}
+
+/* ============ 黄金法则 ============ */
+.rules{list-style:none;counter-reset:rule;padding:0;margin:14px 0}
+.rules li{
+  counter-increment:rule;position:relative;
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--border);border-radius:11px;
+  padding:13px 16px;margin:8px 0;box-shadow:var(--shadow);
+}
+.rules li::before{
+  content:counter(rule);flex-shrink:0;width:26px;height:26px;border-radius:50%;
+  background:var(--accent);color:#fff;font-size:13px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.rules .r-t{font-size:14px;line-height:1.7}
+.rules .r-t b{color:var(--accent)}
+
+/* ============ 误区列表 ============ */
+.mistake{list-style:none;padding:0;margin:14px 0}
+.mistake li{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 16px;margin:8px 0;border-radius:11px;border:1px solid;
+}
+.mistake li.no{background:var(--red-soft);border-color:var(--red)}
+.mistake li.no .mk{color:var(--red);font-weight:800}
+.mistake li.yes{background:var(--green-soft);border-color:var(--green)}
+.mistake li.yes .mk{color:var(--green);font-weight:800}
+.mistake .mk-t{font-size:14px;line-height:1.7}
+.mistake .mk-t b{display:block;font-size:13px;margin-bottom:2px}
+
+/* ============ 本章小结 ============ */
+.summary-box{
+  margin:30px 0 0;padding:18px 22px;border-radius:var(--radius);
+  background:var(--green-soft);border:1px solid var(--green);
+}
+.summary-box .sb-title{
+  display:flex;align-items:center;gap:8px;font-weight:800;font-size:14.5px;
+  color:var(--green);margin-bottom:10px;
+}
+.summary-box ol{margin:0;padding-left:20px}
+.summary-box li{font-size:13.5px;line-height:1.75;margin:4px 0;color:var(--text)}
+.summary-box li::marker{color:var(--green);font-weight:800}
+.summary-box li b{color:var(--primary-2)}
+
+/* ============ 三步阅读路径 ============ */
+.readpath{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0 4px}
+.rp-step{
+  flex:1 1 220px;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);position:relative;
+}
+.rp-step .rp-n{font-size:11.5px;font-weight:800;color:var(--accent);letter-spacing:.05em}
+.rp-step .rp-t{font-weight:700;font-size:14.5px;margin-top:4px}
+.rp-step .rp-d{font-size:12.5px;color:var(--text-2);margin-top:4px;line-height:1.6}
+
+/* ============ 术语表 ============ */
+.termsearch{position:relative;margin:16px 0;max-width:420px}
+.termsearch input{
+  width:100%;padding:11px 16px 11px 40px;border:1px solid var(--border-2);
+  border-radius:12px;background:var(--card);color:var(--text);
+  font-size:14px;font-family:inherit;outline:none;
+}
+.termsearch input:focus{border-color:var(--primary-2);box-shadow:0 0 0 3px var(--primary-soft)}
+.termsearch .ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-3)}
+.term-filters{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+.tf-btn{
+  font-size:12px;padding:4px 12px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--border-2);background:var(--card);color:var(--text-2);
+}
+.tf-btn.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+[data-theme="dark"] .tf-btn.on{background:var(--primary-2);color:#0d1117}
+.glossary{list-style:none;padding:0;margin:12px 0 0}
+.glossary li{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:12px 16px;border-bottom:1px solid var(--border);border-radius:8px;
+}
+.glossary li:hover{background:var(--primary-soft)}
+.glossary .g-term{flex:0 0 190px;font-weight:700;font-size:14px;color:var(--primary-2)}
+.glossary .g-def{font-size:13.5px;color:var(--text-2);line-height:1.7}
+.glossary .g-cat{
+  flex-shrink:0;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;
+  background:var(--accent-soft);color:var(--accent);align-self:center;
+}
+
+/* ============ 资源 & 页脚 ============ */
+.res-list{list-style:none;padding:0;margin:14px 0}
+.res-list li{
+  display:flex;gap:10px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:11px 14px;margin:7px 0;font-size:13.5px;line-height:1.65;
+}
+.res-list .rk{flex-shrink:0;width:24px;height:24px;border-radius:7px;background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-top:1px}
+.res-list .r-desc{color:var(--text-3);font-size:12.5px;margin-top:2px}
+.fail{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  margin:10px 0;overflow:hidden;box-shadow:var(--shadow);
+}
+.fail .f-head{
+  background:var(--red-soft);color:var(--red);font-weight:800;font-size:14px;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+}
+.fail .f-body{padding:12px 14px;font-size:13.5px;line-height:1.75;color:var(--text)}
+.fail .f-body b{color:var(--primary)}
+footer{
+  margin-top:60px;padding:28px 0 20px;border-top:1px solid var(--border);
+  color:var(--text-3);font-size:12.5px;text-align:center;line-height:1.8;
+}
+
+/* ============ 返回顶部 ============ */
+#toTop{
+  position:fixed;right:26px;bottom:26px;z-index:300;
+  width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--primary);color:#fff;font-size:19px;
+  box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transform:translateY(8px);
+  transition:opacity .25s,transform .25s;
+}
+#toTop.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+#toTop:hover{background:var(--primary-2)}
+
+/* ============ 响应式 ============ */
+@media(max-width:1100px){
+  .article{padding:0 28px 100px}
+}
+@media(max-width:960px){
+  #sidebar{transform:translateX(-100%);box-shadow:var(--shadow-lg)}
+  #sidebar.open{transform:translateX(0)}
+  #main{margin-left:0}
+  #menuBtn{display:flex}
+  #scrim{
+    position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:190;opacity:0;
+    pointer-events:none;transition:opacity .3s;
+  }
+  #scrim.show{opacity:1;pointer-events:auto}
+  .zhifa-grid,.vendors,.money-flow,.fee-row{grid-template-columns:1fr}
+  .arch .mods{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  body{font-size:15.5px}
+  .article{padding:0 18px 80px}
+  .hero{padding:32px 24px}
+  .hero h1{font-size:23px}
+  .glossary li{flex-direction:column;gap:4px}
+  .glossary .g-term{flex-basis:auto}
+}
+/* ============ 打印 ============ */
+@media print{
+  #sidebar,#topbar,#progress,#toTop,#scrim{display:none!important}
+  #main{margin-left:0}
+  .article{max-width:none;padding:0}
+  body{font-size:12px;line-height:1.6;background:#fff;color:#000}
+  section.ch{padding-top:24px;page-break-inside:avoid}
+  a{color:#000}
+  .zhifa-panel{grid-template-rows:1fr !important}
+  .callout,.module,.vendor{box-shadow:none;page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="scrim"></div>
+
+<!-- ================= 侧边栏目录 ================= -->
+<aside id="sidebar">
+  <div class="sb-brand">
+    <div class="logo"><span class="dot"></span>公募基金 · 入门手册</div>
+    <div class="sub">产品经理 & 普通人都能读 · 高信息质量</div>
+  </div>
+  <div class="sb-search">
+    <input type="text" id="tocSearch" placeholder="🔍 搜索章节…">
+  </div>
+  <nav class="toc" id="toc">
+    <div class="toc-group"><a href="#ch0" class="active"><span class="num">◉</span>封面导读</a></div>
+    <div class="toc-group" data-g="1">
+      <a href="#ch1"><span class="num">1</span>行业全景<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s1-1">1.1 公募基金是什么</a>
+        <a href="#s1-2">1.2 普通人的理财选项</a>
+        <a href="#s1-3">1.3 行业规模数据</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="2">
+      <a href="#ch2"><span class="num">2</span>用户是谁<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s2-1">2.1 用户分层</a>
+        <a href="#s2-2">2.2 基民画像</a>
+        <a href="#s2-3">2.3 需求与痛点</a>
+        <a href="#s2-4">2.4 基金赚钱基民不赚钱</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="3">
+      <a href="#ch3"><span class="num">3</span>一天与工作流<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s3-1">3.1 基民的一天</a>
+        <a href="#s3-2">3.2 买基金完整旅程</a>
+        <a href="#s3-3">3.3 基金生命周期</a>
+        <a href="#s3-4">3.4 信息披露节奏</a>
+        <a href="#s3-5">3.5 定投 & 止盈 SOP</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="4">
+      <a href="#ch4"><span class="num">4</span>基金心法 ×10<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s4-1">4.1 资产配置优先</a>
+        <a href="#s4-2">4.2 收益与风险一体</a>
+        <a href="#s4-3">4.3 长期主义与复利</a>
+        <a href="#s4-4">4.4 定投与微笑曲线</a>
+        <a href="#s4-5">4.5 看懂净值与费率</a>
+        <a href="#s4-6">4.6 指数 vs 主动</a>
+        <a href="#s4-7">4.7 选择基金经理</a>
+        <a href="#s4-8">4.8 逆向与情绪管理</a>
+        <a href="#s4-9">4.9 止盈与仓位纪律</a>
+        <a href="#s4-10">4.10 识别信息噪音 ★</a>
+        <a href="#s4-11">4.11 十条黄金法则</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="5">
+      <a href="#ch5"><span class="num">5</span>竞品地图<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s5-1">5.1 全景地图</a>
+        <a href="#s5-2">5.2 核心能力拆解</a>
+        <a href="#s5-3">5.3 商业模式根源</a>
+        <a href="#s5-4">5.4 基金投顾</a>
+        <a href="#s5-5">5.5 市场空白</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="6">
+      <a href="#ch6"><span class="num">6</span>功能蓝图<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s6-1">6.1 整体架构</a>
+        <a href="#s6-2">6.2 规划与配置</a>
+        <a href="#s6-3">6.3 选基金工具</a>
+        <a href="#s6-4">6.4 持有与陪伴 ★</a>
+        <a href="#s6-5">6.5 认知与纪律</a>
+        <a href="#s6-6">6.6 信息质量过滤器 ★</a>
+        <a href="#s6-7">6.7 AI 机会与合规红线</a>
+        <a href="#s6-8">6.8 商业化思考</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="7">
+      <a href="#ch7"><span class="num">7</span>行动建议<span class="caret" style="margin-left:auto">▸</span></a>
+      <div class="toc-sub">
+        <a href="#s7-1">7.1 补什么知识</a>
+        <a href="#s7-2">7.2 实操建议</a>
+        <a href="#s7-3">7.3 常见误区</a>
+        <a href="#s7-4">7.4 失败模式清单</a>
+      </div>
+    </div>
+    <div class="toc-group" data-g="8">
+      <a href="#ch8"><span class="num">8</span>术语速查<span class="caret" style="margin-left:auto">▸</span></a>
+    </div>
+    <div class="toc-group" data-g="9">
+      <a href="#ch9"><span class="num">9</span>资源与下一步<span class="caret" style="margin-left:auto">▸</span></a>
+    </div>
+  </nav>
+</aside>
+
+<!-- ================= 主内容 ================= -->
+<div id="main">
+<div id="topbar">
+  <button id="menuBtn" title="目录">☰</button>
+  <span class="crumb" id="crumb">封面导读</span>
+  <span class="spacer"></span>
+  <button class="icon-btn" id="themeBtn" title="切换主题">🌙</button>
+</div>
+
+<div class="article">
+
+<!-- ========== 封面 ========== -->
+<section class="ch" id="ch0">
+  <div class="hero">
+    <span class="tag">公募基金投资 · 领域入门手册</span>
+    <h1>公募基金投资领域<br>入门手册</h1>
+    <p class="lead">这套手册回答五个问题：<strong>普通人每天在基金 App 上干什么？为什么大多数人不赚钱？市面上为什么充满情绪信息？怎么识别高质量信息？一个好产品应该帮用户做什么？</strong>——产品经理和普通人都能读懂。</p>
+    <div class="quick">
+      <a href="#ch1">① 先建地图：行业全景</a>
+      <a href="#ch4">④ 基金心法 ×10</a>
+      <a href="#ch6">⑥ 功能设计蓝图</a>
+      <a href="#ch8">⑧ 术语速查表</a>
+    </div>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">📖 建议阅读时长：约 40 分钟</span>
+    <span class="ov-chip">🎯 难度：零基础可读</span>
+    <span class="ov-chip">🔖 悬停正文蓝色词语即可查术语</span>
+    <span class="ov-chip">🎯 双视角：产品经理 + 普通人</span>
+  </div>
+
+  <div class="readpath">
+    <div class="rp-step"><div class="rp-n">STEP 1 · 建立地图</div><div class="rp-t">先读第一～三章</div><div class="rp-d">搞懂公募是什么、用户是谁、基民的一天怎么过（约 15 分钟）</div></div>
+    <div class="rp-step"><div class="rp-n">STEP 2 · 掌握心法</div><div class="rp-t">精读第四章</div><div class="rp-d">10 大买基心法如何变成产品功能与个人规则，是全书核心（约 15 分钟）</div></div>
+    <div class="rp-step"><div class="rp-n">STEP 3 · 落地执行</div><div class="rp-t">用第五～七章</div><div class="rp-d">看竞品、画蓝图、列行动计划（约 10 分钟）</div></div>
+  </div>
+
+  <div class="callout key">
+    <div class="ico">💡</div>
+    <div><p><strong>怎么读这套手册：</strong>第一章到第三章建立"行业和用户"的地图；第四章是核心——把买基金的心法逐条翻译成产品功能和个人规则；第五、六章告诉你市场现状（含情绪信息的商业模式根源）和你的机会；第七章是可执行清单。每章末尾都有「本章小结」。</p></div>
+  </div>
+</section>
+
+<!-- ========== 第一章 ========== -->
+<section class="ch" id="ch1">
+  <div class="ch-header">
+    <div class="kicker">Chapter 1</div>
+    <h2>一、先建立整体地图：公募基金行业全景</h2>
+    <p class="desc">用最少的术语，搞懂公募基金是什么、在普通人的理财选项里处于什么位置、这个行业有多大。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 公募基金是什么</span>
+    <span class="ov-chip">✅ 普通人的理财选项全景</span>
+    <span class="ov-chip">✅ 行业规模最新数据</span>
+    <span class="ov-chip">✅ ETF 指数化浪潮</span>
+  </div>
+
+  <h3 id="s1-1">1.1 公募基金是什么（一句话版）</h3>
+  <p><strong>公募基金</strong> = 面向<strong>不特定大众公开募集</strong>、投资门槛极低（1 元 / 10 元起投）、信息披露严格、受证监会强监管的<strong>标准化理财产品</strong>。</p>
+  <p>普通人手机里的支付宝、天天基金、银行 App 上能买到的"基金"，绝大多数就是公募基金。与私募的区别，用一个对比就记住：</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>维度</th><th>公募基金</th><th>私募基金（对比参考）</th></tr></thead>
+      <tbody>
+        <tr><td class="t">募集方式</td><td>公开募集，谁都能买</td><td>非公开，只面向合格投资者</td></tr>
+        <tr><td class="t">门槛</td><td>1 元 / 10 元起投</td><td>单只 <b class="num">100 万元</b> 起</td></tr>
+        <tr><td class="t">信息披露</td><td>每日净值 + 季报/半年报/年报，强制</td><td>信息不公开披露</td></tr>
+        <tr><td class="t">投资者</td><td>7.59 亿个人投资者（约每两人一个账户）</td><td>高净值个人 + 机构</td></tr>
+        <tr><td class="t">牌照</td><td>基金公司需证监会核准</td><td>中基协登记备案</td></tr>
+        <tr><td class="t">监管强度</td><td>极强（基金法 + 全面信披）</td><td>强（近两年升级）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <blockquote>一句话记住：<strong>公募是"把大家的钱集合起来交给专业机构管"的合法普惠理财工具；私募是"有钱人的定制款"，公募是"大众的超市货架"。</strong>你的产品服务的对象，是后者这个"超市"里所有的顾客。</blockquote>
+
+  <h3 id="s1-2">1.2 普通人的理财选项全景（用户为什么选基金）</h3>
+  <p>普通人能接触到的理财工具就这几样，基金在其中处于"中间地带"：</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>选项</th><th>年化收益量级</th><th>风险</th><th>流动性</th><th>一句话评价</th></tr></thead>
+      <tbody>
+        <tr><td class="t">银行存款</td><td>1% 上下（利率持续下行）</td><td>极低</td><td>活期/定期</td><td>保本但跑不赢通胀</td></tr>
+        <tr><td class="t">货币基金</td><td>1.2%–1.8%</td><td>极低</td><td>T+0 随时取</td><td>"类现金"，零钱管理</td></tr>
+        <tr><td class="t">银行理财</td><td>2%–3%</td><td>低-中</td><td>有封闭期</td><td>刚兑打破后也会亏钱</td></tr>
+        <tr><td class="t" style="color:var(--accent)">公募基金（债券型）</td><td style="font-weight:700">2.5%–4%</td><td>低-中</td><td>T+1</td><td>稳健配置主力</td></tr>
+        <tr><td class="t" style="color:var(--accent)">公募基金（股票/混合）</td><td style="font-weight:700">长期年化 8%–12%（波动极大）</td><td>中-高</td><td>T+1</td><td>长期增值主力，波动考验人性</td></tr>
+        <tr><td class="t">股票（直接炒股）</td><td>少数人赚钱</td><td>高</td><td>T+1</td><td>7 亏 2 平 1 赚，普通人门槛高</td></tr>
+        <tr><td class="t">保险（储蓄型）</td><td>2.5%–3% 锁定</td><td>低</td><td>差（退保亏）</td><td>长期锁定，流动性差</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout idea">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：</strong>基金是普通人<strong>唯一能以很低门槛、很透明、很方便地配置"股票+债券"等资产</strong>的标准化工具。这也解释了为什么公募基金规模能做到 37 万亿+——它是大众理财需求与专业投资能力之间的"连接器"。</p></div>
+  </div>
+
+  <h3 id="s1-3">1.3 行业到底有多大？（最新数据，2025-2026）</h3>
+  <p>手册总说"公募 37 万亿"，到底多大？基民有多少？——这里把数字补齐（来源：中基协月度数据、中国基金报、上海证券报等，均标注时点）。</p>
+
+  <h4>① 总盘子：全球第二大公募市场，一年内连跨 35/36/37/38/39 万亿</h4>
+  <div class="timeline">
+    <div class="tl-item"><span class="tl-time">2024 年底 · 32.83 万亿</span><div class="tl-body">163 家机构（148 家基金管理公司 + 15 家资管机构），较 2023 年底 27.60 万亿增长约 5 万亿</div></div>
+    <div class="tl-item"><span class="tl-time">2025.07 · 35.08 万亿</span><div class="tl-body">164 家机构，首破 35 万亿</div></div>
+    <div class="tl-item"><span class="tl-time">2025.08 · 36 万亿</span><div class="tl-body">首破 36 万亿</div></div>
+    <div class="tl-item"><span class="tl-time">2025.11 · 37 万亿</span><div class="tl-body">首破 37 万亿</div></div>
+    <div class="tl-item hot"><span class="tl-time">2025 年底 · 37.71 万亿</span><div class="tl-body">连续九个月创新高，较年初 <b class="num">+15%</b></div></div>
+    <div class="tl-item"><span class="tl-time">2026.02 · 38 万亿</span><div class="tl-body">首破 38 万亿</div></div>
+    <div class="tl-item"><span class="tl-time">2026.04 · 39 万亿</span><div class="tl-body">首破 39 万亿</div></div>
+    <div class="tl-item hot"><span class="tl-time">2026.05 · 39.48 万亿</span><div class="tl-body">165 家机构（150 家基金管理公司 + 15 家资管机构），逼近 40 万亿</div></div>
+  </div>
+  <blockquote>小白帮记：39.48 万亿 ≈ <strong>A 股总市值的 1/3 强</strong>（2025 年末 A 股总市值约 108 万亿）；≈ 每个中国人平均持有 2.8 万元基金。全球范围内仅次于美国，是<strong>全球第二大公募基金市场</strong>。</blockquote>
+
+  <h4>② 结构：钱都放在哪类基金里？（2025 年 12 月底，中基协）</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>类型</th><th>规模</th><th>占比</th><th>人话理解</th></tr></thead>
+      <tbody>
+        <tr><td class="t">货币基金</td><td>15.03 万亿</td><td>~40%</td><td>余额宝这类，零钱 + 收益略高于存款</td></tr>
+        <tr><td class="t">债券基金</td><td>10.94 万亿</td><td>~29%</td><td>稳健理财，近两年最大增量（单月曾增超 4120 亿）</td></tr>
+        <tr><td class="t">股票基金（含指数）</td><td>6.05 万亿</td><td>~16%</td><td>高风险高波动，含 ETF 大爆发</td></tr>
+        <tr><td class="t">混合基金</td><td>3.68 万亿</td><td>~10%</td><td>股债搭配</td></tr>
+        <tr><td class="t">QDII（投海外）</td><td>约 0.5 万亿</td><td>~1%</td><td>买美股/港股/海外资产的通道</td></tr>
+        <tr><td class="t">FOF（基金中的基金）</td><td>2444 亿</td><td>&lt;1%</td><td>帮你一篮子买基金</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warn">
+    <div class="ico">⚠️</div>
+    <div><p><strong>关键洞察：货基+债基合计占 69%</strong>——普通人的钱大部分放在"稳健"端；但大家讨论的、被情绪信息轰炸的，几乎全是 16% 的股票基金。<strong>你的产品如果只服务"炒股票基金的人"，服务的是少数人；如果服务"配置全类型的人"，才是大多数。</strong></p></div>
+  </div>
+
+  <h4>③ ETF：2025 年最亮眼的赛道（指数化浪潮）</h4>
+  <ul>
+    <li>2025 年 4 月：全市场 ETF 总规模首次突破 <b class="num">4 万亿</b>；8 月：权益类 ETF 突破 4 万亿</li>
+    <li><strong>2025 年底：ETF 总规模 6.02–6.03 万亿，数量 1381 只，全年净增 2.29 万亿（增幅超 60%）</strong>——一年内连跨 4 万亿、5 万亿、6 万亿三关（Choice/中证报）</li>
+    <li>千亿级 ETF 7 只、百亿级 125 只；华泰柏瑞沪深 300ETF 规模 4222.6 亿，是境内首只突破 4000 亿的 ETF（全市场第一）；易方达沪深 300ETF 3019 亿、华夏 2298 亿紧随其后</li>
+    <li>2024 年 11 月起头部宽基 ETF 管理费降至 <b class="num">0.15%</b>、托管费 0.05%，"低费率时代"全面到来</li>
+  </ul>
+  <div class="callout idea">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：</strong>ETF 的爆发意味着<strong>普通人开始从"买主动基金经理"转向"买指数工具"</strong>——费率更低、持仓透明、风格不漂移。这是过去十年公募最重要的结构性变化，你的产品必须覆盖"指数基金/ETF"这个品类，否则会错过半壁江山。</p></div>
+  </div>
+
+  <h4>④ 基民数量：7.59 亿人</h4>
+  <ul>
+    <li>截至 2022 年末，场外公募基金个人投资者 <b class="num">7.59 亿人</b>，公募基金有效账户（持有份额的账户）超 <b class="num">15 亿户</b>；个人投资者资金占比 51.87%（中基协《中国证券投资基金业年报 2023》）</li>
+    <li>2024 年中基协《全国公募基金投资者状况调查报告》：<strong>40.2% 的基金个人投资者会在大盘下跌时购买基金</strong>；六成以上投资者拥有本科以上学历</li>
+  </ul>
+  <blockquote>小白帮记：<strong>7.59 亿人 ≈ 每两个中国人就有一个持有过基金</strong>。但注意这是"账户数"口径（一个平台开一个户，一个人可能开 3-5 个户），真实"活跃基民"远小于此——但对产品来说，<strong>"曾经买过基金的人"这个池子是以亿计的，而"正在认真投资基金的人"才是你的核心用户。</strong></blockquote>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>公募 = 1 元起投、公开募集、强监管、强信披的标准化理财工具，7.59 亿人持有。</li>
+      <li>普通人的理财光谱里，基金是唯一能低门槛配置股/债的透明工具。</li>
+      <li>行业规模 37.71 万亿（2025 年底）→ 39.48 万亿（2026 年 5 月底），全球第二大；货基+债基占 69%。</li>
+      <li>ETF 2025 年突破 6 万亿（+60%），指数化浪潮是最大结构性变化。</li>
+      <li>你的服务对象是"亿级基民"中的一个切片——想清楚服务哪类人。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第二章 ========== -->
+<section class="ch" id="ch2">
+  <div class="ch-header">
+    <div class="kicker">Chapter 2</div>
+    <h2>二、你的用户是谁：7.59 亿基民与他们的真实旅程</h2>
+    <p class="desc">先看用户分层与真实画像，再理解全行业最痛的"基金赚钱基民不赚钱"。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 用户分层</span>
+    <span class="ov-chip">✅ 基民真实画像</span>
+    <span class="ov-chip">✅ 三类用户痛点</span>
+    <span class="ov-chip">✅ 行业铁律：基金赚钱基民不赚钱</span>
+  </div>
+
+  <h3 id="s2-1">2.1 用户分层（决定产品形态与定位）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>分层</th><th>画像</th><th>资金量级</th><th>行为特征</th><th>付费意愿</th></tr></thead>
+      <tbody>
+        <tr><td class="t">小白基民</td><td>刚工作/刚接触理财，余额宝入坑</td><td>0.1 万–10 万</td><td>跟风买、看热度榜、追明星经理、频繁申赎</td><td>几乎不付费（但数量巨大）</td></tr>
+        <tr><td class="t">进阶基民</td><td>有 1-3 年经验，开始研究指数/行业/经理</td><td>10 万–100 万</td><td>会看回撤/费率，部分人用工具，爱逛社区</td><td>愿意为工具/课程小额付费</td></tr>
+        <tr><td class="t">资深/家庭配置者</td><td>有家庭资产配置意识，股债搭配、定投、养老</td><td>100 万+</td><td>纪律性买入、长期持有、关注投顾/组合</td><td>愿意为"省心+专业"付费（投顾费）</td></tr>
+        <tr><td class="t">机构/专业玩家</td><td>券商资管、保险、FOF、企业年金</td><td>亿级</td><td>用 Wind/晨星等专业工具</td><td>高客单价（但这是私募版的地盘）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout idea">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：小白提供规模与流量，进阶与资深提供收入与口碑。</strong>市面上的免费 App（天天基金、支付宝）靠小白做流量，靠卖基金给所有人赚销售费；付费工具（晨星、韭圈儿 Pro）服务进阶以上。想清楚你的产品在漏斗的哪一层。</p></div>
+  </div>
+
+  <h3 id="s2-2">2.2 基民的"真实画像"（中基协投资者状况调查报告关键数据）</h3>
+  <ul>
+    <li><strong>学历</strong>：六成以上本科及以上——基民不是"没文化"，是"没系统方法"</li>
+    <li><strong>行为</strong>：40.2% 会在<strong>大盘下跌时</strong>购买基金（逢跌加仓者其实不少，但往往在"跌到半山腰"时接刀）</li>
+    <li><strong>持有周期</strong>：机构持有单只基金一般不超过 2 年；个人更短——<strong>中基协/行业报告反复显示个人平均持有期远低于基金收益兑现所需周期</strong></li>
+    <li><strong>信息渠道</strong>：平台推荐、排行榜、社交/短视频、大 V、亲友推荐——<strong>情绪信息的主要入口都在这里</strong></li>
+  </ul>
+
+  <h3 id="s2-3">2.3 三类核心用户的真实需求与痛点</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>角色</th><th>日常要做什么</th><th>核心痛点</th></tr></thead>
+      <tbody>
+        <tr><td class="t">小白基民</td><td>把钱放余额宝→看到别人赚钱→追热门基金→亏损→割肉或躺平</td><td>看不懂（净值/费用/持仓）；被情绪信息裹挟追涨杀跌；不知道何时卖；亏了不知道为什么</td></tr>
+        <tr><td class="t">进阶基民</td><td>研究指数估值、经理风格、费率；做定投；尝试止盈策略</td><td>信息过载；工具碎片化（要拼好几个 App）；业绩数据有陷阱（幸存者偏差、短期榜）；缺乏纪律性执行</td></tr>
+        <tr><td class="t">资深/家庭配置者</td><td>股债配置、养老规划、子女教育金；用投顾组合；关注税收（个人养老金）</td><td>资产"一盘散沙"（银行/支付宝/券商各管一摊，看不到总账）；配置失衡不自知；投顾服务深度不够</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <blockquote>一句话总结用户需求：<strong>让基金"看得懂、选得对、拿得住、卖得好、亏了明白为什么"。</strong>前三个词是产品能帮的，后两个词是产品最缺的。</blockquote>
+
+  <h3 id="s2-4">2.4 行业铁律：基金赚钱，基民不赚钱（这是全行业的"第一痛点"）</h3>
+  <p>这是做公募产品<strong>必须先理解的事实</strong>，也是"市场上情绪信息多"的受害面。</p>
+
+  <h4>实证数据（两组权威研究）</h4>
+  <ol>
+    <li><strong>景顺长城/富国/交银施罗德《公募权益类基金投资者盈利洞察报告》（2021.10）</strong>：过去 5 年，基民的投资行为（追涨杀跌、频繁申赎、持有期过短）给收益带来的<strong>损耗率接近 -60%</strong>——即基金本身赚了 100 元，基民因行为不当实际少赚约 60 元。</li>
+    <li><strong>东方财富证券研报《基民收益率为何跑输基金收益率？》（2022.7）</strong>：
+      <ul>
+        <li>全市场口径：基民实际收益率平均每年比基金收益率<strong>低 2.53 个百分点</strong></li>
+        <li>主动权益类：2016 年以来年均差距 <b class="num">-6%</b>；2020 年波动剧烈年份单年损耗达 14%</li>
+        <li>高仓位行业主题基金（如白酒/医药/新能源）：年均收益磨损接近 <b class="num">10%</b>——<strong>越是热门赛道，基民亏得越多</strong></li>
+      </ul>
+    </li>
+  </ol>
+
+  <h4>持有时长与收益的关系（2021 年 21 世纪经济报道引用的行业数据）</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>持仓时长</th><th>平均收益率</th></tr></thead>
+      <tbody>
+        <tr><td class="t">小于 3 个月</td><td style="color:var(--red);font-weight:700">-1.47%</td></tr>
+        <tr><td class="t">6–12 个月</td><td>+10.94%</td></tr>
+        <tr><td class="t">120 个月以上（10 年）</td><td style="color:var(--green);font-weight:700">+117.38%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <blockquote>小白帮记：<strong>基金是"时间的朋友"还是"时间的敌人"，取决于你持有多久。</strong>拿 3 个月大概率亏钱，拿 10 年大概率翻倍——但大多数人的耐心撑不过 3 个月。这就是"基金赚钱基民不赚钱"的机制：<strong>产品让交易变容易了，却让赚钱变难了。</strong></blockquote>
+
+  <h4>监管已经承认并动手治理（这不是营销话术，是官方文件）</h4>
+  <ul>
+    <li>2025 年《推动公募基金高质量发展行动方案》要求综合展示<strong>中长期业绩、业绩基准、投资者盈亏、换手率与综合费率</strong></li>
+    <li><strong>2026 年 3 月信披新规</strong>：首次强制要求主动股票型与混合型基金在半年报、年报披露<strong>"盈利投资者占比"</strong>；<strong>取消近 1 个月短期业绩披露</strong>；新增 7 年、10 年长期业绩展示；配套销售行为规范，<strong>禁止过度宣传短期收益与排名</strong>，将"投资者盈利"与"保有规模"纳入销售机构考核</li>
+  </ul>
+  <div class="callout idea">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：</strong><strong>监管正在把行业从"规模导向"推向"投资者获得感导向"。</strong>你的产品如果逆着这个方向做（鼓励频繁交易、强化短期排名、制造焦虑），未来会撞上监管；顺着做（帮用户拿得住、看得懂、算清总账），监管就是你的盟友。这可能是做公募产品最重要的战略判断。</p></div>
+  </div>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>用户分层：小白（流量）、进阶（收入）、资深（客单价）、机构（不做）。</li>
+      <li>基民画像：本科以上占六成，不是"不懂"，是"没方法+被信息裹挟"。</li>
+      <li>三大痛点：看不懂、选不对、拿不住；卖不好、亏了不知道为什么。</li>
+      <li>行业铁律：<b>基金赚钱基民不赚钱</b>——行为损耗年均 2.53%，热门赛道高达 10%；持有 &lt;3 个月平均亏 1.47%，10 年以上平均翻倍。</li>
+      <li>监管已转向"投资者获得感"，这是产品最大的顺风。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第三章 ========== -->
+<section class="ch" id="ch3">
+  <div class="ch-header">
+    <div class="kicker">Chapter 3</div>
+    <h2>三、普通人的基金投资一天与完整工作流</h2>
+    <p class="desc">基民的一天怎么过、买基金完整旅程、基金的生命周期、信息披露节奏，以及两套可照做的纪律化 SOP。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 基民的一天</span>
+    <span class="ov-chip">✅ 买基金 8 步旅程</span>
+    <span class="ov-chip">✅ 基金生命周期</span>
+    <span class="ov-chip">✅ 定投 & 止盈 SOP</span>
+  </div>
+
+  <h3 id="s3-1">3.1 一个普通基民的一天（情绪与操作的真实切片）</h3>
+  <div class="timeline">
+    <div class="tl-item"><span class="tl-time">08:00</span><div class="tl-body">地铁上刷基金 App：昨晚美股涨了，看看我的基金今天估值涨没涨</div></div>
+    <div class="tl-item"><span class="tl-time">09:00</span><div class="tl-body">开盘：首页弹出"今日大涨板块"，点进去看涨幅榜，收藏了两只</div></div>
+    <div class="tl-item"><span class="tl-time">11:30</span><div class="tl-body">午休：刷短视频看到"医药要起飞了"的大 V，评论区一片"已上车"</div></div>
+    <div class="tl-item"><span class="tl-time">15:00</span><div class="tl-body">收盘：看到自选里一只基金今天 +3%，犹豫要不要加仓</div></div>
+    <div class="tl-item hot"><span class="tl-time">20:00</span><div class="tl-body">睡前：打开收益页，绿了 → 纠结要不要卖；红了 → 开心但不知道何时止盈</div></div>
+  </div>
+  <blockquote>小白帮记：普通人投资基金，<strong>一天里 90% 的时间在做"看盘+焦虑+被信息轰炸"，10% 的时间在做决策，而决策往往基于情绪而非规则。</strong>这就是产品存在的空间。</blockquote>
+
+  <h3 id="s3-2">3.2 买基金的完整旅程（从"想理财"到"卖出复盘"）</h3>
+  <div class="flow">
+    <div class="fstep"><span class="n">1</span><div class="t">需求产生</div><div class="d">想理财 / 看到别人赚钱 / 银行推销</div></div>
+    <div class="fstep warn"><span class="n">2</span><div class="t">平台触达 ⚠️</div><div class="d">情绪信息第一入口：收益榜、热搜、大V荐基</div></div>
+    <div class="fstep"><span class="n">3</span><div class="t">风险测评</div><div class="d">多数人随便填，与实际承受力脱节</div></div>
+    <div class="fstep warn"><span class="n">4</span><div class="t">选基金 ⚠️</div><div class="d">只看近 1 年排名、只看明星经理</div></div>
+    <div class="fstep"><span class="n">5</span><div class="t">买入</div><div class="d">申购费折扣、A/C 选择、定投 or 一次性</div></div>
+    <div class="fstep warn"><span class="n">6</span><div class="t">持有 ⚠️</div><div class="d">每天看估值、听消息、忍不住交易</div></div>
+    <div class="fstep warn"><span class="n">7</span><div class="t">卖出 ⚠️</div><div class="d">没有卖出规则：回本就跑 / 死扛</div></div>
+    <div class="fstep loop"><span class="n">8</span><div class="t">复盘 ↺</div><div class="d">90% 的人没有——无法区分运气与能力</div></div>
+  </div>
+  <ol>
+    <li><strong>需求产生</strong>：工资到账、看到别人赚钱、银行经理推销、养老规划……动机五花八门</li>
+    <li><strong>平台触达</strong>：⚠️ <strong>这是情绪信息的第一入口</strong>——收益榜、热搜榜、大 V 荐基、"近 1 月涨幅"标签（已被监管叫停）</li>
+    <li><strong>风险测评</strong>：多数人随便填，测评结果与真实风险承受力脱节（"我知道我会亏钱，但测评得填激进点才能买热门基金"）</li>
+    <li><strong>选基金</strong>：⚠️ <strong>最容易被误导的环节</strong>——只看"近 1 年收益"排名、只看明星经理、不懂看回撤/费率/规模/风格</li>
+    <li><strong>买入</strong>：申购费折扣（1 折后约 0.15%）、A/C 份额选择（持有期不同选不同）、定投 vs 一次性</li>
+    <li><strong>持有</strong>：⚠️ <strong>情绪最集中的环节</strong>——每天看估值、听消息、忍不住交易；<strong>平均持有期过短是"基民不赚钱"的最大原因</strong></li>
+    <li><strong>卖出</strong>：⚠️ 没有卖出规则——"回本就跑"、"涨了怕跌赶紧卖"、"跌了死扛"，很少有人按"目标收益率/估值/逻辑变化"卖出</li>
+    <li><strong>复盘</strong>：90% 的人没有——不记录买入理由，无法区分"运气"与"能力"，同样的错误反复犯</li>
+  </ol>
+
+  <h3 id="s3-3">3.3 基金的生命周期（普通人也该知道的"产品事实"）</h3>
+  <p>一只基金从生到死，普通用户在 App 上只会看到净值曲线，但产品事实是：</p>
+  <div class="flow">
+    <div class="fstep"><span class="n">1</span><div class="t">募集期</div><div class="d">新基金发行（认购）</div></div>
+    <div class="fstep"><span class="n">2</span><div class="t">成立</div><div class="d">募集达标，基金成立</div></div>
+    <div class="fstep"><span class="n">3</span><div class="t">建仓期</div><div class="d">封闭运作，逐步买入资产</div></div>
+    <div class="fstep"><span class="n">4</span><div class="t">正常运作</div><div class="d">申赎开放，持续管理</div></div>
+    <div class="fstep warn"><span class="n">5</span><div class="t">事件 ⚠️</div><div class="d">分红 / 限购 / 换经理 / 转型 / 清盘</div></div>
+    <div class="fstep loop"><span class="n">!</span><div class="t">最坑的坑</div><div class="d">认购新基金（"爆款"募集）</div></div>
+  </div>
+  <ul>
+    <li><strong>新基金（认购）vs 老基金（申购）</strong>：新基金没有历史业绩、建仓期未知、市场高位发行的"爆款"往往后续业绩不佳——行业有句老话叫<strong>"好发不好做、好做不好发"</strong>（牛市基金好卖但不好做，熊市不好卖但好做）。数据显示爆款基金成立后跑输的比例偏高（行业公认观察，2021 年 2 月"基金热搜榜"事件是典型）。</li>
+    <li><strong>基金经理更换</strong>：换人 = 产品逻辑可能完全变了，但很多持有人不知道（信披有公告，但 App 提醒极少）。</li>
+    <li><strong>清盘</strong>：规模 &lt;5000 万触发清盘条款，按净值赎回（不是归零），但可能被迫在低点卖出。</li>
+    <li><strong>限购/暂停申购</strong>：大额资金涌入影响策略，优质基金常限购——也是营销上的"稀缺感"来源。</li>
+  </ul>
+  <div class="callout idea">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：</strong>把"基金的生命周期事件"（换经理、清盘预警、限购、分红、风格漂移）主动推送给持有人，是一个高价值但几乎没人做好的功能。<strong>大部分人直到亏钱都不知道基金经理已经换了三任。</strong></p></div>
+  </div>
+
+  <h3 id="s3-4">3.4 信息披露节奏（什么时候能看到什么）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>时间</th><th>能看到什么</th><th>普通人的误区</th></tr></thead>
+      <tbody>
+        <tr><td class="t">每个交易日</td><td>单位净值、估值（盘中估算）</td><td>把"估值"当"实际净值"（有误差，指数基金误差小，主动基金可能很大）</td></tr>
+        <tr><td class="t">每日/每周</td><td>货基万份收益、7 日年化</td><td>7 日年化是"过去 7 天的年化"，不是未来收益承诺</td></tr>
+        <tr><td class="t">季度</td><td>季报（前十大重仓股、份额变化）</td><td>重仓股有滞后（季报截止日 + 15-20 天披露），已过时</td></tr>
+        <tr><td class="t">半年/年度</td><td>半年报、年报（完整持仓、经理报告、费率明细）</td><td>几乎没人读</td></tr>
+        <tr><td class="t">不定期</td><td>分红公告、经理变更、清盘/转型、限购</td><td>平台提醒不足，用户后知后觉</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <blockquote>小白帮记：<strong>基金披露的信息其实非常全——问题不是"没信息"，是"信息没被加工成普通人能用的东西"。</strong>一份 30 页的半年报，普通人需要的是 3 句话："你的基金赚了什么钱、风险在哪、经理说了什么"。这就是产品机会。</blockquote>
+
+  <h3 id="s3-5">3.5 两个普通人可用的标准化流程（SOP：定投 &amp; 止盈）</h3>
+  <p>私募版讲的是机构的晨会/投决会 SOP，公募版对应的就是<strong>普通人也能照做的纪律化流程</strong>——这是"心法变规则"的最小单元。</p>
+
+  <h4>① 定投 SOP（适合有稳定现金流、想平滑波动的人）</h4>
+  <ol>
+    <li>定投的钱必须是"长期不用的闲钱"（3-5 年不动的钱）</li>
+    <li>选标的：宽基指数（沪深300/中证500/A500）+ 少量行业（不追热点）</li>
+    <li>定频率：按月/按周均可（拉长看频率差异很小，关键是坚持）</li>
+    <li>设纪律：止盈规则先写好（见下），下跌时不停扣（微笑曲线右半段靠下跌期积累筹码）</li>
+    <li>定期复核（每季度）：基金经理是否换人、指数估值是否过热、当初逻辑是否还在</li>
+  </ol>
+
+  <h4>② 目标止盈 SOP（把"何时卖"变成规则）</h4>
+  <ol>
+    <li>买入时就写下卖出规则（三选一即可）：
+      <ul>
+        <li><b>A. 目标收益法</b>：达到 +20%/+30% 分批止盈（可 1/3、1/3、1/3）</li>
+        <li><b>B. 估值法</b>：指数 PE 分位 &gt; 80% 时开始分批卖出</li>
+        <li><b>C. 回撤法</b>：最高点回撤 &gt;15% 且逻辑变坏时卖出</li>
+      </ul>
+    </li>
+    <li>触发后执行，禁止临时改规则（除非逻辑根本性变化：经理换人/行业逻辑破坏）</li>
+    <li>卖出后复盘：写一句话"为什么卖对了/卖错了"</li>
+  </ol>
+  <div class="callout idea">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：</strong><strong>"把卖出规则写下来 + 触发提醒 + 复盘记录"——这个最小闭环就是产品可以切入的 MVP。</strong>市场上卖"选基金"工具的人很多，卖"帮你执行纪律"的人几乎没有。</p></div>
+  </div>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>基民的一天：90% 时间看盘焦虑，10% 时间拍脑袋决策。</li>
+      <li>完整旅程 8 步：需求→触达→测评→选基→买入→持有→卖出→复盘；<b>选基/持有/卖出是三大情绪重灾区</b>。</li>
+      <li>基金生命周期事件（换经理/清盘/限购）提醒是空白功能。</li>
+      <li>信披很全但没人加工——"把 30 页年报变成 3 句话"是机会。</li>
+      <li>定投 SOP + 目标止盈 SOP 是最小可用产品闭环。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第四章 ========== -->
+<section class="ch" id="ch4">
+  <div class="ch-header">
+    <div class="kicker">Chapter 4 · 全书核心</div>
+    <h2>四、基金投资心法总览：哪些"心法"能被系统化</h2>
+    <p class="desc">把普通人买基金的心法翻译成产品功能与个人规则。点击卡片展开，一次只展开一张。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 资产配置优先</span>
+    <span class="ov-chip">✅ 长期主义与复利</span>
+    <span class="ov-chip">✅ 看懂净值与费率</span>
+    <span class="ov-chip">✅ 识别信息噪音 ★</span>
+  </div>
+
+  <p>私募版把投资大师的心法翻译成机构系统功能；本版把<strong>普通人买基金的心法</strong>翻译成<strong>产品功能与个人规则</strong>。每一条都可以变成"表单字段、自动计算、提醒规则"。</p>
+
+  <div class="zhifa-grid">
+
+    <div class="zhifa" id="s4-1">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">1</span>
+            <span class="tt"><span class="n">心法一</span><span class="h">资产配置优先于选基金</span><span class="who">Brinson 研究 · 配置贡献超 90% 收益波动</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">长期收益的 90% 以上由"资产配置"（股/债/现金/海外怎么配）决定，而不是"选哪只基金"。普通人的误区是<strong>花 90% 的精力选基金，只花 10% 的精力想配置</strong>。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>家庭资产总览</b>：把支付宝/天天/银行/券商的钱汇总，自动算"股债现金比例"</li>
+            <li><b>配置体检</b>：一键检测"全仓股票基金"（风险过激）或"全仓货基"（收益太低），给出失衡提示</li>
+            <li><b>目标规划</b>：按目标（养老/教育/买房）倒推股债配比（如"100-年龄"法则：年龄 30 岁 → 股票类配置约 70%）</li>
+          </ul>
+          <div class="honest"><b>小白帮记：</b>"100-年龄"是<strong>经验法则不是铁律</strong>，但方向是对的：越年轻越能承受波动，越临近用钱越要保守。</div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa" id="s4-2">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">2</span>
+            <span class="tt"><span class="n">心法二</span><span class="h">收益与风险是一体两面</span><span class="who">所有收益都要用"波动"来标价</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">一只"去年赚 50%"的基金，很可能去年也<strong>"回撤过 25%"</strong>。只看收益不看回撤 = 只看高光不看代价。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>风险收益并排展示</b>：任何"收益榜"旁边必须配"最大回撤/波动率/负收益季度数"——<b>这是对抗情绪信息的第一道产品防线</b></li>
+            <li><b>回撤可视化</b>：净值曲线下画"水下区间"（从高点跌到低点的坑），一眼看懂"这只基金让你难受过几次、每次多久"</li>
+            <li><b>持有体验评分</b>：用"年化收益 / 最大回撤"（卡玛比率）给基金打"体验分"，而不是用绝对收益排名</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa" id="s4-3">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">3</span>
+            <span class="tt"><span class="n">心法三</span><span class="h">长期主义与复利</span><span class="who">数据：持有 &lt;3 个月平均 -1.47%，10 年以上 +117%</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">复利的关键不是"快"，是<strong>"不中断、不大亏"</strong>。亏 50% 需要涨 100% 才回本。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>持有期收益视图</b>：把"你的实际收益 vs 若一直持有不动的收益"对比——<b>让用户亲眼看到"频繁交易让我少赚了多少"</b></li>
+            <li><b>行为损耗计算器</b>：输入你的申赎记录，算出行为损耗金额（参考 2.4 的 -2.53%/年）</li>
+            <li><b>"别打扰复利"提示</b>：换手次数、交易成本可视化</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa" id="s4-4">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">4</span>
+            <span class="tt"><span class="n">心法四</span><span class="h">定投与微笑曲线</span><span class="who">定投客户盈利人数与平均收益率均高于非定投</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">定投 = 固定金额在下跌时多买份额、上涨时少买份额，摊平成本。微笑曲线的本质是<strong>"下跌期积累筹码"</strong>——但 90% 的人理解反了：他们在下跌时停扣甚至赎回。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>定投计划管理</b>：计划目标、止盈规则、一键暂停/恢复的"冷静期"设计</li>
+            <li><b>微笑曲线可视化</b>：画出"你买入的成本线 vs 净值线"，展示定投如何摊平成本</li>
+            <li><b>下跌期陪伴文案</b>：在用户想停扣时，给出"当时为什么开始定投"的提醒（唤醒初心，而非推销）</li>
+          </ul>
+          <div class="honest"><b>诚实的话：定投不是万能的。</b>① 资金必须是长期闲钱；② 宽基指数定投比行业主题定投稳健得多（行业可能"微笑曲线变哭脸"）；③ 熊市漫长时要能坚持 2-3 年，中途放弃 = 在最便宜的时候停止买入。</div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa" id="s4-5">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">5</span>
+            <span class="tt"><span class="n">心法五</span><span class="h">看懂净值与费率</span><span class="who">信息质量的底线：平台靠费用赚钱，没动力教你这个</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">三个净值的区别 + 五类费用的叠加，是普通人最该懂、最没人教的"小知识"。<strong>看长期业绩必须用复权净值。</strong></div>
+        <div class="body">
+          <h5>三个净值</h5>
+          <ul>
+            <li><b>单位净值</b>：1 元 = 一份基金的现价（你看到的"净值"）</li>
+            <li><b>累计净值</b>：单位净值 + 历史分红（不含红利再投资）</li>
+            <li><b>复权净值</b>：把分红再投资算进去的"真实长期收益"——看长期业绩必须用它</li>
+          </ul>
+          <div class="sys-title">A 类 vs C 类怎么选（直接给答案）</div>
+          <ul class="sys">
+            <li><b>A 类</b>：收申购费，不收销售服务费 → <b>长期持有（一般 &gt;1-2 年）选 A</b></li>
+            <li><b>C 类</b>：不收申购费，每年收销售服务费 → <b>短期持有（&lt;1 年）选 C</b></li>
+          </ul>
+          <div class="sys-title">可系统化的点</div>
+          <ul class="sys">
+            <li><b>费用透视器</b>：一键算清"这只基金 1/3/5 年真实总费率"（管理+托管+申赎+销售服务费摊薄）</li>
+            <li><b>费用对比</b>：主动 vs 指数、A vs C 的长期成本可视化（1.2% vs 0.15% 管理费，20 年复利差距可能吃掉 15%-20% 最终收益）</li>
+            <li><b>"7 天赎回惩罚"提醒</b>：用户想快进快出时，弹出"7 天内赎回收 1.5% 手续费"的确认</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa" id="s4-6">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">6</span>
+            <span class="tt"><span class="n">心法六</span><span class="h">指数基金 vs 主动基金</span><span class="who">指数化浪潮：ETF 一年冲上 6 万亿</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">长期看，多数主动基金跑不赢指数，且费率更高；但 A 股主动基金在部分阶段、部分风格下有超额（散户占比高的市场给了主动经理选股空间）。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>"跑赢指数了吗"对比工具</b>：任意主动基金 vs 业绩基准/宽基指数的长期曲线叠加，标出"超额收益"与"超额成本"</li>
+            <li><b>风格归类</b>：把主动基金按"价值/成长/均衡、大盘/中小盘"归类，帮用户理解"你买的是哪一类股票"</li>
+            <li><b>规模与业绩提示</b>：经理管理规模过大（如 &gt;300 亿）时提示"规模对策略的影响"（行业普遍观察：大资金灵活性下降，即"规模魔咒"——张坤、刘彦春等明星经理 2021 年规模破千亿后业绩承压是公开案例）</li>
+          </ul>
+          <div class="honest"><b>诚实的话：</b>主动 vs 指数没有绝对答案。<b>给用户事实与工具，让他自己判断，这是产品该做的；替他下结论说"买指数"或"买明星经理"，是情绪信息做的事。</b></div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa" id="s4-7">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">7</span>
+            <span class="tt"><span class="n">心法七</span><span class="h">选择基金经理的正确姿势</span><span class="who">"选明星"是最容易踩的坑</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">买主动基金 = 买基金经理。但<strong>冠军魔咒</strong>（当年冠军次年往往垫底）与<strong>规模魔咒</strong>（业绩好→规模暴涨→策略失效）都是公开讨论的现象。</div>
+        <div class="body">
+          <h5>正确姿势（看五个维度）</h5>
+          <ul>
+            <li><b>从业年限</b>：经历牛熊（如 7 年以上）比"最近 3 年业绩好"更可靠</li>
+            <li><b>风格一致性</b>：持仓风格是否长期稳定（用持仓数据计算风格漂移度）</li>
+            <li><b>回撤控制</b>：牛市大家都涨，熊市才见真章——看最大回撤与修复时间</li>
+            <li><b>规模变化</b>：管理规模是否已超出其策略容量</li>
+            <li><b>言行一致</b>：季报里说的话 vs 实际持仓是否一致（"说好价值投资却在追热点"）</li>
+          </ul>
+          <div class="sys-title">可系统化的点</div>
+          <ul class="sys">
+            <li><b>基金经理画像卡</b>：年限/风格/回撤/规模/换手率/季报观点摘要，一张卡看清</li>
+            <li><b>冠军魔咒警示</b>：对"近 1 年收益前 10 名"的基金自动附注"历史上前 10 名下一年跑赢中位数的比例"（用历史数据统计）</li>
+            <li><b>经理更换提醒</b>：持仓基金换经理时强提醒（见 3.3）</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa" id="s4-8">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">8</span>
+            <span class="tt"><span class="n">心法八</span><span class="h">逆向投资与情绪管理</span><span class="who">"好发不好做、好做不好发"</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">基金行业最反直觉的规律：<strong>发行最火爆时（全民抢购）往往是阶段性高位；发行最冷清时（无人问津）往往是低位。</strong>别人贪婪我恐惧，别人恐惧我贪婪。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>热度反向指标</b>：用"新基金发行规模/热搜榜/大 V 讨论量"构建市场热度指标，热度极端高时提示"保持冷静"</li>
+            <li><b>估值分位工具</b>：宽基指数 PE/PB 历史分位，分位 &lt;30% 标绿（相对便宜）、&gt;80% 标红（相对贵）——<b>给"逆向"一个客观坐标，而不是靠感觉</b></li>
+            <li><b>冷静期设计</b>：用户在"大涨后想追买/大跌后想割肉"时，强制 24 小时冷静期 + 提示当初的买入理由</li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zhifa" id="s4-9">
+      <button type="button" class="zhifa-head" aria-expanded="false">
+          <div class="head">
+            <span class="badge">9</span>
+            <span class="tt"><span class="n">心法九</span><span class="h">止盈止损与仓位纪律</span><span class="who">纪律 = 事先定规则 + 机械执行</span></span>
+            <span class="caret">▶</span>
+          </div>
+      </button>
+      <div class="zhifa-panel">
+        <div class="panel-inner">
+        <div class="one">散户亏钱两大原因：<strong>① 不止盈</strong>（坐电梯，赚了又亏回去）；<strong>② 不控制仓位</strong>（把全部身家押一只行业基金）。</div>
+        <div class="body">
+          <h5>可系统化的点</h5>
+          <ul class="sys">
+            <li><b>止盈规则模板</b>：目标收益法/估值法/回撤法（见 3.5），系统自动监控并提醒</li>
+            <li><b>仓位上限检查</b>：单只基金占总投资比例 &gt;30% 提示"过于集中"；行业基金占股票仓位 &gt;50% 提示"行业风险"</li>
+            <li><b>纪律执行报告</b>：月度统计"你的止盈规则触发了几次、执行了几次"——<b>把纪律打分，是没人做过的差异化功能</b></li>
+          </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <h3 id="s4-10">4.10 心法十：识别信息噪音（★ 用户特别强调：市场上情绪信息太多）</h3>
+  <p>这是本手册给普通人的"防身术"，也是给产品经理的"机会清单"。先讲清楚情绪信息为什么存在、长什么样、怎么识别，第五章再拆解商业模式根源。</p>
+
+  <h4>情绪信息的五种典型形态（在基金 App/短视频/社区里每天都能见到）</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>形态</th><th>例子</th><th>危害</th></tr></thead>
+      <tbody>
+        <tr><td class="t">① 短期收益榜</td><td>"近 1 月涨幅 TOP10"、"今日涨幅榜"</td><td>引导追涨，买在阶段高点（监管已叫停近 1 月业绩展示）</td></tr>
+        <tr><td class="t">② 大 V/自媒体荐基</td><td>"闭眼买这只，翻倍"、"国家队重仓名单来了"</td><td>无牌照荐基 + 收割流量；承诺收益是违规的</td></tr>
+        <tr><td class="t">③ 热搜/热度标签</td><td>"白酒基金上热搜"、"半导体暴涨"</td><td>把"讨论热度"包装成"买入信号"</td></tr>
+        <tr><td class="t">④ 幸存者偏差榜</td><td>"近 3 年收益 +200% 的基金清单"</td><td><strong>清盘/业绩差的基金不在榜上</strong>，榜单天然高估</td></tr>
+        <tr><td class="t">⑤ 情绪化内容</td><td>"散户别慌，这次不一样"、"最后一跌"</td><td>制造 FOMO（怕错过）或恐慌，驱动无效交易</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <div class="ico">⚠️</div>
+    <div><p><strong>为什么市场上情绪信息这么多：</strong>平台靠"交易量/活跃度/保有量"赚钱，情绪信息是驱动交易与活跃的最廉价手段；内容平台靠流量分成，恐慌与贪婪是最强流量密码。<strong>信息质量低不是监管缺位，是"情绪=流量=收入"的生意模型决定的。</strong>（商业模式根源详见第五章 5.3）</p></div>
+  </div>
+
+  <h4>普通人识别高质量信息的 5 个问题</h4>
+  <ol>
+    <li><strong>谁在说话？</strong> 是持牌机构/基金公司官方，还是无牌照自媒体？（后者荐基本身就违规）</li>
+    <li><strong>他赚什么钱？</strong> 卖货的（收销售佣金）与卖观点的（收投顾费）立场不同——<strong>看推荐与收入是否绑定</strong></li>
+    <li><strong>数据怎么说？</strong> 是否给出"长期（5 年+）+ 回撤 + 费率 + 基准对比"，还是只给"近 1 月涨幅"</li>
+    <li><strong>有没有幸存者偏差？</strong> 榜单是否包含已清盘基金？"平均收益"是否被明星拉高？</li>
+    <li><strong>他让你做什么？</strong> 让你"冷静想清楚"的内容大概率靠谱；让你"马上下单/赶紧上车"的内容大概率有鬼</li>
+  </ol>
+
+  <h4>可系统化的点（这是产品金矿）</h4>
+  <ul>
+    <li><strong>信息源评分</strong>：给"基金信息源"打"可信度分"（是否持牌/是否披露利益冲突/是否给出完整数据）</li>
+    <li><strong>营销话术检测器</strong>：识别"稳赚""闭眼买""错过再等一年"等违规词（这些词在持牌机构文案里是被禁止的）</li>
+    <li><strong>榜单重构</strong>：任何收益榜都配"风险并列展示 + 幸存者偏差说明 + 长期视角切换"</li>
+    <li><strong>"反热度"功能</strong>：把"热搜榜"翻过来用——热度最高的基金标黄提示"注意：热度高≠该买"</li>
+  </ul>
+
+  <h3 id="s4-11">4.11 给普通人的"十条黄金法则"（心法小结，可直接抄）</h3>
+  <ul class="rules">
+    <li><div class="r-t"><b>先定配置，再选基金</b>——股债比例比选哪只重要 10 倍</div></li>
+    <li><div class="r-t"><b>长期不用的闲钱</b>才买股票型基金</div></li>
+    <li><div class="r-t"><b>指数基金是普通人的基本盘</b>（费率低、透明、风格不漂移）</div></li>
+    <li><div class="r-t"><b>买主动基金 = 买经理</b>——看年限、看风格、看回撤，别只看收益</div></li>
+    <li><div class="r-t"><b>任何收益数字必须配回撤和费率一起看</b></div></li>
+    <li><div class="r-t"><b>定投要用"下跌不停扣"的纪律</b>，而不是"跌了我就停"</div></li>
+    <li><div class="r-t"><b>卖出规则在买入时就写好</b>，触发就执行</div></li>
+    <li><div class="r-t"><b>少看短期榜、热搜、大 V</b>——它们是流量生意，不是投资建议</div></li>
+    <li><div class="r-t"><b>换经理了要重新审视</b>这只基金</div></li>
+    <li><div class="r-t"><b>亏钱之后问一句"我当初为什么买它"</b>——写下答案，就是最好的复盘</div></li>
+  </ul>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>十大心法全部能翻译成<b>表单、计算、提醒</b>三个东西。</li>
+      <li>最值得产品化的五个：<b>资产配置体检、风险收益并排（反榜单）、行为损耗计算、止盈纪律执行、信息源评分</b>。</li>
+      <li>心法十（识别噪音）是用户最刚需、市场上最缺的——<b>因为卖情绪的人不会做消灭情绪的产品</b>。</li>
+      <li>翻译口诀：每句心法问三遍——能变成表单吗？能自动算吗？能设提醒吗？</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第五章 ========== -->
+<section class="ch" id="ch5">
+  <div class="ch-header">
+    <div class="kicker">Chapter 5</div>
+    <h2>五、竞品功能地图：市面上已有什么产品</h2>
+    <p class="desc">谁在卖基金、谁在服务基民、情绪信息的钱怎么流，以及最有前景的基金投顾。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 全景地图</span>
+    <span class="ov-chip">✅ 11 家核心拆解</span>
+    <span class="ov-chip">✅ 商业模式根源</span>
+    <span class="ov-chip">✅ 基金投顾 &lt;1% 渗透率</span>
+  </div>
+
+  <h3 id="s5-1">5.1 全景地图</h3>
+  <div class="map-layer">
+    <div class="ml-head">🏛 全流程平台（销售 + 数据 + 内容）</div>
+    <div class="ml-grid">
+      <div class="cp-card"><div class="cp-name">天天基金</div><div class="cp-pos">互联网代销一哥</div><div class="cp-prod">2025 销售额 2.61 万亿 · 21930 只基金</div></div>
+      <div class="cp-card"><div class="cp-name">蚂蚁财富</div><div class="cp-pos">国民级理财入口</div><div class="cp-prod">2025 营收首超 200 亿 · 帮你投</div></div>
+      <div class="cp-card"><div class="cp-name">招商银行 App</div><div class="cp-pos">银行系财富管理</div><div class="cp-prod">权益保有 6105 亿 · 持仓客户 6412 万户</div></div>
+    </div>
+  </div>
+  <div class="map-layer">
+    <div class="ml-head">🗂 五类专业玩家</div>
+    <div class="ml-grid">
+      <div class="cp-card"><div class="cp-name">数据工具</div><div class="cp-pos">韭圈儿 / 蛋卷数据 / 中证指数</div><div class="cp-prod">估值分位、基金对比、专业数据</div></div>
+      <div class="cp-card"><div class="cp-name">投顾服务</div><div class="cp-pos">蚂蚁帮你投 / 天天投顾 / 中欧 / 华夏 / 盈米</div><div class="cp-prod">组合方案 + 调仓 + 陪伴（持牌）</div></div>
+      <div class="cp-card"><div class="cp-name">组合/策略</div><div class="cp-pos">且慢 / 蛋卷基金 / 交银施罗德基金</div><div class="cp-prod">"四笔钱"配置框架、组合跟投</div></div>
+      <div class="cp-card"><div class="cp-name">社区内容</div><div class="cp-pos">雪球 / 支付宝讨论区 / 大 V</div><div class="cp-prod">情绪信息与深度内容并存</div></div>
+      <div class="cp-card"><div class="cp-name">工具 App</div><div class="cp-pos">韭圈儿 / 有知有行 / 理财笔记</div><div class="cp-prod">数据工具 + 高质量投教</div></div>
+      <div class="cp-card"><div class="cp-name">专业评级</div><div class="cp-pos">晨星 / 济安金信 / 中证指数 / 银河 / 海通</div><div class="cp-prod">星级评级、风格箱、分析师报告</div></div>
+    </div>
+  </div>
+
+  <h3 id="s5-2">5.2 各家核心能力拆解</h3>
+  <div class="vendors">
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">天天基金</span><span class="v-tag">互联网代销一哥</span></div>
+      <div class="v-pos">东方财富旗下 · <b>2025 年销售额 2.61 万亿、认申购 2.58 亿笔、非货币保有 7701 亿</b></div>
+      <ul>
+        <li>全市场最全：上线 164 家管理人、21930 只基金</li>
+        <li>数据/工具最全：净值、排行、估值、定投</li>
+        <li>营收 32.03 亿、净利 1.8 亿（2025）</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">蚂蚁财富</span><span class="v-tag">国民级入口</span></div>
+      <div class="v-pos"><b>2025 年营收首超 200 亿</b>（含货基销售服务费等）</div>
+      <ul>
+        <li>用户量最大；余额宝心智（货基）</li>
+        <li>"帮你投"（投顾）、蚂蚁理财金选（选品池）</li>
+        <li>持仓陪伴内容</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">招商银行 App</span><span class="v-tag">银行系财富管理</span></div>
+      <div class="v-pos">权益基金保有 <b>6105 亿</b>（2025 下半年，环比 +24%）；财富产品持仓客户 6412 万户</div>
+      <ul>
+        <li>线下理财经理 + 线上</li>
+        <li>TREE 长盈计划（配置型服务）</li>
+        <li>靠"客户关系"而非流量</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">蛋卷基金</span><span class="v-tag">组合/策略型代销</span></div>
+      <div class="v-pos">雪球系 · 组合跟投文化</div>
+      <ul>
+        <li>"蛋卷斗牛"策略组合</li>
+        <li>与雪球社区深度绑定</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">且慢（盈米）</span><span class="v-tag">投顾/组合先锋</span></div>
+      <div class="v-pos">基金投顾试点标杆</div>
+      <ul>
+        <li>"四笔钱"配置框架（活钱/稳钱/长钱/保险）</li>
+        <li>投顾组合服务</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">有知有行</span><span class="v-tag">投教 + 工具</span></div>
+      <div class="v-pos">小而美</div>
+      <ul>
+        <li>高质量投教内容（《投资第一课》）</li>
+        <li>长赢指数投资计划、资产配置理念传播</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">韭圈儿</span><span class="v-tag">数据工具</span></div>
+      <div class="v-pos">进阶用户数据工具</div>
+      <ul>
+        <li>指数估值分位、基金对比、韭圈儿评分</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">雪球</span><span class="v-tag">社区</span></div>
+      <div class="v-pos">股票 + 基金社区</div>
+      <ul>
+        <li>大 V、组合；情绪信息与深度内容并存</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">晨星（中国）</span><span class="v-tag">专业评级</span></div>
+      <div class="v-pos">全球最权威基金评级</div>
+      <ul>
+        <li>星级评级、风格箱、分析师报告</li>
+        <li>机构为主</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">基金公司直销 App</span><span class="v-tag">自家产品</span></div>
+      <div class="v-pos">费率最低（经常 0 折）</div>
+      <ul>
+        <li>只能买自家产品，产品线单一</li>
+      </ul>
+    </div>
+    <div class="vendor">
+      <div class="v-head"><span class="v-name">券商 App</span><span class="v-tag">股基联动</span></div>
+      <div class="v-pos">东方财富 / 同花顺等</div>
+      <ul>
+        <li>炒股人群导流买基金</li>
+        <li>ETF 场内交易（佣金）</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 id="s5-3">5.3 商业模式拆解（看懂"情绪信息从哪来"的根源）</h3>
+  <p><strong>这一节是第五章的重点：所有平台的行为，都是商业模式的函数。</strong>看懂钱怎么流，就理解信息质量为什么低。</p>
+
+  <h4>公募基金销售链条的钱怎么流</h4>
+  <div class="money-flow">
+    <div class="mf-card">
+      <div class="mf-title">💰 钱怎么流（费率改革前/后的结构）</div>
+      <ul class="money-steps">
+        <li><span class="ms-num">1</span><div class="ms-body"><b>投资人</b><div class="ms-desc">① 申购费（打折后 0.15%，平台赚）；② 管理费 1.2%/年（基金公司赚 → 其中约 20%-50% 作"尾随佣金"分给销售平台）；③ 销售服务费（C 类，平台赚）</div></div></li>
+        <li><span class="ms-num">2</span><div class="ms-body"><b>销售平台（天天/蚂蚁/银行）</b><div class="ms-desc">←—— 尾随佣金（按保有规模付，是平台最大收入来源）</div></div></li>
+        <li><span class="ms-num">3</span><div class="ms-body"><b>基金公司</b><div class="ms-desc">←—— 管理费</div></div></li>
+        <li><span class="ms-num">4</span><div class="ms-body"><b>基金资产（股票/债券）</b><div class="ms-desc">基金经理拿大家的钱去投资</div></div></li>
+      </ul>
+    </div>
+    <div class="mf-card mf-highlight">
+      <div class="mf-title">🔑 根源：利益结构</div>
+      <ul class="money-steps">
+        <li><span class="ms-num">!</span><div class="ms-body"><b>平台最大的收入 = 尾随佣金 + 申购费 + 销售服务费</b><div class="ms-desc">全部与"你买了多少、买了多久"挂钩，<b>与"你赚没赚钱"完全无关</b></div></div></li>
+        <li><span class="ms-num">!</span><div class="ms-body"><b>平台靠"让你买"赚钱，不靠"让你赚"赚钱</b><div class="ms-desc">所以首页推热门榜、热搜、爆款新基；"近 1 月涨幅榜"存在多年（直到 2026 年被监管叫停）；大 V 荐基流量生意源源不断</div></div></li>
+        <li><span class="ms-num">!</span><div class="ms-body"><b>数字</b><div class="ms-desc">2022 年销售渠道费用占公募费用总额约 <b>37%</b>（证监会披露）；2024 年四大费用合计 <b>1884 亿</b>（同比降 7.07%，费率改革见效）</div></div></li>
+      </ul>
+    </div>
+  </div>
+  <blockquote>小白帮记：<strong>你在免费基金 App 上不花钱，是因为你的"注意力+交易"本身就是商品。</strong>平台把情绪卖给你，换取你频繁交易，然后向基金公司收佣金。这不是阴谋，是商业模式——<strong>产品经理做公募产品，第一课就是理解这个利益结构，然后决定站在哪一边。</strong></blockquote>
+
+  <h4>费率改革（2023-2025，三阶段，每年让利超 500 亿）——钱正在变便宜</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>阶段</th><th>时间</th><th>内容</th><th>每年让利</th></tr></thead>
+      <tbody>
+        <tr><td class="t">一：管理费/托管费</td><td>2023.7 起</td><td>主动权益管理费 1.5%→<b class="num">1.2%</b>、托管费 0.25%→<b class="num">0.2%</b></td><td>约 140 亿</td></tr>
+        <tr><td class="t">二：交易佣金</td><td>2024.4</td><td>佣金费率下调（被动股票型原则上不超过 0.26‰、其他不超过 0.52‰）、分配比例上限下调</td><td>约 70 亿</td></tr>
+        <tr><td class="t">三：销售费率</td><td>2025 落地</td><td>认申购费等销售环节降费（申购费打折常态化）</td><td>约 300 亿</td></tr>
+        <tr><td class="t">附加：ETF 降费</td><td>2024.11</td><td>头部宽基 ETF 管理费降至 <b class="num">0.15%</b>、托管 0.05%</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout idea">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：</strong>① 费率改革挤压了平台"卖基金"的利润空间，平台被迫寻找"买方服务"（投顾）的新收入——<strong>这是投顾时代的催化剂</strong>；② 主动 1.2% vs 指数 0.15% 的费率差更明显了，<strong>"费率透明度工具"的价值在上升</strong>；③ 别设计"靠用户频繁交易赚钱"的模型——费率改革和监管方向都站在对立面。</p></div>
+  </div>
+
+  <h3 id="s5-4">5.4 基金投顾：最像"解决方案"的产品形态（重点理解）</h3>
+  <p><strong>基金投顾 = 持牌机构收"投顾费"、替你管理一篮子基金、并提供持续陪伴服务的业务。</strong>它是公募领域唯一"与投资者利益对齐"（你赚钱它才续费）的商业模式。</p>
+  <div class="timeline">
+    <div class="tl-item"><span class="tl-time">2019.10</span><div class="tl-body">证监会启动基金投顾业务试点</div></div>
+    <div class="tl-item"><span class="tl-time">2023.03 底</span><div class="tl-body">60 家机构纳入试点，服务资产规模 <b class="num">1464 亿</b>，客户 524 万户，<b>10 万元以下个人投资者占 94%</b></div></div>
+    <div class="tl-item"><span class="tl-time">2025.02</span><div class="tl-body">证监会明确推动基金投顾试点转常规</div></div>
+    <div class="tl-item hot"><span class="tl-time">2025 年末</span><div class="tl-body">60 家持牌机构（券商/公募/银行/三方销售），服务规模<b class="num">突破 3000 亿</b></div></div>
+    <div class="tl-item"><span class="tl-time">2025.04</span><div class="tl-body">允许基金投顾配置创业板 ETF（底层从场外基金扩到场内工具）</div></div>
+    <div class="tl-item"><span class="tl-time">2026</span><div class="tl-body">立法计划将《证券基金投资顾问业务管理办法》列入制定项目（试点转常规落地在即）</div></div>
+  </div>
+  <div class="callout warn">
+    <div class="ico">⚠️</div>
+    <div><p><strong>渗透率仍极低：</strong>3000 亿 vs 公募 39 万亿，<strong>不到 1%</strong>——巨大的空白市场。</p></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>维度</th><th>基金代销（天天/蚂蚁）</th><th>基金投顾（帮你投/且慢）</th></tr></thead>
+      <tbody>
+        <tr><td class="t">赚什么钱</td><td>申购费 + 尾随佣金（按交易/保有）</td><td>投顾费（按资产规模，约 0.2%-1%/年）</td></tr>
+        <tr><td class="t">利益对齐</td><td>你多交易它多赚</td><td>你长期持有它长期赚</td></tr>
+        <tr><td class="t">提供什么</td><td>货架 + 信息</td><td>组合方案 + 调仓 + 陪伴</td></tr>
+        <tr><td class="t">牌照</td><td>基金销售牌照</td><td>投顾试点资格（更严格）</td></tr>
+        <tr><td class="t">服务形态</td><td>自助式</td><td>委托式 + 顾问式</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout idea">
+    <div class="ico">💡</div>
+    <div><p><strong>产品含义：</strong>投顾是公募领域<strong>唯一商业模式与用户利益天然对齐</strong>的形态，但渗透率 &lt;1%——<strong>这是未来 5-10 年最大的产品机会带</strong>。难点：牌照门槛高、认知成本高、业绩展示难（短期组合业绩会劝退用户）。</p></div>
+  </div>
+
+  <h3 id="s5-5">5.5 关键洞察：市场空白在哪里</h3>
+  <ol>
+    <li><strong>"卖货"平台（天天/蚂蚁）</strong>：产品设计以销售为中心——榜单、热搜、爆款、直播带货。功能全但<strong>利益与用户冲突</strong>，正在被监管矫正（信披新规、禁止短期业绩展示）</li>
+    <li><strong>"投顾"机构（且慢/盈米/银行）</strong>：方向对但渗透率 &lt;1%，产品体验普遍粗糙（组合披露不透明、调仓理由不清晰、陪伴内容鸡汤化）</li>
+    <li><strong>数据工具（韭圈儿/蛋卷数据）</strong>：服务进阶用户，但"工具给你了，用不用得起来"没人管——<strong>从工具到行为的最后一公里没人做</strong></li>
+    <li><strong>投教内容（有知有行/雪球优质帖）</strong>：内容质量高但<strong>与交易行为脱节</strong>——用户看完觉得"懂了"，打开 App 还是追热点</li>
+    <li><strong>空白地带</strong>：<strong>"把认知翻译成行为、把行为沉淀成纪律"的产品</strong>——资产总览（跨平台）、行为损耗计算、纪律执行监督、情绪冷静期、信息源评分。<strong>几乎没人系统做，而这是"基金赚钱基民不赚钱"的解药所在。</strong></li>
+  </ol>
+  <h4>为什么大厂不做（空白地带成因）</h4>
+  <ul>
+    <li><strong>商业模式冲突</strong>：天天/蚂蚁的收入结构决定了它们<strong>不能</strong>诚实地劝你"少交易、拿久点"——那是在消灭自己的收入。让"卖货平台"做"消灭交易"的功能，是让烟草公司做戒烟广告</li>
+    <li><strong>监管催化</strong>：费率改革（销售费被压）→ 平台收入承压 → 更依赖交易量 → 更不可能做"反交易"产品</li>
+    <li><strong>投顾机构想做但没做好</strong>：且慢/盈米方向正确但规模小、资源少、产品糙</li>
+    <li><strong>结论</strong>：空白地带真实存在，但<strong>做这件事的立场必须与"卖货"切割</strong>——要么做持牌投顾，要么做"中立工具+内容"（不靠交易赚钱），要么做 B 端（给平台供工具）。</li>
+  </ul>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>市场格局：代销平台（天天/蚂蚁/招行，赚交易钱）、投顾机构（且慢/盈米，赚服务钱）、数据工具（韭圈儿）、投教（有知有行）、专业评级（晨星）。</li>
+      <li>关键数据：天天基金 2025 年销售额 2.61 万亿、蚂蚁营收首超 200 亿、招行权益保有 6105 亿。</li>
+      <li><b>情绪信息的根源是商业模式</b>：平台靠交易/保有赚钱，与"你赚不赚钱"无关；费率改革 + 监管信披新规正在矫正。</li>
+      <li>费率改革三阶段累计每年让利超 500 亿；ETF 管理费降至 0.15%。</li>
+      <li>基金投顾：渗透率 &lt;1% 的最大空白，唯一利益对齐的形态。</li>
+      <li>空白地带：<b>"认知→行为→纪律"的最后一公里</b>，大厂因利益冲突做不了。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第六章 ========== -->
+<section class="ch" id="ch6">
+  <div class="ch-header">
+    <div class="kicker">Chapter 6</div>
+    <h2>六、从心法到产品：产品功能设计蓝图</h2>
+    <p class="desc">把第四章的心法翻译成模块。这里是"如果我要做一个服务公募投资的产品，长什么样"。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 整体架构</span>
+    <span class="ov-chip">✅ 五大模块</span>
+    <span class="ov-chip">✅ AI 机会与合规红线</span>
+    <span class="ov-chip">✅ 商业化三模式</span>
+  </div>
+
+  <h3 id="s6-1">6.1 整体架构（一个"帮普通人投好基金"的产品）</h3>
+  <div class="arch">
+    <div class="layer workbench">
+      <div class="l-name">统一工作台（我的资产总览）—— 跨平台持仓汇总 / 配置体检 / 今日该做什么（或什么都不做）</div>
+    </div>
+    <div class="layer">
+      <div class="l-name">五大功能模块</div>
+      <div class="mods">
+        <div class="mod"><div class="m-n">规划与配置</div><div class="m-d">目标/配置/体检/再平衡</div></div>
+        <div class="mod"><div class="m-n">选基金工具</div><div class="m-d">筛选/对比/经理画像/费率透视</div></div>
+        <div class="mod star"><div class="m-n">持有与陪伴 ★</div><div class="m-d">定投/止盈/冷静期/换经理提醒</div></div>
+        <div class="mod"><div class="m-n">认知与纪律</div><div class="m-d">交易日志/复盘/行为损耗</div></div>
+        <div class="mod star"><div class="m-n">信息质量 ★</div><div class="m-d">信息源评分/反榜单/话术检测</div></div>
+      </div>
+    </div>
+    <div class="layer data-layer">
+      <div class="l-name">数据层 & 合规层</div>
+      <div class="d-txt"><b>数据：</b>净值/持仓/费率/指数估值/公告/经理数据　<b>合规：</b>不荐基、不承诺收益、信披合规提示</div>
+    </div>
+  </div>
+  <h4>设计三原则（贯穿所有模块）</h4>
+  <ol>
+    <li><strong>利益中立</strong>：不靠交易赚钱，不做"让你多买"的设计——这是产品的生命线</li>
+    <li><strong>长期视角</strong>：默认展示 3/5/10 年数据，短期数据（近 1 月）默认隐藏（监管也在这么做）</li>
+    <li><strong>把规则写下来</strong>：一切建议都转化为"用户可执行的规则+提醒"，而非"一次性建议"</li>
+  </ol>
+
+  <div class="module" id="s6-2">
+    <div class="m-head"><div class="m-ico">🧭</div><div><div class="m-title">模块一：规划与配置</div><div class="m-meta">对应心法一、二 · 先定配置，再选基金</div></div></div>
+    <div class="m-body">
+      <ul>
+        <li><b>跨平台资产总览</b>：用户授权导入（天天/蚂蚁/银行/券商）或手动记账，算出"股/债/现金/海外"真实比例——<b>很多人第一次知道自己 80% 的钱都押在股票基金上</b></li>
+        <li><b>配置体检报告</b>：一键生成"你的配置 vs 你的年龄/目标建议区间"，标出失衡项</li>
+        <li><b>目标规划器</b>：输入目标（退休/买房/教育金）与年限，倒推需要多少股票仓位（用"目标日期"逻辑，类似养老目标基金）</li>
+        <li><b>风险测评 2.0</b>：把"填问卷"升级为"看真实行为"——结合用户历史最大回撤承受记录，动态校准风险等级</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module" id="s6-3">
+    <div class="m-head"><div class="m-ico">🔍</div><div><div class="m-title">模块二：选基金工具</div><div class="m-meta">对应心法五、六、七 · 反排行榜是核心</div></div></div>
+    <div class="m-body">
+      <ul>
+        <li><b>反排行榜</b>：任何榜单默认按"3 年+回撤+费率+规模"排序，短期涨幅列只能手动展开；每只上榜基金附"幸存者偏差"说明</li>
+        <li><b>基金对比器</b>：最多 5 只对比——净值曲线（复权）、最大回撤、卡玛比率、费率全披露、基准超额</li>
+        <li><b>经理画像卡</b>：年限/风格/回撤/规模/换手率/季报观点摘要/风格漂移度（见 4.7）</li>
+        <li><b>费率透视器</b>：A/C 对比、主动 vs 指数长期成本可视化、"7 天惩罚"提醒</li>
+        <li><b>指数估值分位</b>：宽基指数 PE/PB 分位，自动标注"便宜/合理/偏贵"</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module" id="s6-4">
+    <div class="m-head"><div class="m-ico">🤝</div><div><div class="m-title">模块三：持有与陪伴 <span class="star">★ 差异化核心</span></div><div class="m-meta">对应心法三、四、八、九 · 帮用户"拿得住、卖得好"</div></div></div>
+    <div class="m-body">
+      <ul>
+        <li><b>持有期收益视图</b>："你的实际收益 vs 一直持有不动的收益"——行为损耗可视化（2.4 的数据变成用户自己的数字）</li>
+        <li><b>定投计划管理</b>：目标 + 止盈规则 + 下跌不停扣提醒 + "当时为什么开始"的初心唤醒（4.4）</li>
+        <li><b>止盈/止损规则引擎</b>：目标收益法/估值法/回撤法，系统自动监控、触发提醒、<b>执行后记录</b>（3.5 的 SOP 变成产品）</li>
+        <li><b>冷静期</b>：大涨后想追买、大跌后想割肉时，强制 24 小时冷静期 + 展示买入理由</li>
+        <li><b>生命周期事件提醒</b>：基金经理更换（强提醒 + 重新审视引导）、清盘预警、限购、分红（3.3 的空白功能）</li>
+        <li><b>仓位集中度检查</b>：单只 &gt;30%、行业 &gt;50% 时提示（4.9）</li>
+        <li><b>"今天该做什么"</b>：大多数交易日答案是"什么都不用做"——<b>把"不操作"也做成一个产品功能</b>（反焦虑设计）</li>
+      </ul>
+      <div class="callout idea"><div class="ico">💡</div><div><p>这是最空白、最符合"投资者获得感"监管导向的模块。</p></div></div>
+    </div>
+  </div>
+
+  <div class="module" id="s6-5">
+    <div class="m-head"><div class="m-ico">📝</div><div><div class="m-title">模块四：认知与纪律</div><div class="m-meta">对应心法九、十 · 收益不可控，纪律可控</div></div></div>
+    <div class="m-body">
+      <ul>
+        <li><b>交易日志</b>：每笔买入记录"买入理由+预期+卖出规则"，卖出记录"卖出原因+复盘"（默认仅自己可见——参照私募版的"默认私有，汇总公开"设计，避免被打脸感）</li>
+        <li><b>纪律分</b>：月度"规则触发了几次、执行了几次"，不评价收益、只评价纪律——<b>收益不可控，纪律可控</b></li>
+        <li><b>行为损耗报告</b>：月度自动生成"你本月因频繁交易/追涨杀跌少赚了多少"（用历史行为数据估算）</li>
+        <li><b>认知错题本</b>：把亏损交易按"追涨/恐慌割肉/频繁交易/仓位过重"聚类，生成个人行为模式报告（"你的亏损 60% 来自周五大涨后追买"）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module" id="s6-6">
+    <div class="m-head"><div class="m-ico">🛡️</div><div><div class="m-title">模块五：信息质量过滤器 <span class="star">★ 用户特别强调的空白</span></div><div class="m-meta">对应心法十 · 卖情绪的人不会做消灭情绪的产品</div></div></div>
+    <div class="m-body">
+      <ul>
+        <li><b>信息源评分卡</b>：对基金类信息源打分——是否持牌、是否披露利益冲突（卖货/接广告）、是否给出完整数据（长期+回撤+费率）、是否承诺收益（违规）</li>
+        <li><b>营销话术检测</b>：对用户转发的文章/视频标题做"违规词检测"（"稳赚""必涨""闭眼买""错过再等一年"等），提示"该内容含营销信号"</li>
+        <li><b>榜单消毒</b>：任何第三方榜单（热搜/涨幅榜）都配"热度≠买点"的提醒 + 反向指标（4.8 的热度反向指标）</li>
+        <li><b>"3 分钟读懂年报"</b>：把基金的季报/年报加工成 3 句话摘要（赚了什么钱/风险在哪/经理说了什么），替代"没人读的 30 页 PDF"</li>
+        <li><b>事实核查卡</b>：对流传的"国家队重仓名单""内幕消息"类内容，用公开数据核查并标注真伪</li>
+      </ul>
+      <div class="callout warn"><div class="ico">⚠️</div><div><p>市面上没人做这个，因为<b>卖情绪的人不会做消灭情绪的产品</b>。这是你的差异化机会。</p></div></div>
+    </div>
+  </div>
+
+  <h3 id="s6-7">6.7 AI 的机会点与合规红线</h3>
+  <h4>AI 机会点</h4>
+  <ul>
+    <li><strong>AI 持仓解读</strong>：用户上传基金持仓截图 → AI 解析重仓股、行业分布、风格 → "你的基金到底买了什么"</li>
+    <li><strong>AI 年报摘要</strong>：长文转 3 句话（见上）</li>
+    <li><strong>AI 行为复盘</strong>：用交易日志做归因与模式识别</li>
+    <li><strong>AI 问答</strong>："我 30 岁，有 20 万闲钱，怎么配？"→ 给配置框架和工具（不给具体"买哪只"的结论）</li>
+    <li><strong>AI 话术识别</strong>：内容合规检测</li>
+  </ul>
+
+  <h4>合规红线（公募领域的"荐基"边界，比私募版更严）</h4>
+  <p>依据：《证券投资基金法》、《公开募集证券投资基金宣传推介材料管理规定》、《证券期货投资者适当性管理办法》、《公开募集证券投资基金销售机构监督管理办法》等。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>✅ 能做（信息服务/工具）</th><th>❌ 不能做（销售/投顾行为）</th></tr></thead>
+      <tbody>
+        <tr><td>展示事实数据（净值/回撤/费率/持仓）</td><td><strong>宣传承诺收益、保证本金</strong>（"稳赚""保本"绝对禁止）</td></tr>
+        <tr><td>提供筛选/对比工具（用户自己操作）</td><td><strong>无基金销售牌照卖基金</strong>（代销要牌照）</td></tr>
+        <tr><td>提供教育内容/配置框架（不指向具体产品）</td><td><strong>无投顾牌照推荐具体基金组合/买卖时机</strong>（投顾要试点资格）</td></tr>
+        <tr><td>用户自主记录/复盘（过程留痕）</td><td><strong>以"荐基"牟利</strong>（收钱推荐具体基金 = 变相投顾，违规）</td></tr>
+        <tr><td>转载持牌机构合规宣传内容</td><td>虚假宣传、夸大业绩、使用"排名第一/最佳"等违禁词</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <blockquote>判断口诀：<strong>你的产品是"帮用户自己思考"（safe），还是"替用户做决定并对外分发"（risky）？</strong>前者给工具，后者要牌照。2025-2026 年监管对"无证荐股/荐基"的处罚明显加码（多家投顾机构因营销宣传、承诺收益被罚、暂停新增客户），合规不是可以"边做边看"的事。</blockquote>
+
+  <h3 id="s6-8">6.8 商业化与落地思考</h3>
+  <h4>谁付钱（三种模式）</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>模式</th><th>例子</th><th>适合谁</th><th>风险</th></tr></thead>
+      <tbody>
+        <tr><td class="t">C 端订阅（工具/内容）</td><td>韭圈儿会员、有知有行</td><td>服务进阶/资深用户</td><td>付费意愿低，需先建立信任</td></tr>
+        <tr><td class="t">B 端供工具（给代销平台/基金公司做 SaaS）</td><td>给天天/银行供"持有陪伴系统"</td><td>有牌照或有大客户资源</td><td>客户集中、议价弱</td></tr>
+        <tr><td class="t">持牌投顾（收投顾费）</td><td>且慢/盈米模式</td><td>想长期做、有牌照资源</td><td>牌照门槛高、信任周期长</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h4>落地建议</h4>
+  <ol>
+    <li><strong>别从"卖货"切入</strong>——与天天/蚂蚁正面竞争销售场景必死（人家有流量有牌照）；从"持有与陪伴+信息质量"切入（它们做不了）</li>
+    <li><strong>先做"数据导入+资产总览+行为损耗"</strong>：用户第一次看到"我 3 年因为乱操作少赚了 X 万"的冲击力，是最好的留存钩子</li>
+    <li><strong>内容做"反情绪"</strong>：全网都在制造焦虑，你做"冷静的、给出处的内容"本身就是差异化（参考有知有行的路径）</li>
+    <li><strong>用"纪律执行"绑定用户</strong>：止盈规则、定投计划、冷静期——用户用的越久数据越有价值，粘性越高（类似私募版的"留痕=护城河"逻辑）</li>
+    <li><strong>牌照策略</strong>：工具阶段先合规（不荐基），积累用户与数据后，再评估申请/合作投顾牌照</li>
+  </ol>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>产品架构五模块：<b>规划配置、选基工具、持有陪伴、认知纪律、信息质量</b>——前两个是已有产品的红海，后三个是空白。</li>
+      <li>差异化核心：<b>持有陪伴（行为损耗可视化、止盈规则引擎、冷静期）</b> 和 <b>信息质量（反榜单、话术检测、年报 3 句话）</b>。</li>
+      <li>设计三原则：利益中立、长期视角、把规则写下来。</li>
+      <li>合规红线：不做承诺收益、不无牌荐基、不无牌做投顾；AI 定位"过程支持"而非"决策替代"。</li>
+      <li>商业化：C 端订阅 / B 端工具 / 持牌投顾三条路；从"数据导入+行为损耗"切入。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第七章 ========== -->
+<section class="ch" id="ch7">
+  <div class="ch-header">
+    <div class="kicker">Chapter 7</div>
+    <h2>七、给产品经理的行动建议</h2>
+    <p class="desc">把知识变成行动。下面的清单可以勾选，跟着做就入门了。</p>
+  </div>
+  <div class="overview">
+    <span class="ov-chip">✅ 优先补的知识清单</span>
+    <span class="ov-chip">✅ 做产品实操建议</span>
+    <span class="ov-chip">✅ 常见误区提醒</span>
+  </div>
+
+  <h3 id="s7-1">7.1 优先补的"领域知识"清单（按优先级）</h3>
+  <ul class="checklist" id="kl">
+    <li><input type="checkbox" id="k1"><div><div class="cl-t">基金基础知识</div><div class="cl-d">单位/累计/复权净值、A/C 份额、五类费用、申赎规则（T+1、7 天惩罚）</div></div></li>
+    <li><input type="checkbox" id="k2"><div><div class="cl-t">基金分类体系</div><div class="cl-d">货基/债基/股基/混合/指数/ETF/QDII/FOF/养老目标/REITs 各自的风险收益特征</div></div></li>
+    <li><input type="checkbox" id="k3"><div><div class="cl-t">指数知识</div><div class="cl-d">沪深300/中证500/中证A500/中证1000/创业板/科创50 各代表什么；PE/PB 分位怎么读</div></div></li>
+    <li><input type="checkbox" id="k4"><div><div class="cl-t">监管框架</div><div class="cl-d">《基金法》、销售机构管理办法、投顾试点规定、信披新规（2026）、费率改革三阶段</div></div></li>
+    <li><input type="checkbox" id="k5"><div><div class="cl-t">绩效指标</div><div class="cl-d"><span class="term" data-term="最大回撤">最大回撤</span>、<span class="term" data-term="卡玛比率">卡玛比率</span>、<span class="term" data-term="夏普比率">夏普</span>、年化波动、基准超额、<span class="term" data-term="跟踪误差">跟踪误差</span>——"回撤+费率"是必须</div></div></li>
+    <li><input type="checkbox" id="k6"><div><div class="cl-t">投资者行为研究</div><div class="cl-d">行为金融（追涨杀跌、处置效应）、基民收益 vs 基金收益差距的实证数据（2.4 的数据要背下来）</div></div></li>
+  </ul>
+
+  <h3 id="s7-2">7.2 做产品的实操建议</h3>
+  <ol>
+    <li><strong>先访谈 10 个不同层级的基民</strong>：问"你买的第一只基金是什么、为什么卖、亏了钱怎么想"。比读十本书有用。</li>
+    <li><strong>让用户导出"交易记录"</strong>：请 5-10 个用户导出支付宝/天天基金的申赎记录，你会看到真实的"追涨杀跌"数据——<strong>这些数据就是产品需求本身</strong>。</li>
+    <li><strong>观察"情绪信息"的用户反应</strong>：去基金 App 的热搜榜、讨论区、短视频评论区泡三天，记录用户的话术（"已上车""回本就跑""抄底了"）——<strong>用户的语言就是产品文案</strong>。</li>
+    <li><strong>先做"计算器"而不是"社区"</strong>：行为损耗计算器、费率计算器、回撤可视化——计算器是低频但高价值的工具，社区是高频但难冷启动。</li>
+    <li><strong>把"不操作"做成功能</strong>：反焦虑设计（6.4 的"今天该做什么=什么都不用做"）是差异化，别怕它"没有功能感"。</li>
+    <li><strong>合规前置</strong>：产品文案对照 6.7 的红线清单自检，从第一天就不碰"荐基/承诺收益"。</li>
+  </ol>
+
+  <h3 id="s7-3">7.3 常见误区提醒</h3>
+  <ul class="mistake">
+    <li class="no"><span class="mk">✕</span><div class="mk-t"><b>把"短期收益榜/热搜"当核心功能</b>这是情绪信息的帮凶，且已被监管禁止</div></li>
+    <li class="no"><span class="mk">✕</span><div class="mk-t"><b>模仿天天/蚂蚁做"全货架销售"</b>流量和牌照都比不过</div></li>
+    <li class="no"><span class="mk">✕</span><div class="mk-t"><b>无牌照做"组合推荐"</b>变相投顾，违规</div></li>
+    <li class="no"><span class="mk">✕</span><div class="mk-t"><b>用"大师带飞""稳赚"做营销</b>合规红线 + 伤害信任</div></li>
+    <li class="yes"><span class="mk">✓</span><div class="mk-t"><b>做"持有陪伴、纪律执行、信息质量、配置体检"</b>—— 心法的系统化地带 + 监管鼓励方向</div></li>
+  </ul>
+
+  <h3 id="s7-4">7.4 失败模式清单：这个产品"容易怎么死"（排雷清单）</h3>
+  <p>手册前文都在讲"该做什么"，这里补上"容易怎么死"——把这六条当成<strong>排雷清单</strong>：开工前先问自己"这几颗雷我踩得到吗？"</p>
+
+  <div class="fail">
+    <div class="f-head">💀 失败模式 1：变成"又一个排行榜 App"</div>
+    <div class="f-body"><b>死法：</b>为了日活做"近 1 月涨幅榜""热门基金推荐"，把用户推向追涨杀跌——用户亏钱后流失，产品价值归零（且违反监管方向）。<br><b>对策：</b>不做短期榜；任何榜单配风险+长期视角；考核指标用"用户持有期/行为损耗下降"，不用 DAU。</div>
+  </div>
+  <div class="fail">
+    <div class="f-head">💀 失败模式 2：立场与用户冲突（靠交易赚钱）</div>
+    <div class="f-body"><b>死法：</b>商业模式依赖用户频繁交易/高活跃，设计上鼓励折腾——短期收入好看，长期用户亏钱流失、口碑崩坏。<br><b>对策：</b>利益中立设计（6.1 三原则）；收入靠订阅/投顾费/给 B 端供工具，不靠交易量。</div>
+  </div>
+  <div class="fail">
+    <div class="f-head">💀 失败模式 3：无牌照越界（荐基/承诺收益）</div>
+    <div class="f-body"><b>死法：</b>被认定为无证荐基或变相投顾，监管处罚+下架（2025-2026 处罚案例频发）。<br><b>对策：</b>对照 6.7 红线清单逐条自检；给工具不给结论；涉及"建议"的功能一律咨询合规。</div>
+  </div>
+  <div class="fail">
+    <div class="f-head">💀 失败模式 4：信息过载与焦虑制造</div>
+    <div class="f-body"><b>死法：</b>推的越多用户越焦虑，最终卸载——<b>用户要的不是更多信息，是更少且更可靠的信息</b>。<br><b>对策：</b>做减法（默认隐藏短期数据、过滤噪音）；"今天什么都不用做"是功能不是敷衍。</div>
+  </div>
+  <div class="fail">
+    <div class="f-head">💀 失败模式 5：数据打不通（跨平台持仓）</div>
+    <div class="f-body"><b>死法：</b>资产总览是核心功能，但天天/支付宝不开放数据接口（对手怎么会给你数据？），用户手动录入太麻烦，功能空转。<br><b>对策：</b>MVP 用"截图识别+手动记账模板"过渡；或从"用户自己记账"切入（先解决认知，再谈自动导入）；B 端模式可以绕过（给平台做内部工具，数据天然在）。</div>
+  </div>
+  <div class="fail">
+    <div class="f-head">💀 失败模式 6：C 端付费意愿撑不起收入</div>
+    <div class="f-body"><b>死法：</b>小白不付费、进阶嫌贵，订阅收入覆盖不了成本。<br><b>对策：</b>免费工具（计算器/体检）+ 付费深度服务（纪律报告/投顾）；或 B 端模式（给代销平台/基金公司供"陪伴系统"SaaS，客户有钱且需要合规工具）。</div>
+  </div>
+
+  <div class="summary-box">
+    <div class="sb-title">📌 本章小结</div>
+    <ol>
+      <li>先补知识：基金分类/费用/指数/监管/绩效指标/行为金融。</li>
+      <li>再动手：访谈 10 个基民、导出交易记录、泡三天讨论区。</li>
+      <li>避开红线：不做短期榜、不无牌荐基、不承诺收益、不做焦虑制造机。</li>
+      <li>六大死法：<b>排行榜化、利益冲突、牌照越界、信息过载、数据不通、付费不足</b>——每条都有对应对策，写进你的产品风险清单。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 第八章 ========== -->
+<section class="ch" id="ch8">
+  <div class="ch-header">
+    <div class="kicker">Chapter 8 · 随查随用</div>
+    <h2>八、术语速查表</h2>
+    <p class="desc">阅读正文时悬停蓝色术语即可查看；也可以在这里搜索。</p>
+  </div>
+  <div class="termsearch">
+    <span class="ico">🔍</span>
+    <input type="text" id="glossSearch" placeholder="输入术语或关键词过滤…">
+  </div>
+  <div class="term-filters" id="glossFilters">
+    <button class="tf-btn on" data-cat="all">全部</button>
+    <button class="tf-btn" data-cat="基本">基本概念</button>
+    <button class="tf-btn" data-cat="产品">产品类型</button>
+    <button class="tf-btn" data-cat="费用">费用与交易</button>
+    <button class="tf-btn" data-cat="绩效">风险与绩效</button>
+    <button class="tf-btn" data-cat="行为">行为与心理</button>
+    <button class="tf-btn" data-cat="合规">监管与合规</button>
+  </div>
+  <ul class="glossary" id="glossList"></ul>
+</section>
+
+<!-- ========== 第九章 ========== -->
+<section class="ch" id="ch9">
+  <div class="ch-header">
+    <div class="kicker">Chapter 9</div>
+    <h2>九、数据来源与下一步</h2>
+    <p class="desc">本次研究的信息来源（保证"高信息质量"的可查证性），以及读完手册后的第一个行动。</p>
+  </div>
+  <ul class="res-list">
+    <li><span class="rk">1</span><div>中基协《公募基金市场数据》<div class="r-desc">2025.7（35.08 万亿/164 家）、2025.12（37.71 万亿，分类规模）、2026.5（39.48 万亿/165 家）——行业规模一手数据</div></div></li>
+    <li><span class="rk">2</span><div>中基协《中国证券投资基金业年报（2025）》<div class="r-desc">2024 年末公募持 A 股流通市值 5.96 万亿（占 7.4%）、各类型占比、行业集中度（前 20 家 60.2%）</div></div></li>
+    <li><span class="rk">3</span><div>中基协《中国证券投资基金业年报（2023）》<div class="r-desc">2022 年末场外个人投资者 7.59 亿、有效账户 15.22 亿户、个人资金占比 51.87%</div></div></li>
+    <li><span class="rk">4</span><div>中基协《全国公募基金投资者状况调查报告（2024）》<div class="r-desc">40.2% 逢跌加仓、六成本科以上学历</div></div></li>
+    <li><span class="rk">5</span><div>上海证券报 / 中国基金报 / 21 世纪经济报道<div class="r-desc">ETF 突破 4 万亿（2025.4）、6 万亿（2025 年底，1381 只，+64%）；华泰柏瑞沪深 300ETF 4222.6 亿（2025 年末）</div></div></li>
+    <li><span class="rk">6</span><div>景顺长城、富国、交银施罗德《公募权益类基金投资者盈利洞察报告》（2021.10）<div class="r-desc">过去 5 年行为损耗率接近 -60%、拉低收益 11.62%</div></div></li>
+    <li><span class="rk">7</span><div>东方财富证券《基民收益率为何跑输基金收益率？》（2022.7）<div class="r-desc">年均差距 2.53%、主动权益 -6%、行业主题基金 -10%</div></div></li>
+    <li><span class="rk">8</span><div>21 世纪经济报道（2021.10）<div class="r-desc">持仓时长与收益（&lt;3 个月 -1.47%、120 个月以上 +117.38%）</div></div></li>
+    <li><span class="rk">9</span><div>证监会《公募基金行业费率改革工作方案》（2023.7）<div class="r-desc">管理费 1.2%/托管 0.2%；三阶段每年让利约 140 亿+70 亿+300 亿（人民网 2026.1 累计超 500 亿）</div></div></li>
+    <li><span class="rk">10</span><div>证监会《公开募集证券投资基金证券交易费用管理规定》（2024.4）<div class="r-desc">佣金改革第二阶段的法规依据</div></div></li>
+    <li><span class="rk">11</span><div>证监会《推动公募基金高质量发展行动方案》（2025）<div class="r-desc">投资者盈亏展示、换手率与综合费率披露要求</div></div></li>
+    <li><span class="rk">12</span><div>2026 年 3 月信披新规（中国基金报报道）<div class="r-desc">强制披露"盈利投资者占比"、取消近 1 月业绩、新增 7/10 年业绩</div></div></li>
+    <li><span class="rk">13</span><div>证监会《公开募集证券投资基金投资顾问业务管理规定（征求意见稿）》（2023.6）<div class="r-desc">投顾试点数据（2023.3 底 60 家/1464 亿/524 万户）</div></div></li>
+    <li><span class="rk">14</span><div>东方财富 2025 年年报（天天基金）<div class="r-desc">销售额 2.61 万亿、2.58 亿笔、非货币保有 7701 亿、营收 32.03 亿</div></div></li>
+    <li><span class="rk">15</span><div>中国基金报 / 证券时报 / 财联社<div class="r-desc">蚂蚁基金 2025 营收首超 200 亿；招行权益保有 6105 亿；基金投顾 2025 年末超 3000 亿</div></div></li>
+    <li><span class="rk">16</span><div>《公开募集证券投资基金宣传推介材料管理规定》<div class="r-desc">宣传红线原文，做产品前必读</div></div></li>
+    <li><span class="rk">17</span><div>有知有行《投资第一课》<div class="r-desc">普通人友好的投教体系，产品文案与内容标杆</div></div></li>
+    <li><span class="rk">18</span><div>中基协官网（amac.org.cn）投资者教育栏目<div class="r-desc">官方一手信源，识别情绪信息的最佳对照</div></div></li>
+  </ul>
+  <div class="callout key">
+    <div class="ico">🎯</div>
+    <div><p><strong>建议下一步：</strong>拿着本手册第 2 章的用户痛点与第 6 章的功能蓝图，去访谈 10 个真实的基民（导出他们的交易记录看看），把<strong>"行为损耗计算器"和"止盈纪律引擎"</strong>做成 MVP 原型验证需求。</p></div>
+  </div>
+</section>
+
+<footer>
+  公募基金投资领域 · 产品经理入门手册<br>
+  基于公开资料整理 · 仅供学习研究 · 不构成任何投资建议
+</footer>
+
+</div><!-- /article -->
+</div><!-- /main -->
+
+<button id="toTop" title="返回顶部">↑</button>
+
+<script>
+/* ============ 术语词典 ============ */
+const TERMS = {
+  "公募基金": "公开募集、1 元起投、强监管强信披的标准化基金",
+  "基民": "买基金的人（场外个人投资者 7.59 亿人）",
+  "单位净值": "一份基金的当前价格（1 元=一份）",
+  "累计净值": "单位净值 + 历史分红（未含红利再投资）",
+  "复权净值": "把分红再投资计入的\"真实长期收益\"，看长期业绩用它",
+  "申购/认购": "申购=买老基金；认购=买新发行的基金",
+  "赎回": "把基金份额卖回给基金公司，T+1 到账（货基 T+0）",
+  "T+1": "交易日次日确认；当日 15:00 前下单按当日净值，15:00 后按下个交易日",
+  "7 天惩罚": "持有不满 7 天赎回收 1.5% 惩罚性赎回费",
+  "管理费": "基金公司每年收，主动权益 1.2%、指数 0.15%-0.5%",
+  "托管费": "托管银行每年收，0.05%-0.2%",
+  "销售服务费": "C 类份额每年收，0.1%-0.4%",
+  "尾随佣金": "基金公司从管理费中分给销售平台的钱（约 20%-50%）",
+  "A/C 份额": "A 类收申购费、适合长期；C 类收销售服务费、适合短期",
+  "定投": "定期定额买入，摊平成本（微笑曲线）",
+  "微笑曲线": "下跌期积累筹码、上涨期兑现的 U 形成本曲线",
+  "最大回撤": "净值从高点跌到低点的最大跌幅（\"让你难受的程度\"）",
+  "卡玛比率": "年化收益 ÷ 最大回撤（收益/难受程度比）",
+  "夏普比率": "超额收益 ÷ 波动率（风险调整后收益）",
+  "业绩比较基准": "基金自设的\"及格线\"（如 沪深300×80%+中债×20%）",
+  "超额收益": "基金收益 - 基准收益（Alpha）",
+  "跟踪误差": "指数基金相对指数的偏离程度",
+  "宽基指数": "覆盖全市场/大中盘的指数（沪深300、中证500、中证A500）",
+  "行业主题基金": "押注单一行业（白酒/医药/新能源），波动大、基民磨损最高（年均约 10%）",
+  "ETF": "交易所交易基金，场内买卖像股票；2025 年底全市场 6 万亿+",
+  "QDII": "投海外资产的基金（买美股/港股通道）",
+  "FOF": "基金中的基金（一篮子买基金）",
+  "养老目标基金": "按目标日期自动调仓的养老基金（个人养老金可投）",
+  "Y 份额": "个人养老金账户专属份额（费率优惠）",
+  "个人养老金": "2024.12 全面实施，每年 1.2 万免税额度，可投基金/理财/保险",
+  "估值（盘中）": "App 盘中估算的当日净值，有误差，不是最终净值",
+  "7 日年化": "货基\"过去 7 天的年化收益\"，非承诺收益",
+  "万份收益": "货基每万份份额当日收益（1 万块一天赚多少）",
+  "分红": "基金把收益分给持有人（现金分红/红利再投资）",
+  "清盘": "规模过小（<5000 万）触发终止，按净值返还（不是归零）",
+  "限购": "基金暂停大额申购（规模过大保护策略）",
+  "风格漂移": "基金实际持仓风格与宣传不符（说价值投成长）",
+  "冠军魔咒": "年度冠军基金次年业绩往往垫底（行业统计现象）",
+  "规模魔咒": "经理规模过大后策略失效（大资金灵活性下降）",
+  "好发不好做": "发行火爆时（高位）反而难做好业绩；反之亦然",
+  "基金投顾": "持牌机构收投顾费、管理组合并提供陪伴服务；2025 年末规模 3000 亿，渗透率 <1%",
+  "基金代销": "有销售牌照的平台卖基金（赚申购费/尾随佣金）",
+  "投资者适当性": "把风险匹配的产品卖给风险匹配的人（风险测评 R1-R5）",
+  "行为损耗": "基民因追涨杀跌/频繁交易比\"持有不动\"少赚的部分（年均约 2.53%）",
+  "幸存者偏差": "只统计活下来的基金导致榜单虚高（清盘的不在榜上）",
+  "费率改革": "2023-2025 三阶段降费：管理费 1.2%、佣金下调、销售费下调，每年让利超 500 亿",
+  "盈利投资者占比": "2026 年信披新规要求披露的指标（某只基金赚钱的持有人比例）",
+  "100-年龄法则": "经验法则：股票类资产比例 ≈ 100 - 年龄（不是铁律）",
+  "冷静期": "产品设计：触发冲动操作前强制等待 24 小时",
+  "FOMO": "Fear Of Missing Out，害怕错过上涨而冲动买入的情绪",
+  "处置效应": "行为金融现象：亏了死扛不卖、赚一点就跑"
+};
+
+/* 渲染术语表 */
+const glossData = [
+  ["公募基金","公开募集、1 元起投、强监管强信披的标准化基金","基本"],
+  ["基民","买基金的人（场外个人投资者 7.59 亿）","基本"],
+  ["申购/认购","申购=买老基金；认购=买新发行的基金","基本"],
+  ["赎回","把基金份额卖回给基金公司，T+1 到账（货基 T+0）","基本"],
+  ["T+1","交易日次日确认；当日 15:00 前下单按当日净值","基本"],
+  ["单位净值","一份基金的当前价格（1 元=一份）","基本"],
+  ["累计净值","单位净值 + 历史分红（未含红利再投资）","基本"],
+  ["复权净值","把分红再投资计入的\"真实长期收益\"，看长期业绩用它","基本"],
+  ["A/C 份额","A 类收申购费、适合长期；C 类收销售服务费、适合短期","基本"],
+  ["估值（盘中）","App 盘中估算的当日净值，有误差，不是最终净值","基本"],
+  ["分红","基金把收益分给持有人（现金分红/红利再投资）","基本"],
+  ["清盘","规模过小（<5000 万）触发终止，按净值返还（不是归零）","基本"],
+  ["限购","基金暂停大额申购（规模过大保护策略）","基本"],
+  ["定投","定期定额买入，摊平成本（微笑曲线）","基本"],
+  ["微笑曲线","下跌期积累筹码、上涨期兑现的 U 形成本曲线","基本"],
+  ["100-年龄法则","经验法则：股票类资产比例 ≈ 100 - 年龄（不是铁律）","基本"],
+  ["冷静期","产品设计：触发冲动操作前强制等待 24 小时","基本"],
+  ["宽基指数","覆盖全市场/大中盘的指数（沪深300、中证500、中证A500）","基本"],
+  ["业绩比较基准","基金自设的\"及格线\"（如 沪深300×80%+中债×20%）","基本"],
+  ["超额收益","基金收益 - 基准收益（Alpha）","基本"],
+  ["跟踪误差","指数基金相对指数的偏离程度","基本"],
+  ["货币基金","余额宝这类，T+0 赎回的\"类现金\"，收益略高于存款","产品"],
+  ["债券基金","投债券的基金，稳健配置主力（2025 年底 10.94 万亿）","产品"],
+  ["股票基金","投股票的基金，高风险高波动，含指数与 ETF","产品"],
+  ["混合基金","股债搭配的基金，仓位灵活","产品"],
+  ["指数基金","跟踪某个指数（如沪深300）的基金，费率低、透明","产品"],
+  ["ETF","交易所交易基金，场内买卖像股票；2025 年底全市场 6 万亿+","产品"],
+  ["QDII","投海外资产的基金（买美股/港股通道）","产品"],
+  ["FOF","基金中的基金（一篮子买基金）","产品"],
+  ["行业主题基金","押注单一行业（白酒/医药/新能源），波动大、基民磨损最高（年均约 10%）","产品"],
+  ["养老目标基金","按目标日期自动调仓的养老基金（个人养老金可投）","产品"],
+  ["Y 份额","个人养老金账户专属份额（费率优惠）","产品"],
+  ["个人养老金","2024.12 全面实施，每年 1.2 万免税额度，可投基金/理财/保险","产品"],
+  ["管理费","基金公司每年收，主动权益 1.2%、指数 0.15%-0.5%","费用"],
+  ["托管费","托管银行每年收，0.05%-0.2%","费用"],
+  ["销售服务费","C 类份额每年收，0.1%-0.4%","费用"],
+  ["尾随佣金","基金公司从管理费中分给销售平台的钱（约 20%-50%）","费用"],
+  ["申购费","买入手续费，原 1.5%，平台打折后约 0.15%","费用"],
+  ["赎回费","卖出手续费，0-1.5%，持有越久越低","费用"],
+  ["7 天惩罚","持有不满 7 天赎回收 1.5% 惩罚性赎回费","费用"],
+  ["费率改革","2023-2025 三阶段降费：管理费 1.2%、佣金下调、销售费下调，每年让利超 500 亿","费用"],
+  ["最大回撤","净值从高点跌到低点的最大跌幅（\"让你难受的程度\"）","绩效"],
+  ["卡玛比率","年化收益 ÷ 最大回撤（收益/难受程度比）","绩效"],
+  ["夏普比率","超额收益 ÷ 波动率（风险调整后收益）","绩效"],
+  ["年化波动","收益的年度波动幅度，衡量\"颠簸程度\"","绩效"],
+  ["万份收益","货基每万份份额当日收益（1 万块一天赚多少）","绩效"],
+  ["7 日年化","货基\"过去 7 天的年化收益\"，非承诺收益","绩效"],
+  ["行为损耗","基民因追涨杀跌/频繁交易比\"持有不动\"少赚的部分（年均约 2.53%）","行为"],
+  ["幸存者偏差","只统计活下来的基金导致榜单虚高（清盘的不在榜上）","行为"],
+  ["冠军魔咒","年度冠军基金次年业绩往往垫底（行业统计现象）","行为"],
+  ["规模魔咒","经理规模过大后策略失效（大资金灵活性下降）","行为"],
+  ["好发不好做","发行火爆时（高位）反而难做好业绩；反之亦然","行为"],
+  ["风格漂移","基金实际持仓风格与宣传不符（说价值投成长）","行为"],
+  ["FOMO","Fear Of Missing Out，害怕错过上涨而冲动买入的情绪","行为"],
+  ["处置效应","行为金融现象：亏了死扛不卖、赚一点就跑","行为"],
+  ["投资者适当性","把风险匹配的产品卖给风险匹配的人（风险测评 R1-R5）","合规"],
+  ["基金投顾","持牌机构收投顾费、管理组合并提供陪伴服务；2025 年末规模 3000 亿，渗透率 <1%","合规"],
+  ["基金代销","有销售牌照的平台卖基金（赚申购费/尾随佣金）","合规"],
+  ["盈利投资者占比","2026 年信披新规要求披露的指标（某只基金赚钱的持有人比例）","合规"],
+  ["信披新规","2026.3 落地：取消近 1 月业绩、新增 7/10 年业绩、披露盈利投资者占比","合规"]
+];
+const glossList = document.getElementById("glossList");
+let currentCat = "all";
+function renderGloss(filter="", cat="all"){
+  glossList.innerHTML = "";
+  glossData.filter(([t,d,c])=>
+    (cat==="all"||c===cat) &&
+    (t.toLowerCase().includes(filter.toLowerCase()) || d.toLowerCase().includes(filter.toLowerCase()))
+  ).forEach(([t,d,c])=>{
+    const li = document.createElement("li");
+    li.innerHTML = `<span class="g-term">${t}</span><span class="g-def">${d}</span><span class="g-cat">${c}</span>`;
+    glossList.appendChild(li);
+  });
+}
+document.getElementById("glossSearch").addEventListener("input", e=>renderGloss(e.target.value, currentCat));
+document.querySelectorAll("#glossFilters .tf-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll("#glossFilters .tf-btn").forEach(b=>b.classList.remove("on"));
+    btn.classList.add("on");
+    currentCat = btn.dataset.cat;
+    renderGloss(document.getElementById("glossSearch").value, currentCat);
+  });
+});
+renderGloss();
+
+/* ============ 术语悬停 tooltip ============ */
+document.querySelectorAll(".term").forEach(el=>{
+  const key = el.dataset.term || el.textContent;
+  const def = TERMS[key];
+  if(!def) return;
+  const tip = document.createElement("span");
+  tip.className = "tooltip";
+  tip.textContent = def;
+  el.appendChild(tip);
+  el.addEventListener("click", e=>{
+    e.stopPropagation();
+    document.querySelectorAll(".term.show").forEach(t=>{ if(t!==el) t.classList.remove("show"); });
+    el.classList.toggle("show");
+  });
+});
+document.addEventListener("click", e=>{
+  if(!e.target.closest(".term")) document.querySelectorAll(".term.show").forEach(t=>t.classList.remove("show"));
+});
+/* 桌面端 hover 显示 */
+document.querySelectorAll(".term").forEach(el=>{
+  el.addEventListener("mouseenter", ()=>el.classList.add("show"));
+  el.addEventListener("mouseleave", ()=>el.classList.remove("show"));
+});
+
+/* ============ 目录滚动高亮 + 章节定位 ============ */
+const groups = document.querySelectorAll(".toc-group[data-g]");
+const sections = [...document.querySelectorAll("section.ch")];
+const crumb = document.getElementById("crumb");
+function setActive(id){
+  document.querySelectorAll(".toc-group>a").forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+id));
+  document.querySelectorAll(".toc-sub a").forEach(a=>a.classList.toggle("active", a.getAttribute("href")==="#"+id));
+  groups.forEach(g=>{
+    g.classList.toggle("open", g.querySelector("a").getAttribute("href")==="#"+id);
+  });
+  const sec = document.getElementById(id);
+  if(sec){
+    const h2 = sec.querySelector("h2");
+    crumb.textContent = h2 ? h2.textContent : "封面导读";
+  }
+}
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting) setActive(en.target.id);
+  });
+},{rootMargin:"-15% 0px -70% 0px"});
+sections.forEach(s=>io.observe(s));
+
+/* ============ 阅读进度条 ============ */
+const progress = document.getElementById("progress");
+const toTop = document.getElementById("toTop");
+window.addEventListener("scroll", ()=>{
+  const h = document.documentElement;
+  const pct = h.scrollTop / (h.scrollHeight - h.clientHeight);
+  progress.style.width = (pct*100) + "%";
+  toTop.classList.toggle("show", h.scrollTop > 600);
+},{passive:true});
+
+/* ============ 返回顶部 ============ */
+toTop.addEventListener("click", ()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+/* ============ 心法卡片：手风琴（一次只展开一张，完全由 JS 控制） ============ */
+(function(){
+  const cards = document.querySelectorAll('.zhifa');
+  cards.forEach(card=>{
+    const head = card.querySelector('.zhifa-head');
+    head.addEventListener('click', ()=>{
+      const willOpen = !card.classList.contains('open');
+      cards.forEach(c=>{
+        c.classList.remove('open');
+        c.querySelector('.zhifa-head').setAttribute('aria-expanded','false');
+      });
+      if(willOpen){
+        card.classList.add('open');
+        head.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+})();
+
+/* ============ 主题切换 ============ */
+const themeBtn = document.getElementById("themeBtn");
+function applyTheme(dark){
+  document.documentElement.setAttribute("data-theme", dark?"dark":"light");
+  themeBtn.textContent = dark ? "☀️" : "🌙";
+}
+applyTheme(localStorage.getItem("gm-theme")==="dark");
+themeBtn.addEventListener("click", ()=>{
+  const dark = document.documentElement.getAttribute("data-theme")!=="dark";
+  applyTheme(dark);
+  localStorage.setItem("gm-theme", dark?"dark":"light");
+});
+
+/* ============ 移动端抽屉 ============ */
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.getElementById("sidebar");
+const scrim = document.getElementById("scrim");
+function closeDrawer(){ sidebar.classList.remove("open"); scrim.classList.remove("show"); }
+menuBtn.addEventListener("click", ()=>{ sidebar.classList.toggle("open"); scrim.classList.toggle("show"); });
+scrim.addEventListener("click", closeDrawer);
+document.querySelectorAll("#sidebar a").forEach(a=>a.addEventListener("click", closeDrawer));
+
+/* ============ 目录搜索 ============ */
+document.getElementById("tocSearch").addEventListener("input", e=>{
+  const q = e.target.value.trim();
+  document.querySelectorAll(".toc-group").forEach(g=>{
+    if(!q){ g.style.display=""; g.querySelectorAll(".toc-sub a").forEach(a=>a.style.display=""); return; }
+    const a = g.querySelector("a");
+    const match = a.textContent.includes(q) ||
+      [...g.querySelectorAll(".toc-sub a")].some(x=>x.textContent.includes(q));
+    g.style.display = match ? "" : "none";
+    g.classList.toggle("open", match);
+    g.querySelectorAll(".toc-sub a").forEach(x=>x.style.display = x.textContent.includes(q)?"":"none");
+  });
+});
+
+/* ============ 知识清单勾选 ============ */
+document.querySelectorAll("#kl input").forEach(cb=>{
+  cb.addEventListener("change", ()=>cb.closest("li").classList.toggle("done", cb.checked));
+});
+</script>
+</body>
+</html>
