@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>私募投资·小白学习手册 | 心法篇 + 策略篇</title>
+<style>
+  :root{
+    --navy:#14304f; --navy-2:#1d4a78; --gold:#c9a227; --gold-2:#e8c96a;
+    --ink:#22303f; --ink-2:#4a5b6b; --paper:#faf8f4; --card:#ffffff;
+    --line:#e4e0d6; --soft:#f2efe8; --green:#2e7d5b; --red:#b3453a;
+    --shadow:0 1px 3px rgba(20,48,79,.08),0 8px 24px rgba(20,48,79,.06);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;background:var(--paper);color:var(--ink);line-height:1.75;font-size:16px}
+  ::selection{background:var(--gold-2)}
+
+  /* ---------- 进度条 ---------- */
+  #progressbar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--navy-2),var(--gold));z-index:1000;width:0%;transition:width .15s}
+  #progressText{position:fixed;top:6px;right:14px;z-index:1001;font-size:12px;color:var(--ink-2);background:rgba(250,248,244,.9);padding:2px 8px;border-radius:10px;display:none}
+
+  /* ---------- 顶栏 ---------- */
+  header.topbar{position:sticky;top:3px;z-index:999;background:rgba(250,248,244,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .topbar-inner{max-width:1080px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:16px}
+  .brand{font-weight:700;color:var(--navy);font-size:15px;white-space:nowrap}
+  .brand em{font-style:normal;color:var(--gold)}
+  nav.mainnav{flex:1;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+  nav.mainnav::-webkit-scrollbar{display:none}
+  nav.mainnav a{color:var(--ink-2);text-decoration:none;font-size:13px;padding:6px 10px;border-radius:8px;margin-right:2px;transition:.2s}
+  nav.mainnav a:hover{background:var(--soft);color:var(--navy)}
+  nav.mainnav a.active{background:var(--navy);color:#fff}
+  .btn-top{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+  .btn-top:hover{background:var(--navy-2)}
+
+  /* ---------- Hero ---------- */
+  .hero{background:linear-gradient(135deg,#0f2439 0%,#1d4a78 60%,#2a5f92 100%);color:#fff;padding:64px 20px 56px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-80px;top:-80px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,39,.28),transparent 70%)}
+  .hero-inner{max-width:1080px;margin:0 auto;position:relative;z-index:1}
+  .hero .kicker{display:inline-block;background:rgba(201,162,39,.18);border:1px solid rgba(201,162,39,.5);color:var(--gold-2);font-size:13px;padding:4px 14px;border-radius:20px;margin-bottom:18px;letter-spacing:2px}
+  .hero h1{font-size:clamp(26px,4vw,40px);line-height:1.3;margin-bottom:14px;letter-spacing:.5px}
+  .hero p.sub{font-size:clamp(15px,2vw,17px);color:#c9d8e8;max-width:720px;margin-bottom:22px}
+  .hero .quote{border-left:3px solid var(--gold);background:rgba(255,255,255,.08);padding:12px 18px;border-radius:0 10px 10px 0;font-size:15px;color:#eef4fa;max-width:720px}
+  .hero .quote strong{color:var(--gold-2)}
+  .hero-meta{margin-top:20px;font-size:13px;color:#9fb6cc}
+
+  /* ---------- 布局 ---------- */
+  .layout{max-width:1080px;margin:0 auto;padding:0 20px 60px}
+  section.block{margin-top:46px}
+  .part-tag{display:inline-flex;align-items:center;gap:8px;background:var(--navy);color:#fff;font-size:13px;padding:6px 16px;border-radius:20px;margin-bottom:16px;letter-spacing:1px}
+  .part-tag.p2{background:var(--gold)}
+  h2.section-title{font-size:clamp(22px,3vw,28px);color:var(--navy);margin:8px 0 6px;line-height:1.4}
+  .section-desc{color:var(--ink-2);margin-bottom:22px;font-size:15px}
+  h3{font-size:19px;color:var(--navy);margin:30px 0 12px;padding-left:12px;border-left:4px solid var(--gold)}
+  h4{font-size:16px;color:var(--navy-2);margin:20px 0 8px}
+  p{margin-bottom:12px}
+  strong{color:var(--navy)}
+  .hl{background:linear-gradient(transparent 62%,rgba(232,201,106,.55) 62%)}
+
+  /* ---------- 卡片 ---------- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);margin-bottom:16px}
+  .card.tint{background:var(--soft);border-left:4px solid var(--gold)}
+  .card.note{background:#f2f7f3;border-left:4px solid var(--green)}
+  .card.warn{background:#faf1ef;border-left:4px solid var(--red)}
+  .card.blue{background:#eef4fb;border-left:4px solid var(--navy-2)}
+  .card h4{margin-top:0}
+
+  /* ---------- 表格 ---------- */
+  .table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--line);box-shadow:var(--shadow);margin:14px 0 20px;background:#fff}
+  table{width:100%;border-collapse:collapse;font-size:14px;min-width:560px}
+  thead th{background:var(--navy);color:#fff;text-align:left;padding:10px 14px;font-weight:600;white-space:nowrap}
+  tbody td{padding:10px 14px;border-top:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:var(--soft)}
+  tbody tr:hover{background:#f7f3e8}
+  td b{color:var(--navy)}
+
+  /* ---------- 心法卡片 ---------- */
+  .method-grid{display:grid;grid-template-columns:1fr;gap:16px}
+  @media(min-width:768px){.method-grid{grid-template-columns:1fr 1fr}}
+  .method-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);position:relative;transition:transform .15s}
+  .method-card:hover{transform:translateY(-2px)}
+  .method-no{position:absolute;top:-14px;left:18px;background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;font-size:12px;padding:3px 12px;border-radius:12px;letter-spacing:1px}
+  .method-card h4{margin-top:6px;font-size:16.5px}
+  .method-card .plain{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:14.5px;color:var(--ink-2)}
+  .method-card .plain b{color:var(--navy-2)}
+
+  /* ---------- 词汇表 ---------- */
+  .vocab-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
+  .vocab-tabs button{background:#fff;border:1px solid var(--line);color:var(--ink-2);padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:.15s}
+  .vocab-tabs button:hover{border-color:var(--navy-2);color:var(--navy)}
+  .vocab-tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .vocab-panel{display:none}
+  .vocab-panel.show{display:block}
+
+  /* ---------- 流程图（CSS 绘制） ---------- */
+  .flow{display:flex;flex-direction:column;gap:0;align-items:stretch;max-width:560px;margin:18px auto}
+  .flow-step{background:#fff;border:1.5px solid var(--navy-2);border-radius:10px;padding:12px 18px;text-align:center;font-size:14.5px;position:relative;box-shadow:var(--shadow)}
+  .flow-step b{display:block;color:var(--navy);font-size:15px;margin-bottom:2px}
+  .flow-step small{color:var(--ink-2);font-size:12.5px}
+  .flow-step + .flow-step{margin-top:26px}
+  .flow-step + .flow-step::before{content:"▼";position:absolute;top:-22px;left:50%;transform:translateX(-50%);color:var(--gold);font-size:13px}
+
+  /* ---------- 五层金字塔 ---------- */
+  .pyramid{display:flex;flex-direction:column;align-items:center;margin:22px 0;gap:8px}
+  .pyr{width:100%;border-radius:10px;padding:12px 16px;text-align:center;color:#fff;font-size:14.5px;box-shadow:var(--shadow)}
+  .pyr b{font-size:15px}
+  .pyr small{display:block;opacity:.92;font-weight:400;font-size:12.5px}
+  .pyr.l1{background:linear-gradient(135deg,#0f2439,#1d4a78);max-width:100%}
+  .pyr.l2{background:linear-gradient(135deg,#1d4a78,#2a5f92);max-width:88%}
+  .pyr.l3{background:linear-gradient(135deg,#2a5f92,#3d7ab5);max-width:76%}
+  .pyr.l4{background:linear-gradient(135deg,#3d7ab5,#5a94c8);max-width:64%}
+  .pyr.l5{background:linear-gradient(135deg,#c9a227,#8a7020);max-width:52%}
+  .pyr-side{font-size:13px;color:var(--ink-2);margin-top:8px}
+
+  /* ---------- 漏斗 ---------- */
+  .funnel{max-width:640px;margin:20px auto;display:flex;flex-direction:column;gap:6px}
+  .funnel-step{background:linear-gradient(90deg,var(--navy-2),var(--navy));color:#fff;border-radius:8px;padding:10px 16px;font-size:14px;text-align:center}
+  .funnel-step small{opacity:.85}
+  .funnel-step.hl{background:linear-gradient(90deg,var(--gold),#a8841e)}
+  .funnel-step.w50{width:50%;margin-left:25%}
+  .funnel-step.w70{width:70%;margin-left:15%}
+  .funnel-step.w85{width:85%;margin-left:7.5%}
+
+  /* ---------- 收益风险矩阵 ---------- */
+  .matrix{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0;max-width:640px}
+  @media(max-width:600px){.matrix{grid-template-columns:1fr}}
+  .mcell{border-radius:12px;padding:16px 18px;color:#fff;font-size:14px}
+  .mcell b{display:block;font-size:17px;margin-bottom:4px}
+  .mcell small{opacity:.9;font-size:12.5px}
+  .mcell.attack{background:linear-gradient(135deg,#c0392b,#e67e22)}
+  .mcell.oppo{background:linear-gradient(135deg,#2e7d5b,#27ae60)}
+  .mcell.careful{background:linear-gradient(135deg,#8e5b1e,#c9a227)}
+  .mcell.steady{background:linear-gradient(135deg,#1d4a78,#2a7bb8)}
+  .matrix-axis{max-width:640px;display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);padding:0 6px;margin-bottom:-8px}
+
+  /* ---------- 策略卡片 ---------- */
+  .strategy-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);margin-bottom:14px}
+  .strategy-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+  .strategy-head .num{width:38px;height:38px;border-radius:10px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+  .strategy-head h4{margin:0;font-size:17px;color:var(--navy)}
+  .badge{font-size:12px;padding:2px 10px;border-radius:12px;font-weight:500}
+  .badge.hi{background:#fdecea;color:#c0392b}
+  .badge.mid{background:#fdf6e3;color:#8a7020}
+  .badge.lo{background:#eaf4ee;color:#2e7d5b}
+  .strategy-sub{background:var(--soft);border-radius:10px;padding:10px 14px;font-size:13.5px;margin:10px 0}
+  .strategy-find{margin-top:8px}
+
+  /* ---------- 自测 ---------- */
+  .quiz-item{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
+  .quiz-q{display:flex;gap:12px;padding:16px 18px;cursor:pointer;align-items:flex-start}
+  .quiz-q .qno{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+  .quiz-q p{margin:0;font-size:15px}
+  .quiz-q .arrow{margin-left:auto;color:var(--ink-2);transition:transform .2s}
+  .quiz-item.open .arrow{transform:rotate(180deg)}
+  .quiz-a{display:none;padding:14px 18px;background:var(--soft);border-top:1px dashed var(--line);font-size:14px}
+  .quiz-item.open .quiz-a{display:block}
+
+  /* ---------- 速查表 ---------- */
+  .cheat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+  .cheat-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);font-size:14px}
+  .cheat-card b{display:block;color:var(--navy);margin-bottom:4px;font-size:14.5px}
+
+  /* ---------- 完成标记 ---------- */
+  .read-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;background:#fff;border:1.5px solid var(--line);color:var(--ink-2);padding:5px 14px;border-radius:20px;cursor:pointer;margin-left:10px;transition:.15s;vertical-align:middle}
+  .read-btn:hover{border-color:var(--green);color:var(--green)}
+  .read-btn.done{background:var(--green);border-color:var(--green);color:#fff}
+
+  /* ---------- 阅读清单 ---------- */
+  .reading-list{display:grid;grid-template-columns:1fr;gap:12px;margin:18px 0}
+  @media(min-width:700px){.reading-list{grid-template-columns:repeat(3,1fr)}}
+  .read-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);font-size:14px;position:relative}
+  .read-card .phase{display:inline-block;font-size:12px;background:var(--soft);color:var(--navy-2);padding:2px 10px;border-radius:12px;margin-bottom:8px;font-weight:600}
+  .read-card ul{margin:8px 0 0 18px;color:var(--ink-2)}
+
+  /* ---------- 响应式 ---------- */
+  @media(max-width:768px){
+    body{font-size:15px}
+    .topbar-inner{padding:8px 14px}
+    .brand{font-size:13px}
+    nav.mainnav a{font-size:12px;padding:5px 8px}
+    .hero{padding:44px 16px 40px}
+    .layout{padding:0 14px 48px}
+  }
+
+  /* ---------- 打印 ---------- */
+  @media print{
+    .topbar,.btn-top,#progressbar,.read-btn,#progressText{display:none!important}
+    .hero{background:#14304f!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .card,.method-card,.strategy-card,.quiz-item{box-shadow:none;break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div id="progressbar"></div>
+<div id="progressText">0%</div>
+
+<!-- ============ 顶栏 ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">私募投资 · <em>小白学习手册</em></div>
+    <nav class="mainnav" id="mainnav">
+      <a href="#start">开始</a>
+      <a href="#x-intro">心法篇</a>
+      <a href="#x-vocab">词汇表</a>
+      <a href="#x-methods">八大心法</a>
+      <a href="#x-model">元模型</a>
+      <a href="#x-action">行动指南</a>
+      <a href="#s-intro">策略篇</a>
+      <a href="#s-vocab">词汇表</a>
+      <a href="#s-strategies">八大策略</a>
+      <a href="#s-stock">股票四形态</a>
+      <a href="#s-types">四大类型</a>
+      <a href="#s-method">筛选方法</a>
+      <a href="#quiz">自测</a>
+      <a href="#cheatsheet">速查</a>
+    </nav>
+    <button class="btn-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ 顶部</button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<div class="hero" id="start">
+  <div class="hero-inner">
+    <span class="kicker">LEARNING · 投资入门系列</span>
+    <h1>私募投资 · 小白学习手册</h1>
+    <p class="sub">从「顶尖私募怎么思考」到「私募产品怎么挑选」——两篇核心笔记，一套完整的学习路径。不讲术语黑话，全部讲人话。</p>
+    <div class="quote">
+      <strong>一句话主线：</strong>投资赚钱的本质，不是预测涨跌，而是把时间花在最重要的少数问题上，用系统方法把胜率从 60% 提到 90%。
+    </div>
+    <div class="hero-meta">内容来源：高毅资产《顶尖私募心法》+ 东证期货《策略研究与基础池构建》· 整理成学习手册 · 仅供参考，不构成投资建议</div>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- ============ 学习路径 ============ -->
+<section class="block" id="path">
+  <span class="part-tag">HOW TO USE</span>
+  <h2 class="section-title">这份手册怎么读？</h2>
+  <p class="section-desc">不用一次读完。按下面的顺序分三遍过，每一遍都有明确目标。</p>
+  <div class="reading-list">
+    <div class="read-card">
+      <span class="phase">第一遍 · 建立框架（约 30 分钟）</span>
+      <b>看懂私募世界的地图</b>
+      <ul>
+        <li>心法篇：读「八大心法」和「五层模型」</li>
+        <li>策略篇：读「八大策略」总览表 +「四大类型」</li>
+        <li>目标：能向别人解释"私募在干嘛"</li>
+      </ul>
+    </div>
+    <div class="read-card">
+      <span class="phase">第二遍 · 扫清术语（约 40 分钟）</span>
+      <b>把黑话翻译成人话</b>
+      <ul>
+        <li>心法篇：词汇表全部过一遍</li>
+        <li>策略篇：词汇表 + 筛选方法论</li>
+        <li>目标：看到"夏普比率""最大回撤"不再发怵</li>
+      </ul>
+    </div>
+    <div class="read-card">
+      <span class="phase">第三遍 · 实战闭环（按需使用）</span>
+      <b>把知识变成行动</b>
+      <ul>
+        <li>做一遍「自测题」检验理解</li>
+        <li>用「行动指南」开始你的第一次行业分析</li>
+        <li>用「速查表」随时回查</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card tint">
+    💡 <strong>学习小贴士：</strong>每读完一章，点标题旁的「✓ 已读」按钮，顶部进度条会记录你的进度（浏览器本地保存，关掉页面也不丢）。
+  </div>
+</section>
+
+<!-- ================================================================
+     第一部分：心法篇
+================================================================= -->
+<section class="block" id="x-intro">
+  <span class="part-tag">PART 1 · 心法篇</span>
+  <h2 class="section-title">顶尖私募心法：机构是怎么做投研的</h2>
+  <p class="section-desc">来自高毅资产（国内顶级私募）的投研方法论。回答三个问题：<b>研究什么？怎么研究？什么人能做好？</b></p>
+
+  <div class="card blue">
+    <h4>全文骨架：围绕 3 个核心问题</h4>
+    <div class="flow" style="margin:14px 0 0">
+      <div class="flow-step"><b>问题 1：研究什么？</b><small>只研究最重要的问题 —— 大问题、大方向、大概率</small></div>
+      <div class="flow-step"><b>问题 2：怎么研究？</b><small>四维逻辑框架 + 归纳 / 演绎 / 实证三环节</small></div>
+      <div class="flow-step"><b>问题 3：什么人能做好？</b><small>求知欲、诚实、独立 + 1 万小时 + 智慧圈</small></div>
+    </div>
+  </div>
+
+  <div class="card tint">
+    <h4>1 个底层信仰</h4>
+    <p style="margin:0"><strong class="hl">时间是每个人唯一稀缺的资产。</strong>与其在小问题上做到完美精确，不如在大问题上做到模糊准确。<br>
+    <small>⚠️ 注意：这不是选股秘籍，也不是"抓涨停"的技巧。它是一套<strong>机构级的思考操作系统</strong>——对小白来说，价值在于"偷框架"，而不是"照抄"。</small></p>
+  </div>
+</section>
+
+<!-- ============ 心法词汇表 ============ -->
+<section class="block" id="x-vocab">
+  <span class="part-tag">PART 1</span>
+  <h2 class="section-title">金融小白词汇表（心法篇）<button class="read-btn" data-key="x-vocab">✓ 已读完</button></h2>
+  <p class="section-desc">先扫清术语障碍，读心法才不卡壳。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th style="width:180px">术语</th><th>大白话解释</th></tr></thead>
+    <tbody>
+      <tr><td><b>基本面投资</b></td><td>不看短期涨跌、不看 K 线图，而是看"这家公司 / 这个行业本身好不好"来投资。</td></tr>
+      <tr><td><b>宏观</b></td><td>整个国家 / 全球的经济大环境（GDP、利率、政策、人口、社会思潮）。</td></tr>
+      <tr><td><b>产业 / 行业</b></td><td>一个领域里所有做类似事情的公司，比如"白酒行业""新能源行业"。</td></tr>
+      <tr><td><b>阿尔法（alpha）</b></td><td>超额收益，即"比市场平均水平多赚的那部分"。机构说"创造 alpha" ≈ "我们比市场聪明的那部分钱"。</td></tr>
+      <tr><td><b>贝塔（beta）</b></td><td>跟随市场整体的那部分涨跌。市场涨 10%，你也涨 10%，这 10% 就是 beta。</td></tr>
+      <tr><td><b>确定性</b></td><td>你对一个判断有多大把握。<b>60% 确定性的判断几乎没决策价值，要提升到 90%+。</b></td></tr>
+      <tr><td><b>ROE</b></td><td>净资产收益率——股东每投 100 块，一年能赚回多少。衡量公司赚钱效率的核心指标。</td></tr>
+      <tr><td><b>ARPU / ASP</b></td><td>每个用户平均贡献的收入 / 平均销售单价。互联网公司最看重的指标之一。</td></tr>
+      <tr><td><b>NPS（净推荐值）</b></td><td>一个产品 / 服务有多少老客户愿意推荐给别人，是口碑的量化指标。</td></tr>
+      <tr><td><b>自由现金流贴现（DCF）</b></td><td>把一家公司未来能赚的所有钱，折算成今天的价值。机构判断"贵不贵"的终极思维。</td></tr>
+      <tr><td><b>PE / PB</b></td><td>市盈率 / 市净率，两个最常用的估值指标（判断股价贵不贵）。</td></tr>
+      <tr><td><b>边际利润 / 边际成本</b></td><td>多做一个（单位）生意，多赚 / 多花的钱。</td></tr>
+      <tr><td><b>护城河 / 壁垒</b></td><td>竞争对手很难学走的优势，比如品牌、技术专利、规模成本优势。</td></tr>
+      <tr><td><b>赢者通吃</b></td><td>赢家拿走大部分市场份额，比如社交软件、搜索引擎。</td></tr>
+      <tr><td><b>S 型曲线</b></td><td>技术 / 行业发展的生命周期：缓慢起步 → 快速爆发 → 增速见顶（长成 S 形）。</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ 八大心法 ============ -->
+<section class="block" id="x-methods">
+  <span class="part-tag">PART 1</span>
+  <h2 class="section-title">八大心法拆解（每条都讲人话）<button class="read-btn" data-key="x-methods">✓ 已读完</button></h2>
+  <p class="section-desc">这是全文核心。每条心法 = 原文精髓 + 白话翻译 + 小白误区。</p>
+
+  <div class="method-grid">
+    <div class="method-card">
+      <span class="method-no">心法 1</span>
+      <h4>时间是唯一稀缺资产 → 只研究最重要的问题</h4>
+      <p><b>原文精髓：</b>信息无限、时间有限。要抓"大问题、大方向、大概率"；<span class="hl">大问题上的模糊准确，远胜小问题上的完美精确</span>。</p>
+      <p><b>白话：</b>别把精力耗在"明天涨还是跌"这种问题上——对决策几乎没帮助。应该把精力放在"这个行业未来 5 年往哪走"这种大问题上。巴菲特一辈子只做几个大决策，就是这个道理。</p>
+      <div class="plain">⚠️ <b>小白误区：</b>每天盯盘、追热点、研究 K 线形态，看起来"很努力"，其实是在小问题上追求完美精确——大概率是浪费时间。</div>
+    </div>
+
+    <div class="method-card">
+      <span class="method-no">心法 2</span>
+      <h4>四维逻辑框架（宏观 → 产业 → 业务 → 财务）</h4>
+      <p><b>原文精髓：</b>研究任何公司，用四个层层递进的视角，形成"相互验证、互相勾稽"的闭环。</p>
+      <div class="flow" style="margin:10px 0">
+        <div class="flow-step"><b>宏观逻辑</b><small>这个时代的大环境是什么？经济、政策、社会思潮</small></div>
+        <div class="flow-step"><b>产业逻辑</b><small>这个行业处在什么阶段？核心驱动是什么？</small></div>
+        <div class="flow-step"><b>业务逻辑</b><small>这家公司的战略打法，符合大方向吗？</small></div>
+        <div class="flow-step"><b>财务逻辑</b><small>财务数据验证：说的和做的，数字对得上吗？</small></div>
+      </div>
+      <div class="plain"><b>举个奶茶店的例子：</b>宏观=大家还爱喝奶茶吗？产业=奶茶行业是红海还是蓝海？业务=这家店的产品力、选址怎么样？财务=流水、毛利、复购率是不是吹牛？<br><br>⚠️ <b>要点：</b>四个逻辑要<b>自上而下</b>串起来——宏观和产业有大瑕疵的公司，再努力也白搭，直接跳过。</div>
+    </div>
+
+    <div class="method-card">
+      <span class="method-no">心法 3</span>
+      <h4>把握产业本质、核心要素与关键变化</h4>
+      <p><b>原文精髓：</b>每个行业有自己的"本质"和"发动机"：</p>
+      <ul style="margin:6px 0 6px 20px;font-size:14.5px">
+        <li>水电行业 ≈ <b>加了杠杆的利率产品</b>（稳定、类债券）</li>
+        <li>传统零售 ≈ <b>商业地产租赁生意</b></li>
+        <li>动画行业 ≈ <b>内容创意 × 软件的 IT 生意</b></li>
+        <li>消费品的核心驱动力 = <b>产品力</b>（时间累积成品牌）</li>
+      </ul>
+      <p><b>白话：</b>先搞懂行业的"生意本质"再研究公司，别把奶茶店当科技公司研究。同时抓住<b>拐点</b>——比如智能手机渗透率见顶后，行业逻辑从"增量创新"变成"存量替代"。</p>
+      <div class="plain">⚠️ <b>要点：</b>同一套方法不能套所有行业。</div>
+    </div>
+
+    <div class="method-card">
+      <span class="method-no">心法 4</span>
+      <h4>时间、空间、人——看企业的核心能力</h4>
+      <p><b>原文精髓：</b>看一个企业问三件事：</p>
+      <ul style="margin:6px 0 6px 20px;font-size:14.5px">
+        <li><b>时间的朋友</b>：好模式顺应大势、顺应人性 → 可持久</li>
+        <li><b>规模的敌人</b>：规模扩到一定程度效率递减（依赖厨师的餐饮店无法连锁）。<b>流程标准化是服务业规模化的前提</b></li>
+        <li><b>人（最重要）</b>：核心竞争力本质是<b>公司治理结构</b>，取决于企业家精神。<b>只有人，才是创造价值的终极源头</b></li>
+      </ul>
+      <div class="plain">⚠️ <b>对小白最有用的一句：</b>看一个公司，先看老板和团队靠不靠谱，比看一百张图表都重要。</div>
+    </div>
+
+    <div class="method-card">
+      <span class="method-no">心法 5</span>
+      <h4>研究三环节：归纳 → 演绎 → 实证</h4>
+      <p><b>原文精髓（全文最"方法"的部分）：</b></p>
+      <div class="flow" style="margin:10px 0">
+        <div class="flow-step"><b>归纳</b><small>把碎片信息格式化，分清主次矛盾</small></div>
+        <div class="flow-step"><b>演绎</b><small>提出最可能的几种假设（需要想象力）</small></div>
+        <div class="flow-step"><b>实证</b><small>用数据 / 事实验证假设，可能推翻，也可能有意外收获</small></div>
+      </div>
+      <p><b>关键量化目标：</b>把判断确定性从 <b>60% 提升到 90%</b>——哪怕只比市场多掌握 10% 的有效信息，理解力可能提升一个档次，这就是创造 alpha 的过程。</p>
+      <div class="plain"><b>小白用法：</b>先写下来你的判断和理由（假设），过段时间回头验证（实证），错了就复盘——而不是"感觉对了就买"。</div>
+    </div>
+
+    <div class="method-card">
+      <span class="method-no">心法 6</span>
+      <h4>优秀研究员的三个特质</h4>
+      <ul style="margin:6px 0 6px 20px;font-size:14.5px">
+        <li><b>求知欲</b>：无压力、无任务时依然痴迷研究 → 内在驱动力的底层代码</li>
+        <li><b>诚实</b>：人天生爱听对自己有利的话。<b>投资只有客观，没有悲观乐观</b>。"如果你不够真诚，你终将成为自己的牺牲品"</li>
+        <li><b>独立</b>：二手观点没价值；权威意见也要经过自己独立判断</li>
+      </ul>
+      <div class="plain">⚠️ <b>小白自问：</b>亏钱了敢不敢承认是自己判断错了，而不是怪市场？别人都说好的票，你有没有自己的理由？</div>
+    </div>
+
+    <div class="method-card">
+      <span class="method-no">心法 7</span>
+      <h4>正确心态：1 万小时训练 + 放下经验</h4>
+      <p><b>原文精髓：</b></p>
+      <ul style="margin:6px 0 6px 20px;font-size:14.5px">
+        <li>对新人：约 <b>5 年 / 1 万小时</b>的专业训练才有质变，别急</li>
+        <li>对资深：要<b>放下经验</b>，清零心态——旧思维在新时代可能是绊脚石；对越笃定的观点，越要重视反方观点</li>
+        <li>成长靠<b>刻骨铭心的成功 / 错误案例</b></li>
+      </ul>
+      <div class="plain">⚠️ <b>小白提醒：</b>别指望"三天学会投资"。同时警惕"经验陷阱"：过去赚钱的方法，未来不一定有效。</div>
+    </div>
+
+    <div class="method-card">
+      <span class="method-no">心法 8</span>
+      <h4>日常工作：智慧圈、阅读、体系、文档</h4>
+      <ul style="margin:6px 0 6px 20px;font-size:14.5px">
+        <li><b>智慧圈</b>：每个重要课题找 3 个以上行家（因为再牛的人也有立场偏见，芒格："立场导致偏见"）</li>
+        <li><b>广泛阅读</b>：哲学、心理学、科学史都能启发投资</li>
+        <li><b>自建体系</b>：建立自己的研究框架并持续优化</li>
+        <li><b>结构化文档</b>：把思考、判断、结果记录下来，几年后就是复利资产</li>
+      </ul>
+      <div class="plain">⚠️ <b>小白做法：</b>别闭门造车，多和懂行的人交流；多做"归档"，方便复盘——这比任何技巧都值钱。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 元模型 ============ -->
+<section class="block" id="x-model">
+  <span class="part-tag">PART 1</span>
+  <h2 class="section-title">心法的「元模型」：五层框架<button class="read-btn" data-key="x-model">✓ 已读完</button></h2>
+  <p class="section-desc">把所有心法串起来，是一个 5 层金字塔——记住它，就记住了全文。</p>
+  <div class="card">
+    <div class="pyramid">
+      <div class="pyr l1"><b>① 价值观层</b><small>时间是唯一稀缺资产 → 只做最重要的事</small></div>
+      <div class="pyr l2"><b>② 研究框架层</b><small>四维逻辑：宏观 / 产业 / 业务 / 财务</small></div>
+      <div class="pyr l3"><b>③ 方法论层</b><small>归纳 → 演绎 → 实证（把 60% 确定性提到 90%）</small></div>
+      <div class="pyr l4"><b>④ 能力层</b><small>求知欲 × 诚实 × 独立</small></div>
+      <div class="pyr l5"><b>⑤ 环境层</b><small>智慧圈 + 广泛阅读 + 结构化积累</small></div>
+    </div>
+    <div class="pyr-side" style="text-align:center">
+      <b>对个人：</b>从上往下修炼——先想清楚"什么最重要"，再学方法，再修心性，最后靠环境托底。<br>
+      <b>对产品：</b>这五层每一层都能映射成产品的一个模块（见策略篇"系统落地"）。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 行动指南 ============ -->
+<section class="block" id="x-action">
+  <span class="part-tag">PART 1</span>
+  <h2 class="section-title">小白行动指南：立刻能用<button class="read-btn" data-key="x-action">✓ 已读完</button></h2>
+  <p class="section-desc">心法不是拿来背的，是拿来用的。以下 5 个行动 + 5 个避坑，今天就能开始。</p>
+
+  <h3>5 个立刻能做的行动</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th style="width:40px">#</th><th style="width:150px">心法来源</th><th>你的行动</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><b>大问题大方向</b></td><td><b>停止每天盯盘。</b>把时间花在"了解行业 / 公司基本面"上，而非短线涨跌。</td></tr>
+      <tr><td>2</td><td><b>四维逻辑</b></td><td>买任何东西前，写一遍"四维检查单"：宏观（这行还值不值得做？）、产业（竞争格局？）、业务（靠什么赚钱？）、财务（财报数字验证了吗？）。</td></tr>
+      <tr><td>3</td><td><b>排除法</b></td><td>学会<b>先排除</b>：长期下行且估值不低的行业、吹牛的公司（说自己高科技但毛利率很低）——直接拉黑，省下大量时间。</td></tr>
+      <tr><td>4</td><td><b>归纳演绎实证</b></td><td>每笔投资记"投资日志"：买入理由（假设）→ 设定验证时间 → 到期复盘（实证）→ 错了认错。</td></tr>
+      <tr><td>5</td><td><b>结构化文档</b></td><td>建一个自己的 Excel / 笔记，把关注的公司、行业关键数据（毛利率、市占率、复购率）填进去，持续更新。</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>小白最容易犯的 5 个错</h3>
+  <div class="reading-list" style="grid-template-columns:1fr;gap:10px">
+    <div class="card warn" style="margin:0">1️⃣ <b>在小问题上完美精确</b>：研究 K 线、预测明天涨跌——白费力气。</div>
+    <div class="card warn" style="margin:0">2️⃣ <b>逆着大方向努力</b>：行业整体在走下坡，公司再好也难——先看行业。</div>
+    <div class="card warn" style="margin:0">3️⃣ <b>只看财务不看人</b>：数字漂亮但老板不靠谱 / 治理混乱——迟早出事。</div>
+    <div class="card warn" style="margin:0">4️⃣ <b>不验证就下结论</b>：凭"感觉"和"听说"买入，从不复盘。</div>
+    <div class="card warn" style="margin:0">5️⃣ <b>闭门造车</b>：不交流、不阅读，全靠自己拍脑袋。</div>
+  </div>
+
+  <div class="card note">
+    💡 <strong>心法里最狠的一句提醒：</strong>60% 确定性的判断几乎没有决策价值。小白亏钱，往往不是因为判断错，而是因为<strong>在只有 60% 把握时就下了重注</strong>。等你有 90% 把握（研究 + 验证之后）再行动。
+  </div>
+</section>
+
+<!-- ================================================================
+     第二部分：策略篇
+================================================================= -->
+<section class="block" id="s-intro">
+  <span class="part-tag p2">PART 2 · 策略篇</span>
+  <h2 class="section-title">私募策略与基础池构建</h2>
+  <p class="section-desc">来自东证期货《策略研究与基础池构建》。回答一个核心问题：<b>市场上有几万只私募产品，怎么筛出值得配置的那几百只？</b></p>
+  <div class="card blue">
+    <h4>一句话主线：分类 → 指标 → 建池</h4>
+    <div class="flow" style="margin:14px 0 0">
+      <div class="flow-step"><b>① 策略分类重构</b><small>统一分类、给策略打标签</small></div>
+      <div class="flow-step"><b>② 筛选指标确认</b><small>用三年历史数据定收益 / 回撤 / 规模标准</small></div>
+      <div class="flow-step"><b>③ 基金池构建</b><small>按标准层层筛选，形成"基础池"（合格候选名单）</small></div>
+    </div>
+  </div>
+  <div class="card tint">
+    <h4>对系统设计的意义</h4>
+    <p style="margin:0">这就是一套「标准化 + 规则化 + 漏斗化」的流程。你在系统里帮客户做的事情，本质也是这三件事。</p>
+  </div>
+</section>
+
+<!-- ============ 策略词汇表 ============ -->
+<section class="block" id="s-vocab">
+  <span class="part-tag p2">PART 2</span>
+  <h2 class="section-title">私募词汇表（策略篇）<button class="read-btn" data-key="s-vocab">✓ 已读完</button></h2>
+  <p class="section-desc">分五类，点击标签切换。全部大白话。</p>
+
+  <div class="vocab-tabs" id="vtabs">
+    <button class="on" data-tab="v1">产品与机构</button>
+    <button data-tab="v2">收益类</button>
+    <button data-tab="v3">风险类</button>
+    <button data-tab="v4">交易与策略</button>
+    <button data-tab="v5">流程与体系</button>
+  </div>
+
+  <div class="vocab-panel show" id="v1"><div class="table-wrap"><table>
+    <thead><tr><th style="width:170px">术语</th><th>大白话解释</th></tr></thead>
+    <tbody>
+      <tr><td><b>私募基金</b></td><td>向少数「合格投资者」私下募资，投向股票、债券、期货等的基金。门槛高（通常 100 万起）、不公开宣传、玩法比公募灵活。</td></tr>
+      <tr><td><b>合格投资者</b></td><td>符合监管要求、有一定资产和风险承受能力的投资者（个人金融资产不低于 300 万或近三年年均收入不低于 50 万等）。</td></tr>
+      <tr><td><b>管理人</b></td><td>发行并操盘基金的公司，如淡水泉、幻方、九坤等。</td></tr>
+      <tr><td><b>协会备案</b></td><td>在中国证券投资基金业协会登记备案，是产品合规的基本门槛。</td></tr>
+      <tr><td><b>净值 (NAV)</b></td><td>每份基金值多少钱。1.0 起步，涨到 1.2 就是赚了 20%。</td></tr>
+      <tr><td><b>净值披露</b></td><td>管理人定期公布净值，频率越高（日频 / 周频）数据质量越好。</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <div class="vocab-panel" id="v2"><div class="table-wrap"><table>
+    <thead><tr><th style="width:170px">术语</th><th>大白话解释</th></tr></thead>
+    <tbody>
+      <tr><td><b>收益率</b></td><td>一段时间赚了多少钱的比例。</td></tr>
+      <tr><td><b>年化收益</b></td><td>把收益折算成"一年"的口径，方便不同期限的产品横向比较。</td></tr>
+      <tr><td><b>超额收益（alpha）</b></td><td>跑赢基准（如某个指数）的那部分收益。</td></tr>
+      <tr><td><b>分位（10% / 50% / 75%）</b></td><td>把一堆产品按收益排队：<b>10% 分位 = 头部（最好的前 10%）</b>，50% 分位 = 中位数，<b>75% 分位 = 尾部（最差的后 25%）</b>。</td></tr>
+      <tr><td><b>上行 / 下行行情</b></td><td>市场整体上涨的年份 vs 下跌的年份。</td></tr>
+      <tr><td><b>业绩连续性（赫斯特指数）</b></td><td>衡量"好业绩能不能延续"，越接近 1 越容易延续。</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <div class="vocab-panel" id="v3"><div class="table-wrap"><table>
+    <thead><tr><th style="width:170px">术语</th><th>大白话解释</th></tr></thead>
+    <tbody>
+      <tr><td><b>波动率</b></td><td>净值上下"颠簸"的剧烈程度，过山车越猛波动率越高。</td></tr>
+      <tr><td><b>最大回撤</b></td><td>从最高点跌到最低点的最大跌幅。净值 1.5 → 1.2 就是回撤 20%。这是投资人<b>最痛</b>的指标："我最惨的时候会亏多少"。</td></tr>
+      <tr><td><b>夏普比率</b></td><td>每承担 1 单位风险换回多少收益，即"性价比"。&gt;1 算不错，&gt;2 很优秀，负数 = 白折腾。</td></tr>
+      <tr><td><b>回撤峰度</b></td><td>回撤是否容易出现极端值：尖峰 = 容易出现极端大跌。</td></tr>
+      <tr><td><b>敞口</b></td><td>暴露在某种风险下的仓位大小。敞口大 = 涨跌都跟得紧。</td></tr>
+      <tr><td><b>模型风险</b></td><td>量化模型失效 / 不适用的风险（策略赚钱的"底层逻辑"坏了）。</td></tr>
+      <tr><td><b>灰天鹅事件</b></td><td>可预见但被普遍忽视的大风险事件（疫情、地缘冲突、能源危机）。</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <div class="vocab-panel" id="v4"><div class="table-wrap"><table>
+    <thead><tr><th style="width:170px">术语</th><th>大白话解释</th></tr></thead>
+    <tbody>
+      <tr><td><b>多头 / 空头</b></td><td>多头 = 买入、赌涨；空头 = 卖出、赌跌。A 股很多策略只能做多。</td></tr>
+      <tr><td><b>对冲</b></td><td>一边做多一边做空，把市场整体涨跌"抵消"掉，只赚选股那部分钱。</td></tr>
+      <tr><td><b>套利</b></td><td>赚"价差"的钱：同一个东西两个地方价格不一样，低买高卖。</td></tr>
+      <tr><td><b>杠杆</b></td><td>借钱 / 用保证金放大仓位，赚得更多、亏得也更多。期货天然带杠杆。</td></tr>
+      <tr><td><b>择时</b></td><td>判断市场涨跌时机，决定加仓、减仓还是空仓。</td></tr>
+      <tr><td><b>策略容量</b></td><td>一个策略能容纳的资金上限。容量小 = 钱太多就装不下、收益会被摊薄。</td></tr>
+      <tr><td><b>指数增强</b></td><td>跟随某个指数（如中证 500）的基础上，再想办法跑赢它一点点。</td></tr>
+      <tr><td><b>收敛 / 扩张状态</b></td><td>产品之间差异的大小：<b>收敛</b> = 好差产品差不多；<b>扩张</b> = 分化大。向上扩张 = 头部特别好；向下扩张 = 尾部特别差。</td></tr>
+      <tr><td><b>净敞口</b></td><td>多空仓位的净值暴露：净多头（偏看涨）、净空头（偏看跌）、≈0（中性，涨跌都无所谓）。是区分「多空」和「中性」的关键指标。</td></tr>
+      <tr><td><b>因子</b></td><td>量化模型的"选股理由"：价值（便宜）、动量（涨得凶）、质量（赚钱稳）、情绪等。量化多头 = 用一堆因子打分选股。</td></tr>
+      <tr><td><b>拥挤交易</b></td><td>太多资金挤在同一个策略/因子上。赚钱时大家都赚，一旦反转就会踩踏式大跌（如 2024 年小微盘量化踩踏）。</td></tr>
+      <tr><td><b>股指期货贴水 / 对冲成本</b></td><td>做空对冲要付出的"保险费"。市场中性策略必须持续付费对冲，所以 alpha 要够高才划算。</td></tr>
+      <tr><td><b>做空 / 融券</b></td><td>先借股票卖掉、等跌了再买回来还——赚下跌的钱。A 股融券贵、券源少，所以国内多用股指期货代替。</td></tr>
+      <tr><td><b>逼空（轧空）</b></td><td>做空的股票突然暴涨，空头被迫高价买回平仓，越买越涨——做空者最怕的事。</td></tr>
+    </tbody>
+  </table></div></div>
+
+  <div class="vocab-panel" id="v5"><div class="table-wrap"><table>
+    <thead><tr><th style="width:170px">术语</th><th>大白话解释</th></tr></thead>
+    <tbody>
+      <tr><td><b>策略</b></td><td>"赚钱的方法论"。同一个策略下可以有非常多只产品。</td></tr>
+      <tr><td><b>策略指数</b></td><td>把同类产品的净值合成一条曲线，代表这类策略的整体表现。</td></tr>
+      <tr><td><b>基础池</b></td><td>通过硬性筛选标准（合规、存续、业绩达标等）形成的候选池。</td></tr>
+      <tr><td><b>核心池</b></td><td>在基础池之上，经过评分 + 管理人尽调后精选出的"优中选优"池。</td></tr>
+      <tr><td><b>标签</b></td><td>给策略或产品打的"特征标记"，如「下行行情表现突出」「回撤低」，支持检索与配置。</td></tr>
+      <tr><td><b>FOF</b></td><td>基金中的基金——不直接买股债，而是买别的基金。</td></tr>
+      <tr><td><b>MOM</b></td><td>管理人中的管理人——挑选优秀操盘手来管钱。</td></tr>
+    </tbody>
+  </table></div></div>
+</section>
+
+<!-- ============ 八大策略 ============ -->
+<section class="block" id="s-strategies">
+  <span class="part-tag p2">PART 2</span>
+  <h2 class="section-title">八大策略详解（私募世界的骨架）<button class="read-btn" data-key="s-strategies">✓ 已读完</button></h2>
+  <p class="section-desc">私募证券基金按策略分成 8 大类。这是你理解"客户买的是什么"的骨架。</p>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th style="width:36px">#</th><th style="width:120px">一级策略</th><th style="width:170px">一句话是什么</th><th>收益 / 风险特征</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><b>股票多头</b></td><td>买股票、赌涨，低买高卖赚差价</td><td><span class="badge hi">收益高</span>（牛市可观）· <span class="badge hi">风险高</span>（回撤可超 30%）</td></tr>
+      <tr><td>2</td><td><b>管理期货 CTA</b></td><td>玩期货，涨跌都能赚（趋势、套利、多空）</td><td><span class="badge hi">收益高</span>（危机中也能赚）· <span class="badge mid">风险中</span>（与股市低相关）</td></tr>
+      <tr><td>3</td><td><b>相对价值</b></td><td>赚"相对价差"，多空对冲赚价差</td><td><span class="badge mid">收益中</span>· <span class="badge lo">风险低-中</span>（稳健）</td></tr>
+      <tr><td>4</td><td><b>债券策略</b></td><td>买债券吃利息（票息 + 价格波动）</td><td><span class="badge lo">收益中低</span>· <span class="badge lo">风险极低</span>（全场最低）</td></tr>
+      <tr><td>5</td><td><b>宏观策略</b></td><td>看全局，股债汇商多资产多空 + 杠杆</td><td><span class="badge hi">收益中高</span>（头部极高）· <span class="badge hi">风险中高</span>（分化大）</td></tr>
+      <tr><td>6</td><td><b>事件驱动</b></td><td>赚"事件"的钱：并购重组、定增前后套利</td><td><span class="badge hi">收益高</span>（头部）· <span class="badge hi">风险高</span>（尾部很差）</td></tr>
+      <tr><td>7</td><td><b>组合基金</b></td><td>买别人的基金（FOF / MOM）</td><td><span class="badge lo">收益中低</span>· <span class="badge mid">风险中</span>（天然分散）</td></tr>
+      <tr><td>8</td><td><b>复合策略</b></td><td>多种策略混搭，东方不亮西方亮</td><td><span class="badge mid">收益中</span>· <span class="badge mid">风险中</span>（平滑）</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">1</div><h4>股票多头 —— 最主流，赌股票涨</h4><span class="badge hi">产品最多 · 约 3 万只</span></div>
+    <div class="strategy-sub">主要投资沪深上市公司股票，通常不做空、不对冲，靠股票上涨赚钱。<br>子策略：<b>股票主观</b>（人判断买卖）· <b>股票量化</b>（模型选股）· <b>指数增强</b>（跟指数并跑赢）· <b>复合</b></div>
+    <div class="strategy-find">📊 <b>报告观察</b>：上行行情（2020）股票主观头部收益高达 <b>63.63%</b>；下行行情（2022）股票量化相对抗跌（各分位均值 -0.46%）；股票复合策略表现最弱，建议<b>低配</b>。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">2</div><h4>管理期货 CTA —— 涨跌都能赚的「危机阿尔法」</h4><span class="badge hi">2022 大跌时的明星策略</span></div>
+    <div class="strategy-sub">投资商品期货、金融期货、期权、外汇。<b>期货是杠杆交易，做空和做多一样平常</b>，所以涨跌都能赚钱。<br>子策略：趋势（追涨杀跌）· 套利（赚价差）· 复合，再按主观 / 量化划分</div>
+    <div class="strategy-find">📊 <b>报告观察</b>：上行行情期货套利 10% 分位收益 <b>70.94%</b>（全市场最高）；下行行情期货量化最抗跌（+6.99%）；<b>马太效应明显</b>，配置时需要精选头部。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">3</div><h4>相对价值 —— 赚「相对价差」，稳健派</h4><span class="badge lo">回撤极小</span></div>
+    <div class="strategy-sub">同时买卖两个高度相关的资产，赚价格差。多用「量化 + 多空对冲」。<br>子策略：<b>市场中性</b>（完全对冲，只赚选股超额，最稳）· <b>套利</b>（最大回撤常 &lt;1%）· <b>择时对冲</b>（带择时，波动稍大）</div>
+    <div class="strategy-find">📊 <b>报告观察</b>：下行行情中，市场中性（+3.66%）和套利（+3.98%）都实现正向收益，回撤控制有天然优势。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">4</div><h4>债券策略 —— 最稳的「压舱石」</h4><span class="badge lo">全场最稳</span></div>
+    <div class="strategy-sub">专门投资债券（国债、金融债、企业债），赚票息 + 价格波动；可少量配可转债 / 打新增强收益。</div>
+    <div class="strategy-find">📊 <b>报告观察</b>：波动率、最大回撤全场最低（50% 分位最大回撤仅 <b>0.56%</b>）；尾部产品三年均值仍为正——极少数「尾部不亏」的策略；适合风险厌恶型客户的底仓。<br>⚠️ 对尽调要求较高，受灰天鹅事件（信用违约）影响较大。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">5</div><h4>宏观策略 —— 站在全局看，多资产多空</h4><span class="badge mid">分化极大</span></div>
+    <div class="strategy-sub">依据对宏观经济（利率、汇率、政策）的判断，在全球投股票、债券、外汇、商品、衍生品，多空结合 + 杠杆。</div>
+    <div class="strategy-find">📊 <b>报告观察</b>：与股市、债市相关性低，市场低迷时也能创造收益；头部产品极强（10% 分位收益 <b>65.07%</b>），但<b>尾部很差</b>，分化极大。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">6</div><h4>事件驱动 —— 赚「事件」的钱</h4><span class="badge hi">机会型 · 头部高尾部惨</span></div>
+    <div class="strategy-sub">分析重大事件（并购重组、定向增发、大宗交易）前后对价格的影响，提前埋伏、择机退出。</div>
+    <div class="strategy-find">📊 <b>报告观察</b>：头部收益高（10% 分位均值 41.70%，仅次于期货套利），但下行行情大幅亏损；产品数量少（约 230 只），进阶筛选后<b>无产品入池</b>。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">7</div><h4>组合基金 —— 买别人的基金</h4><span class="badge mid">天然分散</span></div>
+    <div class="strategy-sub">把「资产配置」装进一个基金，去买其他专业基金。<b>FOF</b> = 买基金组合；<b>MOM</b> = 选操盘手。</div>
+    <div class="strategy-find">📊 <b>报告观察</b>：天然分散、平滑波动，近年快速发展（2022 年已超 3000 只）；下行行情负收益出现得最晚（50% 分位才转负），好于其他谨慎型策略。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">8</div><h4>复合策略 —— 大杂烩，平滑风险</h4><span class="badge mid">业绩稳定</span></div>
+    <div class="strategy-sub">把多种策略组合在一个产品里运作，用「东方不亮西方亮」平滑单一策略的风险。</div>
+    <div class="strategy-find">📊 <b>报告观察</b>：业绩趋向稳定；下行行情中头部产品表现不错，对尾部也有一定提振。</div>
+  </div>
+</section>
+
+<!-- ============ 股票策略四形态 ============ -->
+<section class="block" id="s-stock">
+  <span class="part-tag p2">PART 2 · 重点专题</span>
+  <h2 class="section-title">股票策略四兄弟：主观多头 / 量化多头 / 股票多空 / 市场中性<button class="read-btn" data-key="s-stock">✓ 已读完</button></h2>
+  <p class="section-desc">股票策略是私募市场的基本盘（产品最多）。所有股票玩法，本质都是「<b>谁做决策</b>（人还是模型）」×「<b>怎么下注</b>（纯做多还是多空对冲）」两个维度的组合。</p>
+
+  <div class="card blue">
+    <h4>一张图看懂四个形态</h4>
+    <div class="matrix" style="max-width:760px">
+      <div class="mcell attack" style="grid-column:1 / -1;background:linear-gradient(135deg,#14304f,#2a5f92)"><b>两个维度 · 四个象限</b><small>横轴 = 谁决策（人脑 vs 模型）｜纵轴 = 怎么下注（纯多 vs 多空对冲）</small></div>
+      <div class="mcell attack" style="background:linear-gradient(135deg,#c0392b,#a93226)"><b>① 主观多头</b><small>人脑精选 · 重仓下注<br>「巴菲特式」</small></div>
+      <div class="mcell oppo"><b>② 量化多头</b><small>机器广撒网 · 赚统计钱<br>「幻方 / 九坤式」</small></div>
+      <div class="mcell careful"><b>③ 股票多空</b><small>两头下注 · 赚选股差价<br>「对冲基金式」</small></div>
+      <div class="mcell steady"><b>④ 股票市场中性</b><small>屏蔽涨跌 · 只赚聪明钱<br>「稳健式」</small></div>
+    </div>
+    <p style="margin:6px 0 0;font-size:13px;color:var(--ink-2)">注：A 股个股做空难（融券成本高），国内「多空 / 中性」多用股指期货做对冲，形态与海外略有差异。</p>
+  </div>
+
+  <h3>四个形态逐个拆解</h3>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">①</div><h4>主观多头 —— 人脑精选，重仓下注</h4><span class="badge hi">波动高 · 回撤可超 30%</span></div>
+    <div class="strategy-sub"><b>怎么赚钱：</b>基金经理靠脑子选股票——做深度研究、看行业、看公司、看老板（还记得心法篇的四维逻辑吗？），买入并持有或波段操作。<br>收益 = <b>选对好公司（alpha）+ 市场上涨（beta）</b>。</div>
+    <ul style="margin:6px 0 8px 20px;font-size:14px">
+      <li><b>特征</b>：持仓集中（10~30 只）、换手中低、牛市中弹性大</li>
+      <li><b>风险</b>：押错公司损失大、高度依赖基金经理个人能力</li>
+      <li><b>代表</b>：高毅、景林、淡水泉等（就是心法篇讲的那类机构）</li>
+      <li><b>适合</b>：能承受大波动、相信"人"的判断、长期视角的投资者</li>
+    </ul>
+    <div class="strategy-find">🎯 <b>与心法篇的呼应：</b>高毅那套心法（四维逻辑、时间/空间/人、归纳演绎实证）讲的正是主观多头的方法论——先懂行业，再选公司，重仓少数。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">②</div><h4>量化多头 —— 机器广撒网，赚统计钱</h4><span class="badge hi">持仓几百~上千只</span></div>
+    <div class="strategy-sub"><b>怎么赚钱：</b>程序模型扫描全市场几千只股票，靠<b>多因子模型</b>（价值、动量、质量、情绪等）+ 交易速度 + 严格风控纪律赚钱。分两种形态：<br><b>· 指数增强</b>：跟着某个指数买（如中证 500），再想办法每年轻轻松松跑赢它一点点；<br><b>· 量化选股</b>：不严格跟指数，全市场自由挑。</div>
+    <ul style="margin:6px 0 8px 20px;font-size:14px">
+      <li><b>特征</b>：持仓分散（数百~上千只）、换手高（尤其高频）、收益与指数高度相关</li>
+      <li><b>风险</b>：模型失效、策略同质化拥挤（大家都在用的因子突然不灵）、市场风格突变（如小盘因子失效）</li>
+      <li><b>代表</b>：幻方、九坤、明汯等头部量化</li>
+      <li><b>适合</b>：想要"市场收益 + 稳定超额"、能接受模型是黑箱的投资者</li>
+    </ul>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">③</div><h4>股票多空 —— 两头下注，赚选股差价</h4><span class="badge mid">波动介于多头与中性之间</span></div>
+    <div class="strategy-sub"><b>怎么赚钱：</b>看好的股票<b>买入</b>，看空的股票<b>卖空</b>（或做空指数）——多头赚"看对"的钱，空头赚"看错"的钱。收益 = <b>多空两边选股能力的差值</b>，市场涨跌的影响被部分抵消。</div>
+    <ul style="margin:6px 0 8px 20px;font-size:14px">
+      <li><b>特征</b>：<b>净敞口可调节</b>——偏多（看涨时）、偏空（看跌时）、接近中性（不确定时）</li>
+      <li><b>风险</b>：做空成本高、"逼空"风险（被做空的股票暴涨）、A 股工具受限（融券贵、难）</li>
+      <li><b>代表</b>：海外对冲基金是主流玩法，国内因做空工具限制相对少见</li>
+      <li><b>适合</b>：希望减少大盘波动影响、又保留方向判断能力的投资者</li>
+    </ul>
+    <div class="strategy-find">🔑 <b>与市场中性的区别（最容易混！）：</b>多空<b>可以留方向</b>（净多 / 净空）；中性是<b>刻意把敞口压到 ≈ 0</b>，只赚选股的钱。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="strategy-head"><div class="num">④</div><h4>股票市场中性 —— 屏蔽涨跌，只赚聪明钱</h4><span class="badge lo">波动小 · 回撤小</span></div>
+    <div class="strategy-sub"><b>怎么赚钱：</b>多头仓位和空头仓位（通常用股指期货）严格对冲，<b>净敞口 ≈ 0</b>——大盘涨跌跟你没关系，赚的是纯粹的"我选股比你强"的超额收益（alpha）。</div>
+    <ul style="margin:6px 0 8px 20px;font-size:14px">
+      <li><b>特征</b>：收益平稳、与股市相关性低（"绝对收益"特征），类似稳健理财但收益更高</li>
+      <li><b>风险</b>：对冲成本（股指期货贴水）、alpha 衰减、<b>拥挤交易</b>（2024-2025 年国内中性策略曾因扎堆出现大回撤）、策略容量有限</li>
+      <li><b>代表</b>：国内量化对冲产品（量化 + 中性是主流；"主观中性"很罕见）</li>
+      <li><b>适合</b>：稳健型投资者——想要"比理财高一点、比股票稳一点"</li>
+    </ul>
+    <div class="strategy-find">🔑 <b>本质：</b>这是"相对价值 / 套利"思维在股票上的应用——还记得八大策略里的"相对价值"吗？市场中性就是它的核心成员。</div>
+  </div>
+
+  <h3>四兄弟对比表（一眼看懂差异）</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th style="width:110px">维度</th><th>① 主观多头</th><th>② 量化多头</th><th>③ 股票多空</th><th>④ 市场中性</th></tr></thead>
+    <tbody>
+      <tr><td><b>决策者</b></td><td>人（基金经理）</td><td>模型 / 程序</td><td>人（可辅以量化）</td><td>模型 / 程序</td></tr>
+      <tr><td><b>下注方式</b></td><td>只买</td><td>只买</td><td>买 + 卖空</td><td>买 + 卖空（严格对冲）</td></tr>
+      <tr><td><b>净敞口</b></td><td>满仓做多</td><td>满仓做多</td><td>可调（偏多 / 偏空）</td><td>≈ 0</td></tr>
+      <tr><td><b>持仓数量</b></td><td>10~30 只（集中）</td><td>数百~上千只（分散）</td><td>数十只</td><td>数百~上千只</td></tr>
+      <tr><td><b>换手率</b></td><td>中低</td><td>高</td><td>中</td><td>中高</td></tr>
+      <tr><td><b>收益来源</b></td><td>选股 + 市场上涨</td><td>指数 + 超额</td><td>多空选股差异</td><td>纯超额（alpha）</td></tr>
+      <tr><td><b>波动 / 回撤</b></td><td>高（可超 30%）</td><td>较高</td><td>中</td><td>低</td></tr>
+      <tr><td><b>股市相关性</b></td><td>高</td><td>高</td><td>中</td><td>低</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="reading-list" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+    <div class="card" style="margin:0">🧠 <b>主观多头</b> = 人脑精选，重仓下注</div>
+    <div class="card" style="margin:0">🤖 <b>量化多头</b> = 机器广撒网，赚统计钱</div>
+    <div class="card" style="margin:0">⚖️ <b>股票多空</b> = 两头下注，赚选股差价</div>
+    <div class="card" style="margin:0">🛡️ <b>市场中性</b> = 屏蔽涨跌，只赚聪明钱</div>
+  </div>
+
+  <div class="card warn">
+    <h4>⚠️ 小白常见误区</h4>
+    <p style="margin:0">· <b>误区一</b>："市场中性 = 保本"——错！它赚的是选股超额，alpha 没了照样亏，只是亏得比股票少。<br>
+    · <b>误区二</b>："量化多头 = 稳赚"——错！量化也会大回撤（2024 年初小微盘流动性危机就是例子），只是亏损方式不同。<br>
+    · <b>误区三</b>："股票多空 = 市场中性"——错！多空可以留方向（净多 / 净空），中性必须压到 ≈ 0。</p>
+  </div>
+</section>
+
+<!-- ============ 四大类型 ============ -->
+<section class="block" id="s-types">
+  <p class="section-desc">报告不直接用八大策略，而是按「收益 × 风险」归成 4 个类型分别建池。这是「客户风险偏好 ↔ 策略池」匹配的核心逻辑。</p>
+
+  <div class="matrix-axis"><span>← 风险低</span><span>风险高 →</span></div>
+  <div class="matrix">
+    <div class="mcell steady"><b>🛡️ 稳健型</b><small>中收益 · 中低风险<br>市场中性 / 套利 / 债券 / 宏观 / 复合<br>匹配：稳健型客户，追求回撤小</small></div>
+    <div class="mcell oppo"><b>🎯 机会型</b><small>高收益 · <b>中低风险</b>（性价比最高！）<br>管理期货 CTA（主观 / 量化 / 套利）<br>匹配：想要高收益、但扛不了大波动</small></div>
+    <div class="mcell careful"><b>⚠️ 谨慎型</b><small>中低收益 · 中高风险（性价比最差）<br>组合基金 / 事件驱动 / 择时对冲<br>匹配：要谨慎对待的一类！</small></div>
+    <div class="mcell attack"><b>🚀 进攻型</b><small>高收益 · 高风险<br>股票多头（主观 / 量化 / 指增）<br>匹配：激进型，能扛大跌</small></div>
+  </div>
+
+  <div class="card tint">
+    <h4>⚠️ 关键理解点：为什么「谨慎型」听着保守，却是「中低收益 + 中高风险」？</h4>
+    <p style="margin:0">「谨慎」不是形容客户，而是<strong>在提醒你</strong>：这类策略（组合基金、事件驱动、择时对冲）收益不算高、风险却不低，性价比是四类里最差的，所以要<strong>谨慎对待</strong>。<br><br>
+    而「机会型」（CTA）反而是四类里<strong>收益风险比最高</strong>的——高收益却只有中低风险，所以叫「机会」。</p>
+  </div>
+</section>
+
+<!-- ============ 筛选方法 ============ -->
+<section class="block" id="s-method">
+  <span class="part-tag p2">PART 2</span>
+  <h2 class="section-title">筛选方法论：怎么从 8.5 万只产品里挑出 364 只<button class="read-btn" data-key="s-method">✓ 已读完</button></h2>
+  <p class="section-desc">理解这套「漏斗」，你就理解了私募 FOF 选产品的全部逻辑。</p>
+
+  <h3>三层筛选漏斗</h3>
+  <div class="funnel">
+    <div class="funnel-step w85">全市场私募产品 · 约 8.5 万只<small> · 先统一分类、打标签</small></div>
+    <div class="funnel-step w70">① 基础筛选：5 条硬门槛 → 约 2.8 万只<small> · 合规 / 存续 / 净值披露</small></div>
+    <div class="funnel-step w70">② 质量控制<small> · 剔空值 / 异常值 / 录入错误</small></div>
+    <div class="funnel-step w50">③ 进阶筛选：收益 + 回撤 + 规模标准</div>
+    <div class="funnel-step hl w50">✅ 基础池：364 只产品 · 133 家管理人<small> · 再评分尽调 → 核心池</small></div>
+  </div>
+
+  <h3>① 基础筛选：5 条硬门槛</h3>
+  <div class="reading-list" style="grid-template-columns:1fr;gap:10px">
+    <div class="card" style="margin:0">1️⃣ 运行状态良好（正常 / 开放 / 封闭运行）</div>
+    <div class="card" style="margin:0">2️⃣ 合规完备（已完成协会备案）</div>
+    <div class="card" style="margin:0">3️⃣ 管理人成立时间超过一年</div>
+    <div class="card" style="margin:0">4️⃣ 产品发行时间超过一年</div>
+    <div class="card" style="margin:0">5️⃣ <b>近 60 日内有净值披露</b>（防止信息不透明 / 数据造假）</div>
+  </div>
+
+  <h3>③ 进阶筛选：3 条差异化标准</h3>
+  <div class="card">
+    <ul style="margin:0 0 0 20px">
+      <li><b>收益标准</b>：各策略 50% 分位对应的收益数值</li>
+      <li><b>最大回撤标准</b>：各策略 50% 分位对应的回撤数值</li>
+      <li><b>管理人自主发行规模</b>：按策略容量设定（股票 / 债券类 20 亿，期货类 10 亿等）</li>
+    </ul>
+  </div>
+  <div class="card blue">
+    <h4>为什么筛选线用「50% 分位」（中位数）？</h4>
+    <p style="margin:0">10% 分位当标准 → 入围太少，容易漏掉特色产品；75% 分位 → 入围太多，等于没筛；<b>50% 分位恰好是"收益大幅下降的转折点"</b>，入围数量适中 → 选它。</p>
+  </div>
+
+  <h3>漏斗威力：各池入池数量（2022 年口径）</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>阶段</th><th>进攻型</th><th>机会型</th><th>谨慎型</th><th>稳健型</th></tr></thead>
+    <tbody>
+      <tr><td><b>基础筛选后</b>（只）</td><td>16,040</td><td>2,364</td><td>2,155</td><td>7,375</td></tr>
+      <tr><td><b>进阶筛选后入池</b>（只）</td><td>119</td><td>76</td><td>32</td><td>137</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:14px;color:var(--ink-2)">从几万只产品，通过「合规门槛 → 业绩标准 → 规模标准」，层层收敛到几百只可配置的候选产品。</p>
+</section>
+
+<!-- ============ 自测 ============ -->
+<section class="block" id="quiz">
+  <span class="part-tag">检验</span>
+  <h2 class="section-title">自测题：检验你学懂了没有<button class="read-btn" data-key="quiz">✓ 已读完</button></h2>
+  <p class="section-desc">先自己答，再点开看答案。答不出来的，回去看对应章节。</p>
+
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">1</div><p>「最大回撤」和「波动率」有什么区别？</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>答：</b>波动率 = 日常上下颠簸的剧烈程度（常态）；最大回撤 = 从最高点到最低点的最大跌幅（最惨时刻）。一个管「日常」，一个管「极端」。</div>
+  </div>
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">2</div><p>为什么 CTA 策略「涨跌都能赚」？它的关键特征是什么？</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>答：</b>期货是杠杆交易，且做空和做多一样平常（每份合约背后都有一个多头一个空头），所以上涨、下跌都能赚钱。因此与股市低相关，大跌时反而常赚钱（危机阿尔法）。</div>
+  </div>
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">3</div><p>为什么「谨慎型」策略收益不高、风险却不低，反而要「谨慎」？</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>答：</b>「谨慎」不是形容客户，而是提醒你：这类策略（组合基金、事件驱动、择时对冲）收益不算高、风险却不低，性价比最差，要谨慎对待。</div>
+  </div>
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">4</div><p>一位客户说「我要高收益，但回撤别太大」，系统应该优先推荐哪个池？</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>答：</b>优先推荐<b>机会池</b>（CTA）：高收益 - 中低风险，是四类中性价比最高的；其次是进攻池中精选头部产品（但需接受较高波动）。</div>
+  </div>
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">5</div><p>基础筛选的 5 条标准里，哪一条是「防数据造假 / 信息不透明」的？</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>答：</b><b>近 60 日内有净值披露</b>——防止产品停更、信息不透明；<b>完成协会备案</b>——防止合规风险。</div>
+  </div>
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">6</div><p>文章说「大问题上的模糊准确，远胜小问题上的完美精确」——你最近把时间花在哪些「小问题」上了？</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>提示：</b>这是开放题。对照心法一自省——每天盯盘？研究 K 线？预测明天涨跌？如果是，试着把时间挪到「行业未来 5 年往哪走」这类大问题上。</div>
+  </div>
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">7</div><p>「依赖厨师的餐饮店是规模的敌人」——为什么？举一个不受此限制的餐饮例子。</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>答：</b>因为厨师的厨艺无法标准化复制，扩张越快越难保证品质一致，效率递减。<b>流程标准化是服务业规模化的前提</b>——例如麦当劳、肯德基（标准化流程，不依赖个别厨师）。</div>
+  </div>
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">8</div><p>从「全市场」到「基础池」，产品数量经历了怎样的漏斗？</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>答：</b>全市场约 8.5 万只 → 基础筛选后约 2.8 万只 → 质量控制 → 进阶筛选后 <b>364 只</b>（基础池），再经评分尽调进入核心池。</div>
+  </div>
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">9</div><p>「股票多空」和「股票市场中性」的核心区别是什么？</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>答：</b>看<b>净敞口</b>——股票多空可以留方向（净多 / 净空 / 中性，可调）；市场中性是刻意把净敞口压到 ≈ 0，纯粹只赚选股超额（alpha）。简单说：多空保留方向判断，中性放弃方向只赚选股的钱。</div>
+  </div>
+  <div class="quiz-item">
+    <div class="quiz-q" onclick="this.parentElement.classList.toggle('open')"><div class="qno">10</div><p>主观多头和量化多头，在持仓数量和换手上有什么典型差异？</p><span class="arrow">▼</span></div>
+    <div class="quiz-a"><b>答：</b>主观多头持仓<b>少而重</b>（10~30 只，集中持仓）、换手中低，靠深度研究；量化多头持仓<b>多而散</b>（数百~上千只）、换手高，靠统计规律和交易速度赚钱。</div>
+  </div>
+</section>
+
+<!-- ============ 速查表 ============ -->
+<section class="block" id="cheatsheet">
+  <span class="part-tag">速查</span>
+  <h2 class="section-title">一页速查表<button class="read-btn" data-key="cheatsheet">✓ 已读完</button></h2>
+  <p class="section-desc">全部内容压缩成一页。学完之后贴墙上，随时回查。</p>
+
+  <h3>心法篇 · 一句话速记</h3>
+  <div class="cheat-grid">
+    <div class="cheat-card"><b>时间稀缺</b>大问题、大方向、大概率；模糊准确 &gt; 完美精确</div>
+    <div class="cheat-card"><b>四维逻辑</b>宏观 → 产业 → 业务 → 财务，自上而下、互相验证</div>
+    <div class="cheat-card"><b>产业本质</b>先懂行业"生意本质"和核心驱动，再研究公司</div>
+    <div class="cheat-card"><b>时间 / 空间 / 人</b>能不能长久、会不会规模不经济、老板靠不靠谱</div>
+    <div class="cheat-card"><b>归纳演绎实证</b>收集 → 假设 → 验证 → 复盘，确定性 60% → 90%</div>
+    <div class="cheat-card"><b>三个特质</b>求知欲、诚实、独立</div>
+    <div class="cheat-card"><b>两个心态</b>新人练 5 年（1 万小时）；老手清零放下经验</div>
+    <div class="cheat-card"><b>日常四件事</b>建智慧圈、广阅读、自建体系、结构化记录</div>
+  </div>
+
+  <h3>策略篇 · 一句话速记</h3>
+  <div class="cheat-grid">
+    <div class="cheat-card"><b>报告主线</b>分类 → 指标 → 建池</div>
+    <div class="cheat-card"><b>四个核心指标</b>收益=能赚多少 · 波动率=日常晃不晃 · 最大回撤=最惨跌多少 · 夏普=划不划算</div>
+    <div class="cheat-card"><b>八大策略</b>股票多头、CTA、相对价值、债券、宏观、事件驱动、组合基金、复合</div>
+    <div class="cheat-card"><b>四大类型</b>进攻（高收益高风险）· 机会（高收益低风险）· 谨慎（低收益高风险）· 稳健（中收益低风险）</div>
+    <div class="cheat-card"><b>分位</b>10% = 头部 · 50% = 中位数 · 75% = 尾部；筛选线用 50% 分位</div>
+    <div class="cheat-card"><b>建池三层</b>基础筛选（5 门槛）→ 质量控制 → 进阶筛选（收益 / 回撤 / 规模）</div>
+    <div class="cheat-card"><b>最终成果</b>364 只产品、133 家管理人，分四个池</div>
+    <div class="cheat-card"><b>客户匹配</b>客户风险偏好（四型）→ 对应策略池</div>
+    <div class="cheat-card" style="grid-column:1/-1;background:var(--soft);border-left:4px solid var(--gold)"><b>股票四兄弟（重点）</b>主观多头=人脑精选重仓｜量化多头=机器广撒网｜股票多空=两头下注｜市场中性=屏蔽涨跌只赚聪明钱<br><small>记忆：横轴=谁决策（人/模型），纵轴=怎么下注（纯多/对冲）</small></div>
+  </div>
+
+  <div class="card tint" style="margin-top:22px">
+    <h4>给小白的一句话</h4>
+    <p style="margin:0"><strong>别盯盘，先建框架；买之前写假设，买之后做复盘；错了认错，比对了炫耀值钱。</strong></p>
+  </div>
+</section>
+
+<!-- ============ Footer ============ -->
+<footer style="margin-top:60px;padding:28px 0 40px;border-top:1px solid var(--line);color:var(--ink-2);font-size:13px;text-align:center">
+  <p style="margin-bottom:8px"><b style="color:var(--navy)">注意</b>：历史业绩不代表未来；策略分类与建池方法论长期有效，但具体哪类策略好会随行情变化。本文档仅供学习研究，不构成任何投资建议。</p>
+  <p>内容来源：高毅资产《顶尖私募心法》· 东证期货《策略研究与基础池构建》· 心法迁移指南（知识库）</p>
+</footer>
+
+</div><!-- /layout -->
+
+<script>
+// ============ 阅读进度条 ============
+const bar = document.getElementById('progressbar');
+const pText = document.getElementById('progressText');
+function updateProgress(){
+  const h = document.documentElement;
+  const total = h.scrollHeight - h.clientHeight;
+  const p = total > 0 ? (h.scrollTop / total) * 100 : 0;
+  bar.style.width = p + '%';
+  pText.textContent = Math.round(p) + '%';
+  pText.style.display = p > 1 ? 'block' : 'none';
+}
+window.addEventListener('scroll', updateProgress, {passive:true});
+updateProgress();
+
+// ============ 导航高亮（scrollspy） ============
+const sections = [...document.querySelectorAll('section.block')];
+const navLinks = [...document.querySelectorAll('nav.mainnav a')];
+function spy(){
+  let current = sections[0].id;
+  const pos = window.scrollY + 120;
+  sections.forEach(s => { if (s.offsetTop <= pos) current = s.id; });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+}
+window.addEventListener('scroll', spy, {passive:true});
+spy();
+
+// ============ 词汇表标签切换 ============
+document.querySelectorAll('#vtabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#vtabs button').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    document.querySelectorAll('.vocab-panel').forEach(p => p.classList.remove('show'));
+    document.getElementById(btn.dataset.tab).classList.add('show');
+  });
+});
+
+// ============ 章节已读标记（localStorage） ============
+const READ_KEY = 'privfund_read_v1';
+let readSet = new Set();
+try { readSet = new Set(JSON.parse(localStorage.getItem(READ_KEY) || '[]')); } catch(e){}
+
+function renderReadBtns(){
+  document.querySelectorAll('.read-btn').forEach(btn => {
+    const k = btn.dataset.key;
+    const done = readSet.has(k);
+    btn.classList.toggle('done', done);
+    btn.textContent = done ? '✓ 已读完' : '✓ 已读完';
+    btn.title = done ? '点击取消标记' : '标记为已读完';
+  });
+}
+function saveRead(){ localStorage.setItem(READ_KEY, JSON.stringify([...readSet])); }
+
+document.querySelectorAll('.read-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const k = btn.dataset.key;
+    if (readSet.has(k)) readSet.delete(k); else readSet.add(k);
+    saveRead(); renderReadBtns();
+  });
+});
+renderReadBtns();
+</script>
+</body>
+</html>
